@@ -337,7 +337,18 @@ a:visited {
     padding: 4px 8px;
 }
 
-/* Single-column header for modal panels (e.g., About) */
+.list .window-viewport {
+    --cols: 2fr 1fr 1fr;
+}
+
+.list-header {
+    grid-template-columns: var(--cols);
+}
+
+ul.details li {
+    grid-template-columns: var(--cols);
+}
+
 .panel-header {
     position: sticky;
     top: 0;
@@ -365,13 +376,18 @@ ul.details {
 
 ul.details li {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    padding: 2px 8px;
+    grid-template-columns: var(--cols);
+    padding: 0;
     border-bottom: 1px solid #eee;
     align-items: center;
     font-size: 13px;
     cursor: default;
     user-select: none;
+}
+
+.list-header .col,
+ul.details li>* {
+    padding: 4px 8px;
 }
 
 ul.details li:hover {
