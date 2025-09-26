@@ -1,44 +1,46 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Imperfect Pictures — Anthology</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <meta name="description" content="Draggable desktop of student projects for Imperfect Pictures." />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Imperfect Pictures — Anthology</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <meta name="description" content="Draggable desktop of student projects for Imperfect Pictures." />
 </head>
+
 <body>
-  <header class="site-header" role="banner">
-    <h1>Imperfect Pictures — Class Anthology</h1>
-    <nav class="utility">
-      <button id="randomizeBtn" class="icon-btn" aria-label="Shuffle layout" title="Shuffle">
-        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-          <path d="M17 3l4 4-4 4V8h-2.59l-3.7 3.7 1.42 1.41L16.41 9H17v2l4-4-4-4v2h-1.59l-4.7 4.7-2.12-2.12L13.59 3H17zM7 13H3v-2h4l3.3-3.3 1.4 1.4L8.4 13.7c-.28.2-.62.3-.96.3H7zm14 4l-4 4v-2h-3.59l-3.71-3.71 1.42-1.41L14.41 17H17v-2l4 4z" fill="currentColor"/>
-        </svg>
-      </button>
-      <a id="listViewLink" href="?view=list" aria-label="Switch to list view">List</a>
-      <a id="canvasViewLink" class="icon-btn" href="?view=canvas" aria-label="Switch to canvas view" title="Canvas" hidden>
-        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-          <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" fill="currentColor"/>
-        </svg>
-      </a>
-    </nav>
-  </header>
+    <header class="site-header" role="banner">
+        <h1>Imperfect Pictures — Class Anthology</h1>
+        <nav class="utility">
+            <button id="randomizeBtn" class="icon-btn" aria-label="Shuffle layout" title="Shuffle">
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path
+                        d="M17 3l4 4-4 4V8h-2.59l-3.7 3.7 1.42 1.41L16.41 9H17v2l4-4-4-4v2h-1.59l-4.7 4.7-2.12-2.12L13.59 3H17zM7 13H3v-2h4l3.3-3.3 1.4 1.4L8.4 13.7c-.28.2-.62.3-.96.3H7zm14 4l-4 4v-2h-3.59l-3.71-3.71 1.42-1.41L14.41 17H17v-2l4 4z"
+                        fill="currentColor" />
+                </svg>
+            </button>
+            <a id="listViewLink" href="?view=list" aria-label="Switch to list view">List</a>
+            <a id="canvasViewLink" class="icon-btn" href="?view=canvas" aria-label="Switch to canvas view"
+                title="Canvas" hidden>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" fill="currentColor" />
+                </svg>
+            </a>
+        </nav>
+    </header>
 
-  <main id="app" role="main">
-    <!-- Canvas view -->
-    <section id="canvas" class="canvas" aria-label="Project canvas" tabindex="-1"></section>
+    <main id="app" role="main">
+        <!-- Canvas view -->
+        <section id="canvas" class="canvas" aria-label="Project canvas" tabindex="-1"></section>
 
-    <!-- List view (accessible fallback) -->
-    <section id="list" class="list" aria-label="Projects list" hidden>
-      <ul id="listUl"></ul>
-    </section>
-  </main>
+        <!-- List view (accessible fallback) -->
+        <section id="list" class="list" aria-label="Projects list" hidden>
+            <ul id="listUl"></ul>
+        </section>
+    </main>
 
-  <footer class="site-footer" role="contentinfo">
-    <small>© <span id="year"></span> Imperfect Pictures cohort.</small>
-  </footer>
-
-  <script src="assets/js/script.js" defer></script>
+    <script src="assets/js/script.js" defer></script>
 </body>
+
 </html>
