@@ -14,6 +14,20 @@
     }
 
     let selectedNode = null;
+    let selectedRow = null;
+    function selectRow(row) {
+        if (selectedRow) selectedRow.classList.remove('selected');
+        selectedRow = row;
+        if (row) row.classList.add('selected');
+    }
+    function openRow(row) {
+        if (!row) return;
+        const href = row.dataset.href;
+        const target = row.dataset.target || '_blank';
+        if (href) {
+            window.open(href, target, 'noopener');
+        }
+    }
     const clockEl = document.getElementById('clock');
 
     // Simple router between canvas and list via query param
@@ -75,6 +89,8 @@
         const listSec = byId('list');
         if (mode === 'list') {
             listSec.hidden = false; canvasSec.hidden = true;
+            // focus list for keyboard nav
+            listUl && listUl.focus();
             listViewLink.hidden = true; canvasViewLink.hidden = false;
         } else {
             listSec.hidden = true; canvasSec.hidden = false;
@@ -182,11 +198,82 @@
 
     function renderList(items) {
         listUl.innerHTML = '';
-        items.forEach(item => {
+        items.forEach((item, idx) => {
             const li = document.createElement('li');
-            li.innerHTML = `<a href="${item.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)} — ${escapeHtml(item.creator)}</a>`;
+            li.setAttribute('role', 'option');
+            li.dataset.href = item.href;
+            li.dataset.target = item.target || '_blank';
+
+            // columns
+            const name = document.createElement('span');
+            name.className = 'name';
+            // clickable text link inside the Name column (Win98 opens on double-click; link is for accessibility)
+            name.innerHTML = `<a href="${item.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>`;
+
+            const creator = document.createElement('span');
+            creator.className = 'creator';
+            creator.textContent = item.creator || '';
+
+            const cls = document.createElement('span');
+            cls.className = 'cls';
+            cls.textContent = item.class || '';
+
+            li.appendChild(name);
+            li.appendChild(creator);
+            li.appendChild(cls);
+
+            // interactions: single-click select, double-click open, context menu
+            li.addEventListener('click', (ev) => {
+                ev.stopPropagation();
+                selectRow(li);
+            });
+            li.addEventListener('dblclick', (ev) => {
+                ev.preventDefault();
+                openRow(li);
+            });
+            li.addEventListener('contextmenu', (ev) => {
+                ev.preventDefault();
+                selectRow(li);
+                showMenu(ev.clientX, ev.clientY, [
+                    { label: 'Open', onClick: () => openRow(li) },
+                    { label: 'Open in new tab', onClick: () => window.open(li.dataset.href, '_blank', 'noopener') },
+                    { label: 'Copy link address', onClick: () => navigator.clipboard && navigator.clipboard.writeText(li.dataset.href) }
+                ]);
+            });
+
             listUl.appendChild(li);
         });
+
+        // keyboard navigation for list
+        listUl.tabIndex = 0;
+        listUl.addEventListener('keydown', (ev) => {
+            if (currentView !== 'list') return;
+            const rows = Array.from(listUl.children);
+            const idx = selectedRow ? rows.indexOf(selectedRow) : -1;
+            if (ev.key === 'ArrowDown') {
+                const next = rows[Math.min(idx + 1, rows.length - 1)] || rows[0];
+                selectRow(next);
+                next && next.scrollIntoView({ block: 'nearest' });
+                ev.preventDefault();
+            } else if (ev.key === 'ArrowUp') {
+                const prev = rows[Math.max(idx - 1, 0)] || rows[0];
+                selectRow(prev);
+                prev && prev.scrollIntoView({ block: 'nearest' });
+                ev.preventDefault();
+            } else if (ev.key === 'Enter') {
+                openRow(selectedRow);
+                ev.preventDefault();
+            } else if (ev.key === 'Home') {
+                if (rows[0]) { selectRow(rows[0]); rows[0].scrollIntoView({ block: 'nearest' }); }
+                ev.preventDefault();
+            } else if (ev.key === 'End') {
+                if (rows[rows.length - 1]) { selectRow(rows[rows.length - 1]); rows[rows.length - 1].scrollIntoView({ block: 'nearest' }); }
+                ev.preventDefault();
+            }
+        });
+
+        // clicking empty area clears selection
+        listUl.addEventListener('click', () => selectRow(null));
     }
 
     function shuffleList() {

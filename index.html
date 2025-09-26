@@ -46,9 +46,21 @@
         <!-- Canvas view -->
         <section id="canvas" class="canvas" aria-label="Project canvas" tabindex="-1"></section>
 
-        <!-- List view (accessible fallback) -->
+        <!-- List view -->
         <section id="list" class="list" aria-label="Projects list" hidden>
-            <ul id="listUl"></ul>
+            <div class="win98-window" role="group" aria-label="Projects">
+                <div class="titlebar">
+                    <span class="titlebar-text">Projects</span>
+                </div>
+                <div class="win98-viewport">
+                    <div class="list-header" role="row">
+                        <span class="col name" role="columnheader">Name</span>
+                        <span class="col creator" role="columnheader">Creator</span>
+                        <span class="col cls" role="columnheader">Class</span>
+                    </div>
+                    <ul id="listUl" class="details" role="listbox" aria-label="Projects"></ul>
+                </div>
+            </div>
         </section>
     </main>
 
