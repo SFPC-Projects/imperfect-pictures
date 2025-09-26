@@ -94,13 +94,7 @@
         listUl.innerHTML = '';
         items.forEach(item => {
             const li = document.createElement('li');
-            li.innerHTML = `
-        <a href="${item.href}" target="_blank" rel="noopener noreferrer">
-          <img src="${item.image}" alt="${escapeHtml(item.title)} — ${escapeHtml(item.creator)}">
-        </a>
-        <div class="creator">${escapeHtml(item.creator)}</div>
-        <div class="title"><strong>${escapeHtml(item.title)}</strong></div>
-      `;
+            li.innerHTML = `<a href="${item.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)} — ${escapeHtml(item.creator)}</a>`;
             listUl.appendChild(li);
         });
     }
