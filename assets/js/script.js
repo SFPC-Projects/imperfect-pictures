@@ -164,20 +164,26 @@
     function setView(mode) {
         currentView = mode;
         const canvasSec = byId('canvas');
+
         if (mode === 'list') {
-            // show list overlay above canvas
             listOverlay && (listOverlay.hidden = false);
-            canvasSec && (canvasSec.hidden = false); // keep canvas visible underneath
+            canvasSec && (canvasSec.hidden = false);
             listUl && listUl.focus();
             listViewLink.hidden = true;
             canvasViewLink.hidden = false;
-        } else {
-            // canvas mode
+        } else { // canvas
             listOverlay && (listOverlay.hidden = true);
             canvasSec && (canvasSec.hidden = false);
             listViewLink.hidden = false;
             canvasViewLink.hidden = true;
         }
+
+        // Show Shuffle only in canvas mode
+        if (randomizeBtn) randomizeBtn.hidden = (mode !== 'canvas');
+
+        const u = new URL(window.location.href);
+        u.searchParams.set('view', mode === 'list' ? 'list' : 'canvas');
+        history.replaceState(null, '', u.toString());
     }
 
     const menu = document.createElement('div');
