@@ -3,7 +3,6 @@
     --ink: #111;
     --muted: #666;
     --accent: #000;
-    /* default link color */
     --caption-bg: rgba(255, 255, 255, 0.8);
     --zstep: 10;
 }
@@ -82,17 +81,15 @@ body {
     inset: 0;
     overflow: hidden;
     background: transparent;
-    /* desktop background provided by body */
 }
 
-/* Draggable node */
 .node {
     position: absolute;
     touch-action: none;
-    /* enable pointer drag */
     user-select: none;
     -webkit-user-drag: none;
     cursor: grab;
+    margin: 0;
 }
 
 .node:active {
@@ -108,10 +105,8 @@ body {
 .node img {
     display: block;
     height: auto;
-    max-width: 260px;
-    /* clamp for sanity */
+    max-width: 150px;
     pointer-events: none;
-    /* so dragging grabs container, not img */
 }
 
 .node .caption {
@@ -139,7 +134,6 @@ body {
     font-weight: 600
 }
 
-/* List view */
 .list {
     margin-top: 60px;
     padding: 1rem;
@@ -161,12 +155,6 @@ body {
     margin-bottom: .36rem;
 }
 
-/* Optional: outline toggle for alignment */
-.canvas.outline .node {
-    outline: 1px dashed rgba(0, 0, 0, .2)
-}
-
-/* Icon button styles */
 .icon-btn {
     display: inline-flex;
     align-items: center;
@@ -187,7 +175,6 @@ body {
     height: 20px
 }
 
-/* Reduce motion accessibility */
 @media (prefers-reduced-motion: reduce) {
     * {
         scroll-behavior: auto !important;
