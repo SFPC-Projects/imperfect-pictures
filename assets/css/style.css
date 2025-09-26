@@ -194,7 +194,7 @@ body {
     }
 }
 
-.taskbar {
+.nav-bar {
     position: fixed;
     left: 0;
     right: 0;
@@ -211,7 +211,7 @@ body {
     font-size: 13px;
 }
 
-.taskbar-left {
+.nav-bar-left {
     display: flex;
     align-items: center;
     gap: 6px
@@ -256,7 +256,7 @@ body {
     box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #fff, inset 2px 2px 0 #404040, inset -2px -2px 0 #dfdfdf;
 }
 
-.taskbar-right {
+.nav-bar-right {
     min-width: 90px;
     text-align: right
 }
