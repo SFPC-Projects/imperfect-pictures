@@ -27,11 +27,13 @@
 
     let selectedNode = null;
     let selectedRow = null;
+
     function selectRow(row) {
         if (selectedRow) selectedRow.classList.remove('selected');
         selectedRow = row;
         if (row) row.classList.add('selected');
     }
+
     function openRow(row) {
         if (!row) return;
         const href = row.dataset.href;
@@ -39,6 +41,48 @@
         if (href) {
             window.open(href, target, 'noopener');
         }
+    }
+
+    let allItems = [];
+    let sortBy = null;
+    let sortAsc = true;
+
+    function normalize(v) { return (v == null ? '' : String(v)).toLowerCase(); }
+
+    function getSortedItems() {
+        const arr = allItems.slice();
+        if (!sortBy) return arr;
+        arr.sort((a, b) => {
+            const A = normalize(a[sortBy]);
+            const B = normalize(b[sortBy]);
+            const cmp = A.localeCompare(B);
+            return sortAsc ? cmp : -cmp;
+        });
+        return arr;
+    }
+
+    function setSort(column) {
+        const map = { name: 'title', creator: 'creator', cls: 'class' };
+        const field = map[column];
+        if (!field) return;
+        if (sortBy === field) {
+            sortAsc = !sortAsc;
+        } else {
+            sortBy = field; sortAsc = true;
+        }
+        renderList(getSortedItems());
+        updateSortIndicators();
+    }
+
+    function updateSortIndicators() {
+        const header = document.querySelector('#list .list-header');
+        if (!header) return;
+        header.querySelectorAll('.col').forEach(el => el.removeAttribute('data-sort'));
+        const active =
+            sortBy === 'title' ? header.querySelector('.name') :
+                sortBy === 'creator' ? header.querySelector('.creator') :
+                    sortBy === 'class' ? header.querySelector('.cls') : null;
+        if (active) active.setAttribute('data-sort', sortAsc ? 'asc' : 'desc');
     }
 
     let currentView = 'canvas';
@@ -136,15 +180,24 @@
     fetch('data/projects.json', { cache: 'no-store' })
         .then(r => r.json())
         .then(items => {
-            renderCanvas(items);
-            renderList(items);
-            if (!restorePositions(items)) randomizePositions();
+            allItems = items;
+            renderCanvas(allItems);
+            renderList(getSortedItems());
+            updateSortIndicators();
+            if (!restorePositions(allItems)) randomizePositions();
             enableDrag();
         })
         .catch(err => {
             console.error('Failed to load data/projects.json', err);
             canvas.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
         });
+
+    const hdrName = document.querySelector('#list .list-header .name');
+    const hdrCreator = document.querySelector('#list .list-header .creator');
+    const hdrCls = document.querySelector('#list .list-header .cls');
+    hdrName && hdrName.addEventListener('click', () => setSort('name'));
+    hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
+    hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
 
     function updateControlsVisibility() {
         const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
