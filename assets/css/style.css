@@ -385,6 +385,19 @@ ul.details li {
     user-select: none;
 }
 
+.list-header .col {
+    cursor: pointer;
+    user-select: none;
+}
+
+.list-header .col[data-sort="asc"]::after {
+    content: " ▲";
+}
+
+.list-header .col[data-sort="desc"]::after {
+    content: " ▼";
+}
+
 .list-header .col,
 ul.details li>* {
     padding: 4px 8px;
