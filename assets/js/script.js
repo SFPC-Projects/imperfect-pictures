@@ -199,6 +199,10 @@
     hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
     hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
 
+    sortBy = 'title'; sortAsc = true;
+    renderList(getSortedItems());
+    updateSortIndicators();
+
     function updateControlsVisibility() {
         const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
         if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
