@@ -5,6 +5,10 @@
     const randomizeBtn = byId('randomizeBtn');
     const listViewLink = byId('listViewLink');
     const canvasViewLink = byId('canvasViewLink');
+    const aboutBtn = byId('aboutBtn');
+    const aboutOverlay = byId('aboutOverlay');
+    const aboutWindow = byId('aboutWindow');
+    const aboutClose = byId('aboutClose');
 
     function makeKey(item, idx) {
         const slug = (s) => String(s || '').toLowerCase().trim()
@@ -28,7 +32,6 @@
             window.open(href, target, 'noopener');
         }
     }
-    const clockEl = document.getElementById('clock');
 
     // Simple router between canvas and list via query param
     const url = new URL(window.location.href);
@@ -36,14 +39,28 @@
     let currentView = view;
     setView(view);
 
-    if (clockEl) {
-        const pad = n => String(n).padStart(2, '0');
-        const tick = () => {
-            const d = new Date();
-            clockEl.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-        };
-        tick(); setInterval(tick, 1000 * 30);
+    function openAbout() {
+        if (!aboutOverlay) return;
+        aboutOverlay.hidden = false;
+        aboutClose && aboutClose.focus();
     }
+    function closeAbout() {
+        if (!aboutOverlay) return;
+        aboutOverlay.hidden = true;
+    }
+
+    aboutBtn && aboutBtn.addEventListener('click', (e) => { e.preventDefault(); openAbout(); });
+    aboutClose && aboutClose.addEventListener('click', (e) => { e.preventDefault(); closeAbout(); });
+
+    // click outside the window closes
+    aboutOverlay && aboutOverlay.addEventListener('click', (e) => {
+        if (e.target === aboutOverlay) closeAbout();
+    });
+
+    // Esc closes
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && aboutOverlay && !aboutOverlay.hidden) closeAbout();
+    });
 
     randomizeBtn.onclick = () => {
         if (currentView === 'list') {

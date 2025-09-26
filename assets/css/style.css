@@ -261,13 +261,6 @@ body {
     text-align: right
 }
 
-#clock {
-    display: inline-block;
-    padding: 2px 6px;
-    background: #c0c0c0;
-    box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #fff;
-}
-
 a {
     color: #000080;
 }
@@ -291,6 +284,19 @@ a:visited {
     display: flex;
     flex-direction: column;
     color: #000;
+}
+
+.window-panel.floating {
+    width: min(720px, 90vw);
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.window-panel.floating .window-viewport {
+    overflow: auto;
+    padding: 10px 12px;
 }
 
 .titlebar {
@@ -373,4 +379,45 @@ ul.details li .name a {
 
 ul.details li .name a:hover {
     text-decoration: underline;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4000;
+}
+
+.titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.titlebar-close {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 6px;
+    cursor: pointer;
+}
+
+.titlebar-close:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.about-content p {
+    margin: .5rem 0 1rem;
+}
+
+.about-content code {
+    background: #f2f2f2;
+    padding: 1px 4px;
+    border-radius: 4px;
 }
