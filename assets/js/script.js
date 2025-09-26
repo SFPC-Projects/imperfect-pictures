@@ -6,11 +6,23 @@
     const listViewLink = byId('listViewLink');
     const canvasViewLink = byId('canvasViewLink');
 
+    let selectedNode = null;
+    const clockEl = document.getElementById('clock');
+
     // Simple router between canvas and list via query param
     const url = new URL(window.location.href);
     const view = url.searchParams.get('view') || 'canvas';
     let currentView = view;
     setView(view);
+
+    if (clockEl) {
+        const pad = n => String(n).padStart(2, '0');
+        const tick = () => {
+            const d = new Date();
+            clockEl.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        };
+        tick(); setInterval(tick, 1000 * 30);
+    }
 
     randomizeBtn.onclick = () => {
         if (currentView === 'list') {
@@ -51,6 +63,29 @@
         }
     }
 
+    // basic context menu
+    const menu = document.createElement('div');
+    menu.id = 'ctx';
+    Object.assign(menu.style, { position: 'fixed', background: '#c0c0c0', border: '1px solid #808080', boxShadow: 'inset -1px -1px 0 #808080, inset 1px 1px 0 #fff', padding: '4px 0', display: 'none', zIndex: 4000, fontSize: '13px', minWidth: '160px' });
+    document.body.appendChild(menu);
+    function hideMenu() { menu.style.display = 'none'; }
+    function showMenu(x, y, items) {
+        menu.innerHTML = '';
+        items.forEach(it => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = it.label;
+            Object.assign(btn.style, { display: 'block', width: '100%', textAlign: 'left', background: 'transparent', border: 'none', padding: '4px 10px', cursor: 'default' });
+            btn.onmouseenter = () => btn.style.background = '#000080', btn.style.color = '#fff';
+            btn.onmouseleave = () => btn.style.background = 'transparent', btn.style.color = '#000';
+            btn.onclick = () => { hideMenu(); it.onClick(); };
+            menu.appendChild(btn);
+        });
+        menu.style.left = x + 'px'; menu.style.top = y + 'px';
+        menu.style.display = 'block';
+    }
+    window.addEventListener('click', hideMenu);
+
     function renderCanvas(items) {
         canvas.innerHTML = '';
         items.forEach((item, idx) => {
@@ -84,6 +119,26 @@
             node.appendChild(cap);
             canvas.appendChild(node);
 
+            // selection on click
+            node.addEventListener('click', (ev) => {
+                ev.stopPropagation();
+                selectNode(node);
+            });
+            // double click opens
+            node.addEventListener('dblclick', (ev) => {
+                ev.preventDefault();
+                a.click();
+            });
+            node.addEventListener('contextmenu', (ev) => {
+                ev.preventDefault();
+                selectNode(node);
+                showMenu(ev.clientX, ev.clientY, [
+                    { label: 'Open', onClick: () => a.click() },
+                    { label: 'Open in new tab', onClick: () => window.open(a.href, '_blank', 'noopener') },
+                    { label: 'Properties', onClick: () => alert(`${item.title} — ${item.creator}`) }
+                ]);
+            });
+
             // keyboard: Enter/Space opens link
             node.addEventListener('keydown', (ev) => {
                 if (ev.key === 'Enter' || ev.key === ' ') {
@@ -101,6 +156,9 @@
                 randomizePositions();
             }
         };
+
+        // clicking empty desktop clears selection
+        canvas.addEventListener('click', () => selectNode(null));
     }
 
     function renderList(items) {
@@ -150,6 +208,7 @@
             if (!node) return;
 
             active = node;
+            selectNode(node);
             node.setPointerCapture(e.pointerId);
             node.style.zIndex = String(++zTop);
             const p = getPos(node);
@@ -232,5 +291,11 @@
     function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
     function escapeHtml(str) {
         return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+    }
+
+    function selectNode(node) {
+        if (selectedNode) selectedNode.classList.remove('selected');
+        selectedNode = node;
+        if (node) node.classList.add('selected');
     }
 })();
