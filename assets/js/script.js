@@ -33,7 +33,6 @@
         }
     }
 
-    // Simple router between canvas and list via query param
     const url = new URL(window.location.href);
     const view = url.searchParams.get('view') || 'canvas';
     let currentView = view;
@@ -51,7 +50,7 @@
 
     aboutBtn && aboutBtn.addEventListener('click', (e) => { e.preventDefault(); openAbout(); });
     aboutClose && aboutClose.addEventListener('click', (e) => { e.preventDefault(); closeAbout(); });
-    // Delegated close handler (safety net)
+
     aboutOverlay && aboutOverlay.addEventListener('click', (e) => {
         const closeBtn = e.target && e.target.closest && e.target.closest('#aboutClose');
         if (closeBtn) {
@@ -61,7 +60,6 @@
         }
     });
 
-    // Keyboard support for close button
     aboutClose && aboutClose.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -69,7 +67,6 @@
         }
     });
 
-    // Esc closes
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && aboutOverlay && !aboutOverlay.hidden) closeAbout();
     });
@@ -97,13 +94,11 @@
         history.replaceState(null, '', url.toString());
     });
 
-    // Data load
     fetch('data/projects.json', { cache: 'no-store' })
         .then(r => r.json())
         .then(items => {
             renderCanvas(items);
             renderList(items);
-            // initial random placement unless saved
             if (!restorePositions(items)) randomizePositions();
             enableDrag();
         })
@@ -118,7 +113,6 @@
         const listSec = byId('list');
         if (mode === 'list') {
             listSec.hidden = false; canvasSec.hidden = true;
-            // focus list for keyboard nav
             listUl && listUl.focus();
             listViewLink.hidden = true; canvasViewLink.hidden = false;
         } else {
@@ -127,7 +121,6 @@
         }
     }
 
-    // basic context menu
     const menu = document.createElement('div');
     menu.id = 'ctx';
     Object.assign(menu.style, { position: 'fixed', background: '#c0c0c0', border: '1px solid #808080', boxShadow: 'inset -1px -1px 0 #808080, inset 1px 1px 0 #fff', padding: '4px 0', display: 'none', zIndex: 4000, fontSize: '13px', minWidth: '160px' });
@@ -157,7 +150,6 @@
             node.className = 'node';
             node.dataset.key = makeKey(item, idx);
 
-            // Anchor wraps image; caption sits below
             const a = document.createElement('a');
             a.className = 'thumb';
             a.href = item.href;
@@ -183,12 +175,10 @@
             node.appendChild(cap);
             canvas.appendChild(node);
 
-            // selection on click
             node.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 selectNode(node);
             });
-            // double click opens
             node.addEventListener('dblclick', (ev) => {
                 ev.preventDefault();
                 a.click();
@@ -203,7 +193,6 @@
                 ]);
             });
 
-            // keyboard: Enter/Space opens link
             node.addEventListener('keydown', (ev) => {
                 if (ev.key === 'Enter' || ev.key === ' ') {
                     a.click();
@@ -221,7 +210,6 @@
             }
         };
 
-        // clicking empty desktop clears selection
         canvas.addEventListener('click', () => selectNode(null));
     }
 
@@ -233,10 +221,8 @@
             li.dataset.href = item.href;
             li.dataset.target = item.target || '_blank';
 
-            // columns
             const name = document.createElement('span');
             name.className = 'name';
-            // clickable text link inside the Name column (opens on double-click; link is for accessibility)
             name.innerHTML = `<a href="${item.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>`;
 
             const creator = document.createElement('span');
@@ -251,7 +237,6 @@
             li.appendChild(creator);
             li.appendChild(cls);
 
-            // interactions: single-click select, double-click open, context menu
             li.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 selectRow(li);
@@ -273,7 +258,6 @@
             listUl.appendChild(li);
         });
 
-        // keyboard navigation for list
         listUl.tabIndex = 0;
         listUl.addEventListener('keydown', (ev) => {
             if (currentView !== 'list') return;
@@ -301,19 +285,16 @@
             }
         });
 
-        // clicking empty area clears selection
         listUl.addEventListener('click', () => selectRow(null));
     }
 
     function shuffleList() {
         if (!listUl) return;
         const nodes = Array.from(listUl.children);
-        // Fisher-Yates shuffle
         for (let i = nodes.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [nodes[i], nodes[j]] = [nodes[j], nodes[i]];
         }
-        // Re-append in new order
         nodes.forEach(n => listUl.appendChild(n));
     }
 
@@ -358,11 +339,9 @@
             const dy = e.clientY - startY;
             const { width: cw, height: ch, left, top } = canvas.getBoundingClientRect();
             const rect = active.getBoundingClientRect();
-            // position relative to canvas
             let nx = origX + dx;
             let ny = origY + dy;
 
-            // Constrain inside canvas
             const w = rect.width, h = rect.height;
             nx = clamp(nx, 0, cw - w);
             ny = clamp(ny, 0, ch - h);
@@ -382,11 +361,9 @@
         window.addEventListener('pointermove', onPointerMove);
         window.addEventListener('pointerup', onPointerUp);
 
-        // Prevent default ghost image drag from the <img>
         canvas.addEventListener('dragstart', (e) => e.preventDefault());
     }
 
-    // Position helpers (we use translate for smoother paint)
     function setPos(el, x, y) {
         el.style.transform = `translate(${x}px, ${y}px)`;
         el.dataset.x = String(Math.round(x));
@@ -399,7 +376,7 @@
     function savePositions() {
         const data = {};
         canvas.querySelectorAll('.node').forEach(n => {
-            const k = n.dataset.key || n.dataset.id; // fallback for older saved nodes
+            const k = n.dataset.key || n.dataset.id;
             if (!k) return;
             data[k] = { x: Number(n.dataset.x || 0), y: Number(n.dataset.y || 0), z: Number(n.style.zIndex || 1) };
         });
