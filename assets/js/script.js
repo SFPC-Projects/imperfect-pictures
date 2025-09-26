@@ -32,8 +32,20 @@
         }
     };
 
-    listViewLink.addEventListener('click', (e) => { /* allow default */ });
-    canvasViewLink.addEventListener('click', (e) => { /* allow default */ });
+    listViewLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        setView('list');
+        const url = new URL(window.location.href);
+        url.searchParams.set('view', 'list');
+        history.replaceState(null, '', url.toString());
+    });
+    canvasViewLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        setView('canvas');
+        const url = new URL(window.location.href);
+        url.searchParams.set('view', 'canvas');
+        history.replaceState(null, '', url.toString());
+    });
 
     // Data load
     fetch('data/projects.json', { cache: 'no-store' })
