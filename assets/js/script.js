@@ -4,7 +4,6 @@
     const listUl = byId('listUl');
     const randomizeBtn = byId('randomizeBtn');
     const listViewLink = byId('listViewLink');
-    const canvasViewLink = byId('canvasViewLink');
 
     const listOverlay = byId('listOverlay');
     const listWindow = byId('listWindow');
@@ -45,6 +44,7 @@
     let currentView = 'canvas';
     setView('canvas');
     listOverlay && (listOverlay.hidden = true);
+    updateControlsVisibility();
 
     // List window close behaviors
     listClose && listClose.addEventListener('click', (e) => {
@@ -71,10 +71,12 @@
         if (!aboutOverlay) return;
         aboutOverlay.hidden = false;
         aboutClose && aboutClose.focus();
+        updateControlsVisibility();
     }
     function closeAbout() {
         if (!aboutOverlay) return;
         aboutOverlay.hidden = true;
+        updateControlsVisibility();
     }
 
     // Open
@@ -130,10 +132,6 @@
         e.preventDefault();
         setView('list');
     });
-    canvasViewLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        setView('canvas');
-    });
 
     fetch('data/projects.json', { cache: 'no-store' })
         .then(r => r.json())
@@ -148,25 +146,27 @@
             canvas.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
         });
 
+    function updateControlsVisibility() {
+        const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
+        if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
+        if (listViewLink) listViewLink.classList.toggle('active', currentView === 'list');
+        if (randomizeBtn) randomizeBtn.hidden = !(currentView === 'canvas' && !aboutOpen);
+    }
+
     function setView(mode) {
         currentView = mode;
         const canvasSec = byId('canvas');
 
         if (mode === 'list') {
-            listOverlay && (listOverlay.hidden = false);
-            canvasSec && (canvasSec.hidden = false);
-            listUl && listUl.focus();
-            listViewLink.hidden = true;
-            canvasViewLink.hidden = false;
+            if (listOverlay) listOverlay.hidden = false;
+            if (canvasSec) canvasSec.hidden = false; // keep canvas visible underneath
+            if (listUl) listUl.focus();
         } else { // canvas
-            listOverlay && (listOverlay.hidden = true);
-            canvasSec && (canvasSec.hidden = false);
-            listViewLink.hidden = false;
-            canvasViewLink.hidden = true;
+            if (listOverlay) listOverlay.hidden = true;
+            if (canvasSec) canvasSec.hidden = false;
         }
 
-        // Show Shuffle only in canvas mode
-        if (randomizeBtn) randomizeBtn.hidden = (mode !== 'canvas');
+        updateControlsVisibility();
     }
 
     const menu = document.createElement('div');
