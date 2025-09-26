@@ -157,7 +157,8 @@ body {
 }
 
 .list li {
-    margin-bottom: .75rem;
+    margin-top: .36rem;
+    margin-bottom: .36rem;
 }
 
 /* Optional: outline toggle for alignment */
