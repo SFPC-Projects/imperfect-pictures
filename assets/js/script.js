@@ -242,15 +242,6 @@
                 ev.preventDefault();
                 a.click();
             });
-            node.addEventListener('contextmenu', (ev) => {
-                ev.preventDefault();
-                selectNode(node);
-                showMenu(ev.clientX, ev.clientY, [
-                    { label: 'Open', onClick: () => a.click() },
-                    { label: 'Open in new tab', onClick: () => window.open(a.href, '_blank', 'noopener') },
-                    { label: 'Properties', onClick: () => alert(`${item.title} — ${item.creator}`) }
-                ]);
-            });
 
             node.addEventListener('keydown', (ev) => {
                 if (ev.key === 'Enter' || ev.key === ' ') {
@@ -303,15 +294,6 @@
             li.addEventListener('dblclick', (ev) => {
                 ev.preventDefault();
                 openRow(li);
-            });
-            li.addEventListener('contextmenu', (ev) => {
-                ev.preventDefault();
-                selectRow(li);
-                showMenu(ev.clientX, ev.clientY, [
-                    { label: 'Open', onClick: () => openRow(li) },
-                    { label: 'Open in new tab', onClick: () => window.open(li.dataset.href, '_blank', 'noopener') },
-                    { label: 'Copy link address', onClick: () => navigator.clipboard && navigator.clipboard.writeText(li.dataset.href) }
-                ]);
             });
 
             listUl.appendChild(li);
