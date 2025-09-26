@@ -346,6 +346,26 @@ a:visited {
     padding: 4px 8px;
 }
 
+/* Single-column header for modal panels (e.g., About) */
+.panel-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    background: #c0c0c0;
+    color: #000;
+    border-bottom: 1px solid #808080;
+    box-shadow:
+        inset -1px -1px 0 #808080,
+        inset 1px 1px 0 #fff;
+    font-size: 12px;
+}
+
+.panel-header .col {
+    padding: 4px 8px;
+}
+
 ul.details {
     list-style: none;
     margin: 0;
