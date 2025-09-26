@@ -11,10 +11,17 @@
   <header class="site-header" role="banner">
     <h1>Imperfect Pictures — Class Anthology</h1>
     <nav class="utility">
-      <button id="randomizeBtn" aria-label="Randomly reposition projects">Shuffle</button>
-      <button id="toggleOutlineBtn" aria-pressed="false" aria-label="Toggle outlines for alignment">Outline</button>
+      <button id="randomizeBtn" class="icon-btn" aria-label="Shuffle layout" title="Shuffle">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M17 3l4 4-4 4V8h-2.59l-3.7 3.7 1.42 1.41L16.41 9H17v2l4-4-4-4v2h-1.59l-4.7 4.7-2.12-2.12L13.59 3H17zM7 13H3v-2h4l3.3-3.3 1.4 1.4L8.4 13.7c-.28.2-.62.3-.96.3H7zm14 4l-4 4v-2h-3.59l-3.71-3.71 1.42-1.41L14.41 17H17v-2l4 4z" fill="currentColor"/>
+        </svg>
+      </button>
       <a id="listViewLink" href="?view=list" aria-label="Switch to list view">List</a>
-      <a id="canvasViewLink" href="?view=canvas" aria-label="Switch to canvas view" hidden>Canvas</a>
+      <a id="canvasViewLink" class="icon-btn" href="?view=canvas" aria-label="Switch to canvas view" title="Canvas" hidden>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" fill="currentColor"/>
+        </svg>
+      </a>
     </nav>
   </header>
 

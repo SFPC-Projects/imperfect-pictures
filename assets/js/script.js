@@ -4,7 +4,6 @@
   const listUl = byId('listUl');
   const yearOut = byId('year');
   const randomizeBtn = byId('randomizeBtn');
-  const toggleOutlineBtn = byId('toggleOutlineBtn');
   const listViewLink = byId('listViewLink');
   const canvasViewLink = byId('canvasViewLink');
 
@@ -89,11 +88,6 @@
     });
 
     randomizeBtn.onclick = randomizePositions;
-    toggleOutlineBtn.onclick = ()=>{
-      const pressed = toggleOutlineBtn.getAttribute('aria-pressed') === 'true';
-      toggleOutlineBtn.setAttribute('aria-pressed', String(!pressed));
-      canvas.classList.toggle('outline', !pressed);
-    };
   }
 
   function renderList(items){
