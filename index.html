@@ -12,30 +12,35 @@
 <body>
     <footer class="nav-bar" role="contentinfo" aria-label="Navigation bar">
         <div class="nav-bar-left">
-            <button id="aboutBtn" class="about-btn" type="button" aria-label="About">About</button>
-            <div class="task-buttons">
-                <button id="listViewLink" class="task-btn" type="button" aria-label="Switch to list view" title="List">
-                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                        <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" fill="currentColor" />
-                    </svg>
-                    <span>List</span>
-                </button>
-                <button id="canvasViewLink" class="task-btn" type="button" aria-label="Switch to canvas view"
-                    title="Canvas" hidden>
-                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                        <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" fill="currentColor" />
-                    </svg>
-                    <span>Canvas</span>
-                </button>
-                <button id="randomizeBtn" class="task-btn" aria-label="Shuffle layout" title="Shuffle">
-                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                        <path
-                            d="M17 3l4 4-4 4V8h-2.59l-3.7 3.7 1.42 1.41L16.41 9H17v2l4-4-4-4v2h-1.59l-4.7 4.7-2.12-2.12L13.59 3H17zM7 13H3v-2h4l3.3-3.3 1.4 1.4L8.4 13.7c-.28.2-.62.3-.96.3H7zm14 4l-4 4v-2h-3.59l-3.71-3.71 1.42-1.41L14.41 17H17v-2l4 4z"
-                            fill="currentColor" />
-                    </svg>
-                    <span>Shuffle</span>
-                </button>
-            </div>
+            <button id="aboutBtn" class="task-btn" type="button" aria-label="About" title="About">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path
+                        d="M11 7h2v2h-2V7zm0 4h2v6h-2v-6zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
+                        fill="currentColor" />
+                </svg>
+                <span>About</span>
+            </button>
+            <button id="listViewLink" class="task-btn" type="button" aria-label="Switch to list view" title="List">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" fill="currentColor" />
+                </svg>
+                <span>List</span>
+            </button>
+            <button id="canvasViewLink" class="task-btn" type="button" aria-label="Switch to canvas view" title="Canvas"
+                hidden>
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" fill="currentColor" />
+                </svg>
+                <span>Canvas</span>
+            </button>
+            <button id="randomizeBtn" class="task-btn" aria-label="Shuffle layout" title="Shuffle">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path
+                        d="M17 3l4 4-4 4V8h-2.59l-3.7 3.7 1.42 1.41L16.41 9H17v2l4-4-4-4v2h-1.59l-4.7 4.7-2.12-2.12L13.59 3H17zM7 13H3v-2h4l3.3-3.3 1.4 1.4L8.4 13.7c-.28.2-.62.3-.96.3H7zm14 4l-4 4v-2h-3.59l-3.71-3.71 1.42-1.41L14.41 17H17v-2l4 4z"
+                        fill="currentColor" />
+                </svg>
+                <span>Shuffle</span>
+            </button>
         </div>
         <div class="nav-bar-right">
             <span class="nav-bar-title" aria-label="Site title">Imperfect Pictures Class Archive</span>
