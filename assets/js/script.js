@@ -2,12 +2,9 @@
     const byId = (id) => document.getElementById(id);
     const canvas = byId('canvas');
     const listUl = byId('listUl');
-    const yearOut = byId('year');
     const randomizeBtn = byId('randomizeBtn');
     const listViewLink = byId('listViewLink');
     const canvasViewLink = byId('canvasViewLink');
-
-    yearOut.textContent = new Date().getFullYear();
 
     // Simple router between canvas and list via query param
     const url = new URL(window.location.href);
