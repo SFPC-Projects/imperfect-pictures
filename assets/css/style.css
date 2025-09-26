@@ -82,7 +82,7 @@ body {
     inset: 0;
     overflow: hidden;
     background: transparent;
-    /* desktop is the body background */
+    /* desktop background provided by body */
 }
 
 /* Draggable node */
