@@ -6,6 +6,13 @@
     const listViewLink = byId('listViewLink');
     const canvasViewLink = byId('canvasViewLink');
 
+    function makeKey(item, idx) {
+        const slug = (s) => String(s || '').toLowerCase().trim()
+            .replace(/[\s]+/g, '-').replace(/[^a-z0-9\-_.:/]/g, '');
+        const t = slug(item.title), c = slug(item.creator), i = slug(item.image);
+        return `tc:${t}|${c}|${i || idx}`;
+    }
+
     let selectedNode = null;
     const clockEl = document.getElementById('clock');
 
@@ -103,7 +110,7 @@
         items.forEach((item, idx) => {
             const node = document.createElement('figure');
             node.className = 'node';
-            node.dataset.id = item.id ?? String(idx);
+            node.dataset.key = makeKey(item, idx);
 
             // Anchor wraps image; caption sits below
             const a = document.createElement('a');
@@ -276,7 +283,9 @@
     function savePositions() {
         const data = {};
         canvas.querySelectorAll('.node').forEach(n => {
-            data[n.dataset.id] = { x: Number(n.dataset.x || 0), y: Number(n.dataset.y || 0), z: Number(n.style.zIndex || 1) };
+            const k = n.dataset.key || n.dataset.id; // fallback for older saved nodes
+            if (!k) return;
+            data[k] = { x: Number(n.dataset.x || 0), y: Number(n.dataset.y || 0), z: Number(n.style.zIndex || 1) };
         });
         try { localStorage.setItem('ipos', JSON.stringify(data)); } catch (_e) { }
     }
@@ -289,7 +298,7 @@
         const nodes = Array.from(canvas.querySelectorAll('.node'));
         let appliedAny = false;
         nodes.forEach((n, idx) => {
-            const key = n.dataset.id ?? String(idx);
+            const key = n.dataset.key || n.dataset.id || String(idx);
             const s = saved[key];
             if (s) {
                 setPos(n, s.x || 0, s.y || 0);
