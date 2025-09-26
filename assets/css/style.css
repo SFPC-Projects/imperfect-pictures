@@ -206,6 +206,7 @@ body {
 }
 
 
+
 .task-btn {
     display: inline-flex;
     align-items: center;
@@ -217,6 +218,10 @@ body {
     border: none;
     cursor: pointer;
     box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #fff, inset -2px -2px 0 #404040, inset 2px 2px 0 #dfdfdf;
+}
+
+.task-btn[hidden] {
+    display: none !important;
 }
 
 .task-btn:active {
