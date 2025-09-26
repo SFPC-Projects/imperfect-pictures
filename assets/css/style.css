@@ -261,6 +261,10 @@ body {
     text-align: right
 }
 
+.nav-bar-title {
+    white-space: nowrap;
+}
+
 a {
     color: #000080;
 }
