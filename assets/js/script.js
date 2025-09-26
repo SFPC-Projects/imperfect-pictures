@@ -42,16 +42,9 @@
         }
     }
 
-    const url = new URL(window.location.href);
-    const view = url.searchParams.get('view') || 'canvas';
-    let currentView = view;
-    setView(view);
-
-    if (view === 'list') {
-        listOverlay && (listOverlay.hidden = false);
-    } else {
-        listOverlay && (listOverlay.hidden = true);
-    }
+    let currentView = 'canvas';
+    setView('canvas');
+    listOverlay && (listOverlay.hidden = true);
 
     // List window close behaviors
     listClose && listClose.addEventListener('click', (e) => {
@@ -136,16 +129,10 @@
     listViewLink.addEventListener('click', (e) => {
         e.preventDefault();
         setView('list');
-        const url = new URL(window.location.href);
-        url.searchParams.set('view', 'list');
-        history.replaceState(null, '', url.toString());
     });
     canvasViewLink.addEventListener('click', (e) => {
         e.preventDefault();
         setView('canvas');
-        const url = new URL(window.location.href);
-        url.searchParams.set('view', 'canvas');
-        history.replaceState(null, '', url.toString());
     });
 
     fetch('data/projects.json', { cache: 'no-store' })
@@ -180,10 +167,6 @@
 
         // Show Shuffle only in canvas mode
         if (randomizeBtn) randomizeBtn.hidden = (mode !== 'canvas');
-
-        const u = new URL(window.location.href);
-        u.searchParams.set('view', mode === 'list' ? 'list' : 'canvas');
-        history.replaceState(null, '', u.toString());
     }
 
     const menu = document.createElement('div');
