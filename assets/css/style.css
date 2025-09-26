@@ -390,6 +390,14 @@ ul.details li {
     user-select: none;
 }
 
+.list-header .col:hover {
+    filter: brightness(0.98);
+}
+
+.list-header [role="columnheader"] {
+    cursor: pointer;
+}
+
 .list-header .col[data-sort="asc"]::after {
     content: " ▲";
 }
