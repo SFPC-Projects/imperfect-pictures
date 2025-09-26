@@ -57,8 +57,6 @@ body {
 .utility a,
 .utility button {
     font: inherit;
-    border: 1px solid #ddd;
-    background: #fff;
     padding: .35rem .55rem;
     border-radius: 6px;
     text-decoration: none;
@@ -182,9 +180,8 @@ body {
     width: 36px;
     height: 36px;
     border: none;
-    background: rgba(255, 255, 255, .7);
+    background: none;
     border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
     text-decoration: none;
     color: var(--ink);
     cursor: pointer;
