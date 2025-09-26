@@ -1,4 +1,79 @@
-html, body { margin: 0; padding: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
-header, main { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-h1 { margin-bottom: .25rem; }
-footer { max-width: 900px; margin: 4rem auto 2rem; padding: 0 1rem; opacity: .7; }
+:root{
+  --bg:#f7f7f5;
+  --ink:#111;
+  --muted:#666;
+  --accent: #000; /* default link color */
+  --caption-bg: rgba(255,255,255,0.8);
+  --zstep: 10;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg);
+  color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  line-height:1.35;
+}
+
+.site-header, .site-footer{
+  max-width: 1100px; margin: .75rem auto; padding: 0 .75rem;
+  display:flex; align-items:center; justify-content:space-between; gap:.5rem;
+}
+.site-header h1{font-size:1rem; margin:.25rem 0}
+.utility {display:flex; gap:.5rem; align-items:center}
+.utility a, .utility button{
+  font: inherit; border:1px solid #ddd; background:#fff; padding:.35rem .55rem;
+  border-radius:6px; text-decoration:none; color:var(--ink); cursor:pointer;
+}
+.utility a[hidden]{display:none}
+
+#app{height: calc(100vh - 120px); max-width: 1100px; margin: 0 auto; padding: .5rem}
+.canvas{
+  position:relative;
+  width:100%; height:100%;
+  border:1px dashed #ddd; border-radius:10px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0,0,0,.02), transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(0,0,0,.02), transparent 45%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,.01), rgba(0,0,0,.01) 1px, transparent 1px, transparent 20px),
+    #fafaf8;
+  overflow:hidden;
+}
+
+/* Draggable node */
+.node{
+  position:absolute; touch-action:none; /* enable pointer drag */
+  user-select:none; -webkit-user-drag: none;
+  cursor: grab;
+}
+.node:active{cursor:grabbing}
+.node a.thumb{
+  display:block; text-decoration:none; outline: none;
+}
+.node img{
+  display:block; height:auto; max-width: 260px; /* clamp for sanity */
+  pointer-events:none; /* so dragging grabs container, not img */
+}
+.node .caption{
+  margin-top:.25rem; background:var(--caption-bg); backdrop-filter: blur(2px);
+  padding:.25rem .35rem; border-radius:6px; border:1px solid rgba(0,0,0,.06);
+  box-shadow: 0 1px 0 rgba(0,0,0,.06);
+}
+.node .creator{font-size:.85rem; color:var(--muted)}
+.node .title{font-weight:600}
+
+/* List view */
+.list[hidden]{display:none}
+.list ul{margin:0; padding:0; list-style:none; display:grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap:1rem}
+.list li{
+  border:1px solid #eee; border-radius:10px; padding:.75rem; background:#fff;
+}
+.list img{max-width:100%; height:auto; display:block; margin-bottom:.5rem}
+
+/* Optional: outline toggle for alignment */
+.canvas.outline .node{ outline:1px dashed rgba(0,0,0,.2) }
+
+/* Reduce motion accessibility */
+@media (prefers-reduced-motion: reduce){
+  *{scroll-behavior:auto!important; transition:none!important}
+}

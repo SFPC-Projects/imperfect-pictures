@@ -3,31 +3,35 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Imperfect Pictures — Class Anthology</title>
+  <title>Imperfect Pictures — Anthology</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <meta name="description" content="Draggable desktop of student projects for Imperfect Pictures." />
 </head>
 <body>
-  <header>
+  <header class="site-header" role="banner">
     <h1>Imperfect Pictures — Class Anthology</h1>
-    <p>Archive of works, experiments, and resources.</p>
+    <nav class="utility">
+      <button id="randomizeBtn" aria-label="Randomly reposition projects">Shuffle</button>
+      <button id="toggleOutlineBtn" aria-pressed="false" aria-label="Toggle outlines for alignment">Outline</button>
+      <a id="listViewLink" href="?view=list" aria-label="Switch to list view">List</a>
+      <a id="canvasViewLink" href="?view=canvas" aria-label="Switch to canvas view" hidden>Canvas</a>
+    </nav>
   </header>
 
-  <main>
-    <section id="intro">
-      <h2>About</h2>
-      <p>This site preserves the projects from the digital art class “Imperfect Pictures.”</p>
-    </section>
+  <main id="app" role="main">
+    <!-- Canvas view -->
+    <section id="canvas" class="canvas" aria-label="Project canvas" tabindex="-1"></section>
 
-    <section id="works">
-      <h2>Works</h2>
-      <ul id="work-list"></ul>
+    <!-- List view (accessible fallback) -->
+    <section id="list" class="list" aria-label="Projects list" hidden>
+      <ul id="listUl"></ul>
     </section>
   </main>
 
-  <footer>
+  <footer class="site-footer" role="contentinfo">
     <small>© <span id="year"></span> Imperfect Pictures cohort.</small>
   </footer>
 
-  <script src="assets/js/app.js"></script>
+  <script src="assets/js/app.js" defer></script>
 </body>
 </html>

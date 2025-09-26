@@ -1,0 +1,29 @@
+[
+  {
+    "id": "soto-film",
+    "creator": "A. Soto",
+    "title": "Glitching Memory",
+    "href": "works/glitching-memory.html",
+    "image": "assets/img/soto.png",
+    "target": "_self",
+    "width": 220
+  },
+  {
+    "id": "nguyen-webring",
+    "creator": "M. Nguyen",
+    "title": "Broken Webring",
+    "href": "https://example.com/nguyen-broken-webring",
+    "image": "assets/img/nguyen.png",
+    "target": "_blank",
+    "width": 200
+  },
+  {
+    "id": "ray-traces",
+    "creator": "J. Ray",
+    "title": "Ray Traces (Study)",
+    "href": "works/ray-traces.html",
+    "image": "assets/img/ray.png",
+    "target": "_self",
+    "width": 180
+  }
+]
