@@ -10,8 +10,37 @@
     const aboutWindow = byId('aboutWindow');
     const aboutClose = byId('aboutClose');
 
+    // --- Debug helpers ---
+    const DEBUG = true; // flip to false to silence logs
+    const dbg = (...args) => { if (DEBUG) console.log('[about]', ...args); };
+    dbg('refs', {
+        aboutBtn: !!aboutBtn,
+        aboutOverlay: !!aboutOverlay,
+        aboutWindow: !!aboutWindow,
+        aboutClose: !!aboutClose
+    });
+
     function isOverlayOpen() {
+        dbg('isOverlayOpen', aboutOverlay ? !aboutOverlay.hidden : null);
         return !!(aboutOverlay && !aboutOverlay.hidden);
+    }
+
+    function openAbout() {
+        dbg('openAbout: start');
+        if (!aboutOverlay) return;
+        aboutOverlay.hidden = false;
+        dbg('openAbout: set hidden=false');
+        if (aboutClose) {
+            aboutClose.focus();
+            dbg('openAbout: focused close');
+        }
+    }
+
+    function closeAbout() {
+        dbg('closeAbout: start');
+        if (!aboutOverlay) return;
+        aboutOverlay.hidden = true;
+        dbg('closeAbout: set hidden=true');
     }
 
     function makeKey(item, idx) {
@@ -42,6 +71,8 @@
     let currentView = view;
     setView(view);
 
+    dbg('initial view', view);
+
     function openAbout() {
         if (!aboutOverlay) return;
         aboutOverlay.hidden = false;
@@ -54,41 +85,55 @@
 
     // Open
     aboutBtn && aboutBtn.addEventListener('click', (e) => {
+        dbg('aboutBtn click');
         e.preventDefault();
         openAbout();
     });
 
     // Direct close button click
     aboutClose && aboutClose.addEventListener('click', (e) => {
+        dbg('aboutClose click');
         e.preventDefault();
         closeAbout();
     });
 
-    // Global delegated click (safety net): if a click lands on #aboutClose anywhere, close
+    // Delegated close via capture (safety net)
     document.addEventListener('click', (e) => {
+        dbg('document click (capture)', {
+            targetId: e.target && e.target.id,
+            targetCls: e.target && (e.target.className || '(no class)')
+        });
         const btn = e.target && e.target.closest && e.target.closest('#aboutClose');
         if (btn && isOverlayOpen()) {
+            dbg('delegated close via #aboutClose');
             e.preventDefault();
             closeAbout();
         }
     }, true);
 
-    // Click-outside: clicking the overlay background (outside the window) closes
+    // Click-outside on overlay background
     aboutOverlay && aboutOverlay.addEventListener('mousedown', (e) => {
+        dbg('overlay mousedown', {
+            targetId: e.target && e.target.id,
+            targetCls: e.target && (e.target.className || '(no class)')
+        });
         if (!isOverlayOpen()) return;
         if (e.target === aboutOverlay || (aboutWindow && !aboutWindow.contains(e.target))) {
-            // close only when the initial press was outside
+            dbg('outside click -> closeAbout');
             closeAbout();
         }
     });
 
     // Keyboard: Escape closes; Enter/Space on the Close button also close
     window.addEventListener('keydown', (e) => {
+        dbg('keydown', e.key);
         if (!isOverlayOpen()) return;
         if (e.key === 'Escape') {
+            dbg('keydown close');
             e.preventDefault();
             closeAbout();
         } else if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === aboutClose) {
+            dbg('keydown close (button)');
             e.preventDefault();
             closeAbout();
         }
@@ -435,4 +480,16 @@
         selectedNode = node;
         if (node) node.classList.add('selected');
     }
+
+    if (aboutOverlay) {
+        const mo = new MutationObserver((mutations) => {
+            for (const m of mutations) {
+                if (m.attributeName === 'hidden') {
+                    dbg('aboutOverlay hidden changed:', aboutOverlay.hidden);
+                }
+            }
+        });
+        mo.observe(aboutOverlay, { attributes: true });
+    }
+
 })();
