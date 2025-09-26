@@ -51,10 +51,22 @@
 
     aboutBtn && aboutBtn.addEventListener('click', (e) => { e.preventDefault(); openAbout(); });
     aboutClose && aboutClose.addEventListener('click', (e) => { e.preventDefault(); closeAbout(); });
-
-    // click outside the window closes
+    // Delegated close handler (safety net)
     aboutOverlay && aboutOverlay.addEventListener('click', (e) => {
-        if (e.target === aboutOverlay) closeAbout();
+        const closeBtn = e.target && e.target.closest && e.target.closest('#aboutClose');
+        if (closeBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeAbout();
+        }
+    });
+
+    // Keyboard support for close button
+    aboutClose && aboutClose.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            closeAbout();
+        }
     });
 
     // Esc closes
