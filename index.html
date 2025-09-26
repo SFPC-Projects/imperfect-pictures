@@ -44,22 +44,26 @@
         <!-- Canvas view -->
         <section id="canvas" class="canvas" aria-label="Project canvas" tabindex="-1"></section>
 
-        <!-- List view -->
-        <section id="list" class="list" aria-label="Projects list" hidden>
-            <div class="window-panel" role="group" aria-label="Projects">
-                <div class="titlebar">
-                    <span class="titlebar-text">Projects</span>
-                </div>
-                <div class="window-viewport">
-                    <div class="list-header" role="row">
-                        <span class="col name" role="columnheader">Name</span>
-                        <span class="col creator" role="columnheader">Creator</span>
-                        <span class="col cls" role="columnheader">Class</span>
+        <!-- List view window -->
+        <div id="listOverlay" class="overlay" hidden>
+            <section id="list" class="list" aria-label="Projects list">
+                <div id="listWindow" class="window-panel floating" role="dialog" aria-modal="true"
+                    aria-labelledby="listTitle">
+                    <div class="titlebar">
+                        <span class="titlebar-text" id="listTitle">Projects</span>
+                        <button id="listClose" class="titlebar-close" aria-label="Close">×</button>
                     </div>
-                    <ul id="listUl" class="details" role="listbox" aria-label="Projects"></ul>
+                    <div class="window-viewport">
+                        <div class="list-header" role="row">
+                            <span class="col name" role="columnheader">Name</span>
+                            <span class="col creator" role="columnheader">Creator</span>
+                            <span class="col cls" role="columnheader">Class</span>
+                        </div>
+                        <ul id="listUl" class="details" role="listbox" aria-label="Projects"></ul>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
         <!-- About window -->
         <div id="aboutOverlay" class="overlay" hidden>

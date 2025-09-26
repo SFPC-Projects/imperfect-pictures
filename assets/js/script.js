@@ -5,6 +5,11 @@
     const randomizeBtn = byId('randomizeBtn');
     const listViewLink = byId('listViewLink');
     const canvasViewLink = byId('canvasViewLink');
+
+    const listOverlay = byId('listOverlay');
+    const listWindow = byId('listWindow');
+    const listClose = byId('listClose');
+
     const aboutBtn = byId('aboutBtn');
     const aboutOverlay = byId('aboutOverlay');
     const aboutWindow = byId('aboutWindow');
@@ -41,6 +46,33 @@
     const view = url.searchParams.get('view') || 'canvas';
     let currentView = view;
     setView(view);
+
+    if (view === 'list') {
+        listOverlay && (listOverlay.hidden = false);
+    } else {
+        listOverlay && (listOverlay.hidden = true);
+    }
+
+    // List window close behaviors
+    listClose && listClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        setView('canvas');
+    });
+
+    // Click outside the list window closes it
+    listOverlay && listOverlay.addEventListener('mousedown', (e) => {
+        if (e.target === listOverlay || (listWindow && !listWindow.contains(e.target))) {
+            setView('canvas');
+        }
+    });
+
+    // Esc closes list window
+    window.addEventListener('keydown', (e) => {
+        if (currentView === 'list' && e.key === 'Escape') {
+            e.preventDefault();
+            setView('canvas');
+        }
+    });
 
     function openAbout() {
         if (!aboutOverlay) return;
@@ -132,14 +164,19 @@
     function setView(mode) {
         currentView = mode;
         const canvasSec = byId('canvas');
-        const listSec = byId('list');
         if (mode === 'list') {
-            listSec.hidden = false; canvasSec.hidden = true;
+            // show list overlay above canvas
+            listOverlay && (listOverlay.hidden = false);
+            canvasSec && (canvasSec.hidden = false); // keep canvas visible underneath
             listUl && listUl.focus();
-            listViewLink.hidden = true; canvasViewLink.hidden = false;
+            listViewLink.hidden = true;
+            canvasViewLink.hidden = false;
         } else {
-            listSec.hidden = true; canvasSec.hidden = false;
-            listViewLink.hidden = false; canvasViewLink.hidden = true;
+            // canvas mode
+            listOverlay && (listOverlay.hidden = true);
+            canvasSec && (canvasSec.hidden = false);
+            listViewLink.hidden = false;
+            canvasViewLink.hidden = true;
         }
     }
 
