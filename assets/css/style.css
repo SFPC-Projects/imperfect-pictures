@@ -140,6 +140,11 @@ body {
 }
 
 /* List view */
+.list {
+    margin-top: 60px;
+    padding: 1rem;
+}
+
 .list[hidden] {
     display: none
 }
@@ -152,7 +157,7 @@ body {
 }
 
 .list li {
-    margin-bottom: 1rem;
+    margin-bottom: .75rem;
 }
 
 /* Optional: outline toggle for alignment */
