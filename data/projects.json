@@ -3,7 +3,7 @@
         "id": "soto-film",
         "creator": "A. Soto",
         "title": "Glitching Memory",
-        "href": "works/glitching-memory.html",
+        "href": "projects/glitching-memory.html",
         "image": "assets/img/soto.png",
         "target": "_self",
         "width": 220
@@ -21,7 +21,7 @@
         "id": "ray-traces",
         "creator": "J. Ray",
         "title": "Ray Traces (Study)",
-        "href": "works/ray-traces.html",
+        "href": "projects/ray-traces.html",
         "image": "assets/img/ray.png",
         "target": "_self",
         "width": 180

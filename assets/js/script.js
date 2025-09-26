@@ -9,7 +9,16 @@
     // Simple router between canvas and list via query param
     const url = new URL(window.location.href);
     const view = url.searchParams.get('view') || 'canvas';
+    let currentView = view;
     setView(view);
+
+    randomizeBtn.onclick = () => {
+        if (currentView === 'list') {
+            shuffleList();
+        } else {
+            randomizePositions();
+        }
+    };
 
     listViewLink.addEventListener('click', (e) => { /* allow default */ });
     canvasViewLink.addEventListener('click', (e) => { /* allow default */ });
@@ -30,6 +39,7 @@
         });
 
     function setView(mode) {
+        currentView = mode;
         const canvasSec = byId('canvas');
         const listSec = byId('list');
         if (mode === 'list') {
@@ -84,7 +94,13 @@
             node.tabIndex = 0;
         });
 
-        randomizeBtn.onclick = randomizePositions;
+        randomizeBtn.onclick = () => {
+            if (currentView === 'list') {
+                shuffleList();
+            } else {
+                randomizePositions();
+            }
+        };
     }
 
     function renderList(items) {
@@ -94,6 +110,18 @@
             li.innerHTML = `<a href="${item.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)} — ${escapeHtml(item.creator)}</a>`;
             listUl.appendChild(li);
         });
+    }
+
+    function shuffleList() {
+        if (!listUl) return;
+        const nodes = Array.from(listUl.children);
+        // Fisher-Yates shuffle
+        for (let i = nodes.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [nodes[i], nodes[j]] = [nodes[j], nodes[i]];
+        }
+        // Re-append in new order
+        nodes.forEach(n => listUl.appendChild(n));
     }
 
     function randomizePositions() {
