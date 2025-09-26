@@ -10,6 +10,10 @@
     const aboutWindow = byId('aboutWindow');
     const aboutClose = byId('aboutClose');
 
+    function isOverlayOpen() {
+        return !!(aboutOverlay && !aboutOverlay.hidden);
+    }
+
     function makeKey(item, idx) {
         const slug = (s) => String(s || '').toLowerCase().trim()
             .replace(/[\s]+/g, '-').replace(/[^a-z0-9\-_.:/]/g, '');
@@ -48,27 +52,46 @@
         aboutOverlay.hidden = true;
     }
 
-    aboutBtn && aboutBtn.addEventListener('click', (e) => { e.preventDefault(); openAbout(); });
-    aboutClose && aboutClose.addEventListener('click', (e) => { e.preventDefault(); closeAbout(); });
+    // Open
+    aboutBtn && aboutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAbout();
+    });
 
-    aboutOverlay && aboutOverlay.addEventListener('click', (e) => {
-        const closeBtn = e.target && e.target.closest && e.target.closest('#aboutClose');
-        if (closeBtn) {
+    // Direct close button click
+    aboutClose && aboutClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeAbout();
+    });
+
+    // Global delegated click (safety net): if a click lands on #aboutClose anywhere, close
+    document.addEventListener('click', (e) => {
+        const btn = e.target && e.target.closest && e.target.closest('#aboutClose');
+        if (btn && isOverlayOpen()) {
             e.preventDefault();
-            e.stopPropagation();
+            closeAbout();
+        }
+    }, true);
+
+    // Click-outside: clicking the overlay background (outside the window) closes
+    aboutOverlay && aboutOverlay.addEventListener('mousedown', (e) => {
+        if (!isOverlayOpen()) return;
+        if (e.target === aboutOverlay || (aboutWindow && !aboutWindow.contains(e.target))) {
+            // close only when the initial press was outside
             closeAbout();
         }
     });
 
-    aboutClose && aboutClose.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            closeAbout();
-        }
-    });
-
+    // Keyboard: Escape closes; Enter/Space on the Close button also close
     window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && aboutOverlay && !aboutOverlay.hidden) closeAbout();
+        if (!isOverlayOpen()) return;
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            closeAbout();
+        } else if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === aboutClose) {
+            e.preventDefault();
+            closeAbout();
+        }
     });
 
     randomizeBtn.onclick = () => {
