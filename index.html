@@ -14,14 +14,6 @@
         <div class="nav-bar-left">
             <button id="aboutBtn" class="about-btn" type="button" aria-label="About">About</button>
             <div class="task-buttons">
-                <button id="randomizeBtn" class="task-btn" aria-label="Shuffle layout" title="Shuffle">
-                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                        <path
-                            d="M17 3l4 4-4 4V8h-2.59l-3.7 3.7 1.42 1.41L16.41 9H17v2l4-4-4-4v2h-1.59l-4.7 4.7-2.12-2.12L13.59 3H17zM7 13H3v-2h4l3.3-3.3 1.4 1.4L8.4 13.7c-.28.2-.62.3-.96.3H7zm14 4l-4 4v-2h-3.59l-3.71-3.71 1.42-1.41L14.41 17H17v-2l4 4z"
-                            fill="currentColor" />
-                    </svg>
-                    <span>Shuffle</span>
-                </button>
                 <a id="listViewLink" class="task-btn" href="?view=list" aria-label="Switch to list view" title="List">
                     <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                         <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" fill="currentColor" />
@@ -35,6 +27,14 @@
                     </svg>
                     <span>Canvas</span>
                 </a>
+                <button id="randomizeBtn" class="task-btn" aria-label="Shuffle layout" title="Shuffle">
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                        <path
+                            d="M17 3l4 4-4 4V8h-2.59l-3.7 3.7 1.42 1.41L16.41 9H17v2l4-4-4-4v2h-1.59l-4.7 4.7-2.12-2.12L13.59 3H17zM7 13H3v-2h4l3.3-3.3 1.4 1.4L8.4 13.7c-.28.2-.62.3-.96.3H7zm14 4l-4 4v-2h-3.59l-3.71-3.71 1.42-1.41L14.41 17H17v-2l4 4z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>Shuffle</span>
+                </button>
             </div>
         </div>
         <div class="nav-bar-right"></div>
@@ -75,9 +75,6 @@
                         <button id="aboutClose" class="titlebar-close" aria-label="Close">×</button>
                     </div>
                     <div class="window-viewport">
-                        <div class="panel-header" role="row">
-                            <span class="col" role="columnheader">Details</span>
-                        </div>
                         <div class="about-content">
                             <p><strong>Imperfect Pictures</strong> is a digital art class anthology and archive. It
                                 gathers
