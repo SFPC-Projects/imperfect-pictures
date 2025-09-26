@@ -207,7 +207,7 @@
             // columns
             const name = document.createElement('span');
             name.className = 'name';
-            // clickable text link inside the Name column (Win98 opens on double-click; link is for accessibility)
+            // clickable text link inside the Name column (opens on double-click; link is for accessibility)
             name.innerHTML = `<a href="${item.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>`;
 
             const creator = document.createElement('span');
