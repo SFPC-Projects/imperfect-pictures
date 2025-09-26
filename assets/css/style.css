@@ -411,6 +411,10 @@ ul.details li .name a:hover {
     z-index: 4000;
 }
 
+.overlay[hidden] {
+    display: none !important;
+}
+
 .titlebar {
     display: flex;
     align-items: center;
