@@ -106,6 +106,7 @@ body {
     display: block;
     height: auto;
     max-width: 150px;
+    max-height: 150px;
     pointer-events: none;
 }
 
