@@ -63,26 +63,27 @@
 
         <!-- About window -->
         <div id="aboutOverlay" class="overlay" hidden>
-            <div id="aboutWindow" class="window-panel floating" role="dialog" aria-modal="true"
-                aria-labelledby="aboutTitle">
-                <div class="titlebar">
-                    <span class="titlebar-text" id="aboutTitle">About — Imperfect Pictures</span>
-                    <button id="aboutClose" class="titlebar-close" aria-label="Close">×</button>
+          <section id="about" class="list" aria-label="About this site">
+            <div id="aboutWindow" class="window-panel floating" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+              <div class="titlebar">
+                <span class="titlebar-text" id="aboutTitle">About — Imperfect Pictures</span>
+                <button id="aboutClose" class="titlebar-close" aria-label="Close">×</button>
+              </div>
+              <div class="window-viewport">
+                <div class="about-content">
+                  <p><strong>Imperfect Pictures</strong> is a digital art class anthology and archive. It gathers
+                      student works, experiments, and resources into a playful, movable “desktop” interface.</p>
+                  <p>To add projects, update <code>data/projects.json</code>. Each entry accepts:
+                      <code>creator</code>, <code>title</code>, <code>class</code>, <code>href</code>,
+                      <code>image</code>, and optional <code>target</code>,
+                      <code>width</code>/<code>height</code>.
+                  </p>
+                  <p>You can customize this text in <code>index.html</code> under the <code>#aboutWindow</code>
+                      section.</p>
                 </div>
-                <div class="window-viewport">
-                    <div class="about-content">
-                        <p><strong>Imperfect Pictures</strong> is a digital art class anthology and archive. It gathers
-                            student works, experiments, and resources into a playful, movable “desktop” interface.</p>
-                        <p>To add projects, update <code>data/projects.json</code>. Each entry accepts:
-                            <code>creator</code>, <code>title</code>, <code>class</code>, <code>href</code>,
-                            <code>image</code>, and optional <code>target</code>,
-                            <code>width</code>/<code>height</code>.
-                        </p>
-                        <p>You can customize this text in <code>index.html</code> under the <code>#aboutWindow</code>
-                            section.</p>
-                    </div>
-                </div>
+              </div>
             </div>
+          </section>
         </div>
     </main>
 
