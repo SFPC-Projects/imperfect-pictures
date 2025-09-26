@@ -217,7 +217,7 @@ body {
     gap: 6px
 }
 
-.start-btn {
+.about-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -230,7 +230,7 @@ body {
     font-weight: 700;
 }
 
-.start-btn:active {
+.about-btn:active {
     box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #fff, inset 2px 2px 0 #404040, inset -2px -2px 0 #dfdfdf;
 }
 
