@@ -1,9 +1,6 @@
 :root {
-    --bg: #f7f7f5;
     --ink: #111;
     --muted: #666;
-    --accent: #000;
-    --caption-bg: rgba(255, 255, 255, 0.8);
     --bg-app: #018281;
     --link: #000080;
     --link-visited: var(--link);
@@ -44,7 +41,6 @@
     --nav-title-min: 90px;
     --titlebar-close-size: 18px;
 
-    --z-step: 10;
     --z-overlay: 4000;
     --z-nav: 3000;
 
@@ -83,7 +79,6 @@ a:visited {
     height: 100dvh;
     margin: 0;
     padding: 0;
-    max-width: none;
 }
 
 .canvas {
@@ -367,14 +362,7 @@ ul.details li>* {
     display: none !important;
 }
 
-.task-btn:active {
-    box-shadow:
-        inset 1px 1px 0 var(--border-dark),
-        inset -1px -1px 0 var(--border-light),
-        inset 2px 2px 0 var(--border-xdark),
-        inset -2px -2px 0 var(--border-mid);
-}
-
+.task-btn:active,
 .task-btn.active {
     box-shadow:
         inset 1px 1px 0 var(--border-dark),
