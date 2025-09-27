@@ -55,7 +55,7 @@
         return `tc:${t}|${c}|${i || idx}`;
     }
 
-    function makePlaceholderPicker() {
+    function createPlaceholderSequence() {
         const n = Math.max(1, CONFIG.placeholderCount);
         const padLen = String(n).length;
         const pool = Array.from({ length: n }, (_, i) => String(i + 1).padStart(padLen, '0'));
@@ -141,7 +141,7 @@
 
     function renderCanvas(items) {
         canvas.innerHTML = '';
-        const nextPlaceholder = makePlaceholderPicker();
+        const nextPlaceholder = createPlaceholderSequence();
         items.forEach((item, idx) => {
             const node = document.createElement('figure');
             node.className = 'node';
