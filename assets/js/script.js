@@ -63,7 +63,7 @@
         const idx = Math.abs(h) % n + 1;
         const padLen = String(n).length; // auto-pad based on count
         const xx = String(idx).padStart(padLen, '0');
-        return String(CONFIG.placeholderPattern).replace('{NN}', xx);
+        return String(CONFIG.placeholderPath).replace('{NN}', xx);
     }
     
     /* SELECTION STATE */
