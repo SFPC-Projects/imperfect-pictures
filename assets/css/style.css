@@ -458,7 +458,7 @@ ul.details li>* {
 }
 
 @media (max-width: 430px) {
-    .task-btn span {
+    .task-btn span:not([aria-hidden="true"]) {
         display: none;
     }
 }
