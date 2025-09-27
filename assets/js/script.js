@@ -23,13 +23,7 @@
 
     /* CONFIGURATION */
 
-    const CONFIG = {
-        placeholderCount: 20,
-        initialView: 'canvas',
-        defaultSort: { by: 'title', asc: true },
-        randomizeOnFirstLoad: true,
-        dragBoundsPadding: 8,
-    };
+    const CONFIG = {};
 
     function mergeConfig(partial) {
         if (!partial || typeof partial !== 'object') return;
