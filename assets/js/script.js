@@ -41,7 +41,7 @@
         return fetch('data/config.json', { cache: 'no-store' })
             .then(r => r.ok ? r.json() : {})
             .then(json => { mergeConfig(json); })
-            .catch(() => { /* keep defaults */ });
+            .catch(() => { /* ignore */ });
     }
 
     /* UTILITY */
