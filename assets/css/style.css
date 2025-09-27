@@ -20,21 +20,22 @@
     --font-base: 13px;
     --font-lg: 14px;
 
+    --space-xxs: 2px;
     --space-xs: 4px;
     --space-sm: 6px;
     --space-md: 8px;
     --space-lg: 10px;
     --space-xl: 12px;
-    --radius-1: 4px;
+    --radius-md: 4px;
 
-    --zstep: 10;
+    --z-step: 10;
     --z-overlay: 4000;
     --z-nav: 3000;
 
     --thumb: 150px;
     --icon: 20px;
     --icon-btn: 36px;
-    --nav-h: 38px;
+    --nav-height: 38px;
 }
 
 * {
@@ -66,7 +67,7 @@ a:visited {
 #app {
     position: relative;
     width: 100vw;
-    height: calc(100dvh - var(--nav-h));
+    height: calc(100dvh - var(--nav-height));
     margin: 0;
     padding: 0;
     max-width: none;
@@ -138,7 +139,7 @@ a:visited {
     color: #fff;
     font-size: 18px;
     line-height: 1;
-    padding: calc(var(--space-xs)/2) var(--space-sm);
+    padding: var(--space-xxs) var(--space-sm);
     cursor: pointer;
 }
 
@@ -289,7 +290,7 @@ ul.details li>* {
 
 .node .caption {
     margin-top: .25rem;
-    padding: calc(var(--space-xs)/2) calc(var(--space-xs)*0.75);
+    padding: var(--space-xxs) calc(var(--space-xs)*0.75);
     border: 1px solid transparent;
     /* keep transparent baseline */
     background: transparent;
@@ -323,7 +324,7 @@ ul.details li>* {
     left: 0;
     right: 0;
     bottom: 0;
-    height: var(--nav-h);
+    height: var(--nav-height);
     background: var(--chrome);
     border-top: 2px solid var(--border-light);
     box-shadow: inset 0 2px 0 var(--border-mid), inset 0 -2px 0 var(--border-dark);
@@ -345,7 +346,7 @@ ul.details li>* {
     display: inline-flex;
     align-items: center;
     gap: var(--space-sm);
-    padding: calc(var(--space-xs) - 1px) var(--space-md);
+    padding: var(--space-xxs) var(--space-md);
     text-decoration: none;
     color: #000;
     background: var(--chrome);
@@ -410,14 +411,14 @@ ul.details li>* {
 @media (max-width: 640px) {
     :root {
         --thumb: 110px;
-        --nav-h: 48px;
+        --nav-height: 48px;
         --titlebar-h: 32px;
         --font-base: 14px;
         /* bump base font slightly on small screens */
     }
 
     #app {
-        height: calc(100dvh - var(--nav-h) - env(safe-area-inset-bottom, 0));
+        height: calc(100dvh - var(--nav-height) - env(safe-area-inset-bottom, 0));
     }
 
     .window-panel.floating {
