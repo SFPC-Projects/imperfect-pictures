@@ -22,6 +22,7 @@
     let currentView = 'canvas';
 
     const CONFIG = Object.freeze({
+        placeholderPath: 'assets/img/placeholder_{NN}.png',
         placeholderCount: 42,
         defaultSort: { by: 'title', asc: true }
     });
@@ -54,17 +55,17 @@
         return `tc:${t}|${c}|${i || idx}`;
     }
 
-    // Placeholder images: assets/img/placeholder_XX.png
+    // Deterministic pseudo-random pick based on the node key
     function getPlaceholderSrc(key) {
-        // Deterministic pseudo-random pick based on the node key
         const n = Math.max(1, CONFIG.placeholderCount);
         let h = 0;
         for (let i = 0; i < key.length; i++) h = ((h << 5) - h) + key.charCodeAt(i) | 0;
         const idx = Math.abs(h) % n + 1;
-        const xx = String(idx).padStart(2, '0');
-        return `assets/img/placeholder_${xx}.png`;
+        const padLen = String(n).length; // auto-pad based on count
+        const xx = String(idx).padStart(padLen, '0');
+        return String(CONFIG.placeholderPattern).replace('{NN}', xx);
     }
-
+    
     /* SELECTION STATE */
 
     function selectNode(node) {
