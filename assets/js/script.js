@@ -24,12 +24,15 @@
     /* UTILITY */
 
     function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+
     function escapeHtml(str) {
         return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
     }
+
     function isOverlayOpen() {
         return !!(aboutOverlay && !aboutOverlay.hidden);
     }
+
     function isExternalHref(href) {
         try {
             const u = new URL(href, window.location.href);
@@ -38,6 +41,7 @@
             return false;
         }
     }
+
     function makeKey(item, idx) {
         const slug = (s) => String(s || '').toLowerCase().trim()
             .replace(/[\s]+/g, '-').replace(/[^a-z0-9\-_.:/]/g, '');
@@ -64,11 +68,13 @@
         selectedNode = node;
         if (node) node.classList.add('selected');
     }
+
     function selectRow(row) {
         if (selectedRow) selectedRow.classList.remove('selected');
         selectedRow = row;
         if (row) row.classList.add('selected');
     }
+
     function openRow(row) {
         if (!row) return;
         const href = row.dataset.href;
@@ -83,6 +89,7 @@
     /* SORTING */
 
     function normalize(v) { return (v == null ? '' : String(v)).toLowerCase(); }
+
     function getSortedItems() {
         const arr = allItems.slice();
         if (!sortBy) return arr;
@@ -94,6 +101,7 @@
         });
         return arr;
     }
+
     function setSort(column) {
         const map = { name: 'title', creator: 'creator', cls: 'class' };
         const field = map[column];
@@ -106,6 +114,7 @@
         renderList(getSortedItems());
         updateSortIndicators();
     }
+
     function updateSortIndicators() {
         const header = document.querySelector('#list .list-header');
         if (!header) return;
@@ -172,6 +181,7 @@
 
         canvas.addEventListener('click', () => selectNode(null));
     }
+
     function renderList(items) {
         listUl.innerHTML = '';
         items.forEach((item, idx) => {
@@ -249,6 +259,7 @@
         }
         nodes.forEach(n => listUl.appendChild(n));
     }
+
     function randomizePositions() {
         const nodes = Array.from(canvas.querySelectorAll('.node'));
         const { width: cw, height: ch } = canvas.getBoundingClientRect();
@@ -316,14 +327,17 @@
 
         canvas.addEventListener('dragstart', (e) => e.preventDefault());
     }
+
     function setPos(el, x, y) {
         el.style.transform = `translate(${x}px, ${y}px)`;
         el.dataset.x = String(Math.round(x));
         el.dataset.y = String(Math.round(y));
     }
+
     function getPos(el) {
         return { x: Number(el.dataset.x || 0), y: Number(el.dataset.y || 0) };
     }
+
     function savePositions() {
         const data = {};
         canvas.querySelectorAll('.node').forEach(n => {
@@ -333,6 +347,7 @@
         });
         try { localStorage.setItem('ipos', JSON.stringify(data)); } catch (_e) { }
     }
+
     function restorePositions(items) {
         let saved = null;
         try { saved = JSON.parse(localStorage.getItem('ipos') || 'null'); } catch (_e) { }
@@ -360,6 +375,7 @@
         aboutClose && aboutClose.focus();
         updateControlsVisibility();
     }
+
     function closeAbout() {
         if (!aboutOverlay) return;
         aboutOverlay.hidden = true;
@@ -419,6 +435,7 @@
 
         updateControlsVisibility();
     }
+
     function updateControlsVisibility() {
         const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
         if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
