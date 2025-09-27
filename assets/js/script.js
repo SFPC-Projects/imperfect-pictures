@@ -55,8 +55,8 @@
         return `tc:${t}|${c}|${i || idx}`;
     }
 
-    // Deterministic pseudo-random pick based on the node key
     function getPlaceholderSrc(key) {
+        // Deterministic pseudo-random pick based on the node key
         const n = Math.max(1, CONFIG.placeholderCount);
         let h = 0;
         for (let i = 0; i < key.length; i++) h = ((h << 5) - h) + key.charCodeAt(i) | 0;
