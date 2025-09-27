@@ -14,10 +14,22 @@
     const aboutWindow = byId('aboutWindow');
     const aboutClose = byId('aboutClose');
 
+    let selectedNode = null;
+    let selectedRow = null;
+    let allItems = [];
+    let sortBy = null;
+    let sortAsc = true;
+    let currentView = 'canvas';
+
+    /* UTILITY */
+    
+    function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+    }
     function isOverlayOpen() {
         return !!(aboutOverlay && !aboutOverlay.hidden);
     }
-
     function isExternalHref(href) {
         try {
             const u = new URL(href, window.location.href);
@@ -26,7 +38,6 @@
             return false;
         }
     }
-
     function makeKey(item, idx) {
         const slug = (s) => String(s || '').toLowerCase().trim()
             .replace(/[\s]+/g, '-').replace(/[^a-z0-9\-_.:/]/g, '');
@@ -34,15 +45,18 @@
         return `tc:${t}|${c}|${i || idx}`;
     }
 
-    let selectedNode = null;
-    let selectedRow = null;
+    /* SELECTION STATE */
 
+    function selectNode(node) {
+        if (selectedNode) selectedNode.classList.remove('selected');
+        selectedNode = node;
+        if (node) node.classList.add('selected');
+    }
     function selectRow(row) {
         if (selectedRow) selectedRow.classList.remove('selected');
         selectedRow = row;
         if (row) row.classList.add('selected');
     }
-
     function openRow(row) {
         if (!row) return;
         const href = row.dataset.href;
@@ -54,12 +68,9 @@
         }
     }
 
-    let allItems = [];
-    let sortBy = null;
-    let sortAsc = true;
+    /* SORTING */
 
     function normalize(v) { return (v == null ? '' : String(v)).toLowerCase(); }
-
     function getSortedItems() {
         const arr = allItems.slice();
         if (!sortBy) return arr;
@@ -71,7 +82,6 @@
         });
         return arr;
     }
-
     function setSort(column) {
         const map = { name: 'title', creator: 'creator', cls: 'class' };
         const field = map[column];
@@ -84,7 +94,6 @@
         renderList(getSortedItems());
         updateSortIndicators();
     }
-
     function updateSortIndicators() {
         const header = document.querySelector('#list .list-header');
         if (!header) return;
@@ -96,168 +105,7 @@
         if (active) active.setAttribute('data-sort', sortAsc ? 'asc' : 'desc');
     }
 
-    let currentView = 'canvas';
-    setView('canvas');
-    listOverlay && (listOverlay.hidden = true);
-    updateControlsVisibility();
-
-    // List window close behaviors
-    listClose && listClose.addEventListener('click', (e) => {
-        e.preventDefault();
-        setView('canvas');
-    });
-
-    // Click outside the list window closes it
-    listOverlay && listOverlay.addEventListener('mousedown', (e) => {
-        if (e.target === listOverlay || (listWindow && !listWindow.contains(e.target))) {
-            setView('canvas');
-        }
-    });
-
-    // Esc closes list window
-    window.addEventListener('keydown', (e) => {
-        if (currentView === 'list' && e.key === 'Escape') {
-            e.preventDefault();
-            setView('canvas');
-        }
-    });
-
-    function openAbout() {
-        if (!aboutOverlay) return;
-        aboutOverlay.hidden = false;
-        aboutClose && aboutClose.focus();
-        updateControlsVisibility();
-    }
-    function closeAbout() {
-        if (!aboutOverlay) return;
-        aboutOverlay.hidden = true;
-        updateControlsVisibility();
-    }
-
-    // Open
-    aboutBtn && aboutBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        openAbout();
-    });
-
-    // Direct close button click
-    aboutClose && aboutClose.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeAbout();
-    });
-
-    // Delegated close via capture (safety net)
-    document.addEventListener('click', (e) => {
-        const btn = e.target && e.target.closest && e.target.closest('#aboutClose');
-        if (btn && isOverlayOpen()) {
-            e.preventDefault();
-            closeAbout();
-        }
-    }, true);
-
-    // Click-outside on overlay background
-    aboutOverlay && aboutOverlay.addEventListener('mousedown', (e) => {
-        if (!isOverlayOpen()) return;
-        if (e.target === aboutOverlay || (aboutWindow && !aboutWindow.contains(e.target))) {
-            closeAbout();
-        }
-    });
-
-    // Keyboard: Escape closes; Enter/Space on the Close button also close
-    window.addEventListener('keydown', (e) => {
-        if (!isOverlayOpen()) return;
-        if (e.key === 'Escape') {
-            e.preventDefault();
-            closeAbout();
-        } else if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === aboutClose) {
-            e.preventDefault();
-            closeAbout();
-        }
-    });
-
-    randomizeBtn.onclick = () => {
-        if (currentView === 'list') {
-            shuffleList();
-        } else {
-            randomizePositions();
-        }
-    };
-
-    listViewLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        setView('list');
-    });
-
-    fetch('data/projects.json', { cache: 'no-store' })
-        .then(r => r.json())
-        .then(items => {
-            allItems = items;
-            renderCanvas(allItems);
-            renderList(getSortedItems());
-            updateSortIndicators();
-            if (!restorePositions(allItems)) randomizePositions();
-            enableDrag();
-        })
-        .catch(err => {
-            console.error('Failed to load data/projects.json', err);
-            canvas.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
-        });
-
-    const hdrName = document.querySelector('#list .list-header .name');
-    const hdrCreator = document.querySelector('#list .list-header .creator');
-    const hdrCls = document.querySelector('#list .list-header .cls');
-    hdrName && hdrName.addEventListener('click', () => setSort('name'));
-    hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
-    hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
-
-    sortBy = 'title'; sortAsc = true;
-    renderList(getSortedItems());
-    updateSortIndicators();
-
-    function updateControlsVisibility() {
-        const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
-        if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
-        if (listViewLink) listViewLink.classList.toggle('active', currentView === 'list');
-        if (randomizeBtn) randomizeBtn.hidden = !(currentView === 'canvas' && !aboutOpen);
-    }
-
-    function setView(mode) {
-        currentView = mode;
-        const canvasSec = byId('canvas');
-
-        if (mode === 'list') {
-            if (listOverlay) listOverlay.hidden = false;
-            if (canvasSec) canvasSec.hidden = false; // keep canvas visible underneath
-            if (listUl) listUl.focus();
-        } else { // canvas
-            if (listOverlay) listOverlay.hidden = true;
-            if (canvasSec) canvasSec.hidden = false;
-        }
-
-        updateControlsVisibility();
-    }
-
-    const menu = document.createElement('div');
-    menu.id = 'ctx';
-    Object.assign(menu.style, { position: 'fixed', background: '#c0c0c0', border: '1px solid #808080', boxShadow: 'inset -1px -1px 0 #808080, inset 1px 1px 0 #fff', padding: '4px 0', display: 'none', zIndex: 4000, fontSize: '13px', minWidth: '160px' });
-    document.body.appendChild(menu);
-    function hideMenu() { menu.style.display = 'none'; }
-    function showMenu(x, y, items) {
-        menu.innerHTML = '';
-        items.forEach(it => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.textContent = it.label;
-            Object.assign(btn.style, { display: 'block', width: '100%', textAlign: 'left', background: 'transparent', border: 'none', padding: '4px 10px', cursor: 'default' });
-            btn.onmouseenter = () => btn.style.background = '#000080', btn.style.color = '#fff';
-            btn.onmouseleave = () => btn.style.background = 'transparent', btn.style.color = '#000';
-            btn.onclick = () => { hideMenu(); it.onClick(); };
-            menu.appendChild(btn);
-        });
-        menu.style.left = x + 'px'; menu.style.top = y + 'px';
-        menu.style.display = 'block';
-    }
-    window.addEventListener('click', hideMenu);
+    /* RENDERING */
 
     function renderCanvas(items) {
         canvas.innerHTML = '';
@@ -308,17 +156,8 @@
             node.tabIndex = 0;
         });
 
-        randomizeBtn.onclick = () => {
-            if (currentView === 'list') {
-                shuffleList();
-            } else {
-                randomizePositions();
-            }
-        };
-
         canvas.addEventListener('click', () => selectNode(null));
     }
-
     function renderList(items) {
         listUl.innerHTML = '';
         items.forEach((item, idx) => {
@@ -385,6 +224,8 @@
         listUl.addEventListener('click', () => selectRow(null));
     }
 
+    /* SHUFFLING */
+
     function shuffleList() {
         if (!listUl) return;
         const nodes = Array.from(listUl.children);
@@ -394,7 +235,6 @@
         }
         nodes.forEach(n => listUl.appendChild(n));
     }
-
     function randomizePositions() {
         const nodes = Array.from(canvas.querySelectorAll('.node'));
         const { width: cw, height: ch } = canvas.getBoundingClientRect();
@@ -410,6 +250,8 @@
         });
         savePositions();
     }
+
+    /* DRAGGING */
 
     function enableDrag() {
         let active = null;
@@ -460,7 +302,6 @@
 
         canvas.addEventListener('dragstart', (e) => e.preventDefault());
     }
-
     function setPos(el, x, y) {
         el.style.transform = `translate(${x}px, ${y}px)`;
         el.dataset.x = String(Math.round(x));
@@ -469,7 +310,6 @@
     function getPos(el) {
         return { x: Number(el.dataset.x || 0), y: Number(el.dataset.y || 0) };
     }
-
     function savePositions() {
         const data = {};
         canvas.querySelectorAll('.node').forEach(n => {
@@ -479,7 +319,6 @@
         });
         try { localStorage.setItem('ipos', JSON.stringify(data)); } catch (_e) { }
     }
-
     function restorePositions(items) {
         let saved = null;
         try { saved = JSON.parse(localStorage.getItem('ipos') || 'null'); } catch (_e) { }
@@ -499,14 +338,140 @@
         return appliedAny;
     }
 
-    function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
-    function escapeHtml(str) {
-        return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+    /* OVERLAY HANDLING */
+
+    function openAbout() {
+        if (!aboutOverlay) return;
+        aboutOverlay.hidden = false;
+        aboutClose && aboutClose.focus();
+        updateControlsVisibility();
+    }
+    function closeAbout() {
+        if (!aboutOverlay) return;
+        aboutOverlay.hidden = true;
+        updateControlsVisibility();
+    }
+    // Open
+    aboutBtn && aboutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAbout();
+    });
+    // Direct close button click
+    aboutClose && aboutClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeAbout();
+    });
+    // Delegated close via capture (safety net)
+    document.addEventListener('click', (e) => {
+        const btn = e.target && e.target.closest && e.target.closest('#aboutClose');
+        if (btn && isOverlayOpen()) {
+            e.preventDefault();
+            closeAbout();
+        }
+    }, true);
+    // Click-outside on overlay background
+    aboutOverlay && aboutOverlay.addEventListener('mousedown', (e) => {
+        if (!isOverlayOpen()) return;
+        if (e.target === aboutOverlay || (aboutWindow && !aboutWindow.contains(e.target))) {
+            closeAbout();
+        }
+    });
+    // Keyboard: Escape closes; Enter/Space on the Close button also close
+    window.addEventListener('keydown', (e) => {
+        if (!isOverlayOpen()) return;
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            closeAbout();
+        } else if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === aboutClose) {
+            e.preventDefault();
+            closeAbout();
+        }
+    });
+
+    /* VIEW TOGGLE */
+
+    function setView(mode) {
+        currentView = mode;
+        const canvasSec = byId('canvas');
+
+        if (mode === 'list') {
+            if (listOverlay) listOverlay.hidden = false;
+            if (canvasSec) canvasSec.hidden = false; // keep canvas visible underneath
+            if (listUl) listUl.focus();
+        } else { // canvas
+            if (listOverlay) listOverlay.hidden = true;
+            if (canvasSec) canvasSec.hidden = false;
+        }
+
+        updateControlsVisibility();
+    }
+    function updateControlsVisibility() {
+        const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
+        if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
+        if (listViewLink) listViewLink.classList.toggle('active', currentView === 'list');
+        if (randomizeBtn) randomizeBtn.hidden = !(currentView === 'canvas' && !aboutOpen);
     }
 
-    function selectNode(node) {
-        if (selectedNode) selectedNode.classList.remove('selected');
-        selectedNode = node;
-        if (node) node.classList.add('selected');
-    }
+    /* INITIALIZATION */
+
+    setView('canvas');
+    listOverlay && (listOverlay.hidden = true);
+    updateControlsVisibility();
+
+    listClose && listClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        setView('canvas');
+    });
+
+    listOverlay && listOverlay.addEventListener('mousedown', (e) => {
+        if (e.target === listOverlay || (listWindow && !listWindow.contains(e.target))) {
+            setView('canvas');
+        }
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if (currentView === 'list' && e.key === 'Escape') {
+            e.preventDefault();
+            setView('canvas');
+        }
+    });
+
+    randomizeBtn.onclick = () => {
+        if (currentView === 'list') {
+            shuffleList();
+        } else {
+            randomizePositions();
+        }
+    };
+
+    listViewLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        setView('list');
+    });
+
+    fetch('data/projects.json', { cache: 'no-store' })
+        .then(r => r.json())
+        .then(items => {
+            allItems = items;
+            renderCanvas(allItems);
+            renderList(getSortedItems());
+            updateSortIndicators();
+            if (!restorePositions(allItems)) randomizePositions();
+            enableDrag();
+        })
+        .catch(err => {
+            console.error('Failed to load data/projects.json', err);
+            canvas.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
+        });
+
+    const hdrName = document.querySelector('#list .list-header .name');
+    const hdrCreator = document.querySelector('#list .list-header .creator');
+    const hdrCls = document.querySelector('#list .list-header .cls');
+    hdrName && hdrName.addEventListener('click', () => setSort('name'));
+    hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
+    hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
+
+    sortBy = 'title'; sortAsc = true;
+    renderList(getSortedItems());
+    updateSortIndicators();
 })();
