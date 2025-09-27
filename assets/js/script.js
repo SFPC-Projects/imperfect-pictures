@@ -56,7 +56,7 @@
         const n = Math.max(1, PLACEHOLDER_COUNT);
         const padLen = String(n).length;
         const pool = Array.from({ length: n }, (_, i) => String(i + 1).padStart(padLen, '0'));
-        // shuffle Fisher–Yates
+        // Fisher–Yates shuffle
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]];
