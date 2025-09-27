@@ -21,6 +21,35 @@
     let sortAsc = true;
     let currentView = 'canvas';
 
+    /* CONFIGURATION */
+
+    const CONFIG = {
+        placeholderCount: 20,
+        initialView: 'canvas',
+        defaultSort: { by: 'title', asc: true },
+        randomizeOnFirstLoad: true,
+        dragBoundsPadding: 8,
+    };
+
+    function mergeConfig(partial) {
+        if (!partial || typeof partial !== 'object') return;
+        if (typeof partial.placeholderCount === 'number') CONFIG.placeholderCount = partial.placeholderCount;
+        if (typeof partial.initialView === 'string') CONFIG.initialView = partial.initialView;
+        if (partial.defaultSort && typeof partial.defaultSort === 'object') {
+            if (typeof partial.defaultSort.by === 'string') CONFIG.defaultSort.by = partial.defaultSort.by;
+            if (typeof partial.defaultSort.asc === 'boolean') CONFIG.defaultSort.asc = partial.defaultSort.asc;
+        }
+        if (typeof partial.randomizeOnFirstLoad === 'boolean') CONFIG.randomizeOnFirstLoad = partial.randomizeOnFirstLoad;
+        if (typeof partial.dragBoundsPadding === 'number') CONFIG.dragBoundsPadding = partial.dragBoundsPadding;
+    }
+
+    function loadConfig() {
+        return fetch('data/config.json', { cache: 'no-store' })
+            .then(r => r.ok ? r.json() : {})
+            .then(json => { mergeConfig(json); })
+            .catch(() => { /* keep defaults */ });
+    }
+
     /* UTILITY */
 
     function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
@@ -49,11 +78,10 @@
         return `tc:${t}|${c}|${i || idx}`;
     }
 
-    // Placeholder images: assets/img/placeholder_XX.png (01..NN)
-    const PLACEHOLDER_COUNT = 20; // <-- set this to the number of placeholder images you have
+    // Placeholder images: assets/img/placeholder_XX.png
     function getPlaceholderSrc(key) {
         // Deterministic pseudo-random pick based on the node key so it stays stable across renders
-        const n = Math.max(1, PLACEHOLDER_COUNT);
+        const n = Math.max(1, CONFIG.placeholderCount);
         let h = 0;
         for (let i = 0; i < key.length; i++) h = ((h << 5) - h) + key.charCodeAt(i) | 0;
         const idx = Math.abs(h) % n + 1;
@@ -268,8 +296,11 @@
             const rect = node.getBoundingClientRect();
             const w = rect.width || 220;
             const h = rect.height || 180;
-            const x = Math.max(4, Math.random() * (cw - w - 8));
-            const y = Math.max(4, Math.random() * (ch - h - 8));
+            const pad = Math.max(0, CONFIG.dragBoundsPadding || 0);
+            const maxX = Math.max(0, cw - w - pad);
+            const maxY = Math.max(0, ch - h - pad);
+            const x = clamp(Math.random() * maxX, pad, maxX);
+            const y = clamp(Math.random() * maxY, pad, maxY);
             setPos(node, x, y);
             node.style.zIndex = String(z++);
         });
@@ -381,17 +412,17 @@
         aboutOverlay.hidden = true;
         updateControlsVisibility();
     }
-    // Open
+
     aboutBtn && aboutBtn.addEventListener('click', (e) => {
         e.preventDefault();
         openAbout();
     });
-    // Direct close button click
+
     aboutClose && aboutClose.addEventListener('click', (e) => {
         e.preventDefault();
         closeAbout();
     });
-    // Delegated close via capture (safety net)
+
     document.addEventListener('click', (e) => {
         const btn = e.target && e.target.closest && e.target.closest('#aboutClose');
         if (btn && isOverlayOpen()) {
@@ -406,7 +437,7 @@
             closeAbout();
         }
     });
-    // Keyboard: Escape closes; Enter/Space on the Close button also close
+    // Keyboard: Escape or Enter/Space on Close button closes
     window.addEventListener('keydown', (e) => {
         if (!isOverlayOpen()) return;
         if (e.key === 'Escape') {
@@ -445,64 +476,68 @@
 
     /* INITIALIZATION */
 
-    setView('canvas');
-    listOverlay && (listOverlay.hidden = true);
-    updateControlsVisibility();
+    loadConfig().then(() => {
+        setView(CONFIG.initialView === 'list' ? 'list' : 'canvas');
+        listOverlay && (listOverlay.hidden = CONFIG.initialView === 'list' ? false : true);
+        updateControlsVisibility();
 
-    listClose && listClose.addEventListener('click', (e) => {
-        e.preventDefault();
-        setView('canvas');
-    });
-
-    listOverlay && listOverlay.addEventListener('mousedown', (e) => {
-        if (e.target === listOverlay || (listWindow && !listWindow.contains(e.target))) {
-            setView('canvas');
-        }
-    });
-
-    window.addEventListener('keydown', (e) => {
-        if (currentView === 'list' && e.key === 'Escape') {
+        listClose && listClose.addEventListener('click', (e) => {
             e.preventDefault();
             setView('canvas');
-        }
-    });
-
-    randomizeBtn.onclick = () => {
-        if (currentView === 'list') {
-            shuffleList();
-        } else {
-            randomizePositions();
-        }
-    };
-
-    listViewLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        setView('list');
-    });
-
-    fetch('data/projects.json', { cache: 'no-store' })
-        .then(r => r.json())
-        .then(items => {
-            allItems = items;
-            renderCanvas(allItems);
-            renderList(getSortedItems());
-            updateSortIndicators();
-            if (!restorePositions(allItems)) randomizePositions();
-            enableDrag();
-        })
-        .catch(err => {
-            console.error('Failed to load data/projects.json', err);
-            canvas.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
+        });
+        listOverlay && listOverlay.addEventListener('mousedown', (e) => {
+            if (e.target === listOverlay || (listWindow && !listWindow.contains(e.target))) {
+                setView('canvas');
+            }
+        });
+        window.addEventListener('keydown', (e) => {
+            if (currentView === 'list' && e.key === 'Escape') {
+                e.preventDefault();
+                setView('canvas');
+            }
         });
 
-    const hdrName = document.querySelector('#list .list-header .name');
-    const hdrCreator = document.querySelector('#list .list-header .creator');
-    const hdrCls = document.querySelector('#list .list-header .cls');
-    hdrName && hdrName.addEventListener('click', () => setSort('name'));
-    hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
-    hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
+        randomizeBtn.onclick = () => {
+            if (currentView === 'list') {
+                shuffleList();
+            } else {
+                randomizePositions();
+            }
+        };
+        listViewLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            setView('list');
+        });
 
-    sortBy = 'title'; sortAsc = true;
-    renderList(getSortedItems());
-    updateSortIndicators();
+        fetch('data/projects.json', { cache: 'no-store' })
+            .then(r => r.json())
+            .then(items => {
+                allItems = items;
+                sortBy = (CONFIG.defaultSort && CONFIG.defaultSort.by) || null;
+                sortAsc = (CONFIG.defaultSort && typeof CONFIG.defaultSort.asc === 'boolean')
+                    ? CONFIG.defaultSort.asc : true;
+
+                renderCanvas(allItems);
+                renderList(getSortedItems());
+                updateSortIndicators();
+
+                const restored = restorePositions(allItems);
+                if (!restored && CONFIG.randomizeOnFirstLoad) {
+                    randomizePositions();
+                }
+                enableDrag();
+            })
+            .catch(err => {
+                console.error('Failed to load data/projects.json', err);
+                canvas.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
+            });
+
+        // Header click sorting for list window
+        const hdrName = document.querySelector('#list .list-header .name');
+        const hdrCreator = document.querySelector('#list .list-header .creator');
+        const hdrCls = document.querySelector('#list .list-header .cls');
+        hdrName && hdrName.addEventListener('click', () => setSort('name'));
+        hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
+        hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
+    });
 })();
