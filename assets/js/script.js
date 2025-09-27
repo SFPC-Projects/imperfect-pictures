@@ -56,7 +56,7 @@
 
     // Placeholder images: assets/img/placeholder_XX.png
     function getPlaceholderSrc(key) {
-        // Deterministic pseudo-random pick based on the node key so it stays stable across renders
+        // Deterministic pseudo-random pick based on the node key
         const n = Math.max(1, CONFIG.placeholderCount);
         let h = 0;
         for (let i = 0; i < key.length; i++) h = ((h << 5) - h) + key.charCodeAt(i) | 0;
@@ -182,8 +182,6 @@
             });
             node.tabIndex = 0;
         });
-
-        canvas.addEventListener('click', () => selectNode(null));
     }
 
     function renderList(items) {
@@ -209,47 +207,8 @@
             li.appendChild(name);
             li.appendChild(creator);
             li.appendChild(cls);
-
-            li.addEventListener('click', (ev) => {
-                ev.stopPropagation();
-                selectRow(li);
-            });
-            li.addEventListener('dblclick', (ev) => {
-                ev.preventDefault();
-                openRow(li);
-            });
-
             listUl.appendChild(li);
         });
-
-        listUl.tabIndex = 0;
-        listUl.addEventListener('keydown', (ev) => {
-            if (currentView !== 'list') return;
-            const rows = Array.from(listUl.children);
-            const idx = selectedRow ? rows.indexOf(selectedRow) : -1;
-            if (ev.key === 'ArrowDown') {
-                const next = rows[Math.min(idx + 1, rows.length - 1)] || rows[0];
-                selectRow(next);
-                next && next.scrollIntoView({ block: 'nearest' });
-                ev.preventDefault();
-            } else if (ev.key === 'ArrowUp') {
-                const prev = rows[Math.max(idx - 1, 0)] || rows[0];
-                selectRow(prev);
-                prev && prev.scrollIntoView({ block: 'nearest' });
-                ev.preventDefault();
-            } else if (ev.key === 'Enter') {
-                openRow(selectedRow);
-                ev.preventDefault();
-            } else if (ev.key === 'Home') {
-                if (rows[0]) { selectRow(rows[0]); rows[0].scrollIntoView({ block: 'nearest' }); }
-                ev.preventDefault();
-            } else if (ev.key === 'End') {
-                if (rows[rows.length - 1]) { selectRow(rows[rows.length - 1]); rows[rows.length - 1].scrollIntoView({ block: 'nearest' }); }
-                ev.preventDefault();
-            }
-        });
-
-        listUl.addEventListener('click', () => selectRow(null));
     }
 
     /* SHUFFLING */
@@ -307,7 +266,7 @@
             if (!active) return;
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
-            const { width: cw, height: ch, left, top } = canvas.getBoundingClientRect();
+            const { width: cw, height: ch } = canvas.getBoundingClientRect();
             const rect = active.getBoundingClientRect();
             let nx = origX + dx;
             let ny = origY + dy;
@@ -354,7 +313,7 @@
         try { localStorage.setItem('ipos', JSON.stringify(data)); } catch (_e) { }
     }
 
-    function restorePositions(items) {
+    function restorePositions() {
         let saved = null;
         try { saved = JSON.parse(localStorage.getItem('ipos') || 'null'); } catch (_e) { }
         if (!saved) return false;
@@ -495,7 +454,7 @@
             renderList(getSortedItems());
             updateSortIndicators();
 
-            const restored = restorePositions(allItems);
+            const restored = restorePositions();
             if (!restored) {
                 randomizePositions();
             }
@@ -513,4 +472,55 @@
     hdrName && hdrName.addEventListener('click', () => setSort('name'));
     hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
     hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
+
+    // Canvas background click to deselect node
+    if (canvas) {
+        canvas.addEventListener('click', () => selectNode(null));
+    }
+
+    // List interactions
+    if (listUl) {
+        listUl.tabIndex = 0;
+        listUl.addEventListener('click', (ev) => {
+            const li = ev.target.closest('li');
+            if (li && listUl.contains(li)) {
+                ev.stopPropagation();
+                selectRow(li);
+            } else {
+                selectRow(null);
+            }
+        });
+        listUl.addEventListener('dblclick', (ev) => {
+            const li = ev.target.closest('li');
+            if (li && listUl.contains(li)) {
+                ev.preventDefault();
+                openRow(li);
+            }
+        });
+        listUl.addEventListener('keydown', (ev) => {
+            if (currentView !== 'list') return;
+            const rows = Array.from(listUl.children);
+            const idx = selectedRow ? rows.indexOf(selectedRow) : -1;
+            if (ev.key === 'ArrowDown') {
+                const next = rows[Math.min(idx + 1, rows.length - 1)] || rows[0];
+                selectRow(next);
+                next && next.scrollIntoView({ block: 'nearest' });
+                ev.preventDefault();
+            } else if (ev.key === 'ArrowUp') {
+                const prev = rows[Math.max(idx - 1, 0)] || rows[0];
+                selectRow(prev);
+                prev && prev.scrollIntoView({ block: 'nearest' });
+                ev.preventDefault();
+            } else if (ev.key === 'Enter') {
+                openRow(selectedRow);
+                ev.preventDefault();
+            } else if (ev.key === 'Home') {
+                if (rows[0]) { selectRow(rows[0]); rows[0].scrollIntoView({ block: 'nearest' }); }
+                ev.preventDefault();
+            } else if (ev.key === 'End') {
+                if (rows[rows.length - 1]) { selectRow(rows[rows.length - 1]); rows[rows.length - 1].scrollIntoView({ block: 'nearest' }); }
+                ev.preventDefault();
+            }
+        });
+    }
 })();
