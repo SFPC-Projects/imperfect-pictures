@@ -18,6 +18,15 @@
         return !!(aboutOverlay && !aboutOverlay.hidden);
     }
 
+    function isExternalHref(href) {
+        try {
+            const u = new URL(href, window.location.href);
+            return u.origin !== window.location.origin;
+        } catch (_e) {
+            return false;
+        }
+    }
+
     function makeKey(item, idx) {
         const slug = (s) => String(s || '').toLowerCase().trim()
             .replace(/[\s]+/g, '-').replace(/[^a-z0-9\-_.:/]/g, '');
@@ -37,9 +46,11 @@
     function openRow(row) {
         if (!row) return;
         const href = row.dataset.href;
-        const target = row.dataset.target || '_blank';
         if (href) {
-            window.open(href, target, 'noopener');
+            const external = isExternalHref(href);
+            const target = external ? '_blank' : '_self';
+            const features = external ? 'noopener' : '';
+            window.open(href, target, features);
         }
     }
 
@@ -258,8 +269,9 @@
             const a = document.createElement('a');
             a.className = 'thumb';
             a.href = item.href;
-            a.target = item.target ?? '_blank';
-            a.rel = 'noopener noreferrer';
+            const external = isExternalHref(item.href);
+            a.target = external ? '_blank' : '_self';
+            a.rel = external ? 'noopener noreferrer' : '';
             a.tabIndex = 0;
             a.setAttribute('aria-label', `${item.title} by ${item.creator}`);
 
@@ -315,11 +327,11 @@
             const li = document.createElement('li');
             li.setAttribute('role', 'option');
             li.dataset.href = item.href;
-            li.dataset.target = item.target || '_blank';
 
+            const external = isExternalHref(item.href);
             const name = document.createElement('span');
             name.className = 'name';
-            name.innerHTML = `<a href="${item.href}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>`;
+            name.innerHTML = `<a href="${item.href}" target="${external ? '_blank' : '_self'}" ${external ? 'rel="noopener noreferrer"' : ''}>${escapeHtml(item.title)}</a>`;
 
             const creator = document.createElement('span');
             creator.className = 'creator';

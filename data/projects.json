@@ -5,7 +5,6 @@
         "class": "Summer 2025",
         "href": "projects/glitching-memory.html",
         "image": "assets/img/soto.png",
-        "target": "_self",
         "width": 220
     },
     {
@@ -14,7 +13,6 @@
         "class": "Summer 2025",
         "href": "https://example.com/nguyen-broken-webring",
         "image": "assets/img/nguyen.png",
-        "target": "_blank",
         "width": 200
     },
     {
@@ -23,7 +21,6 @@
         "class": "Summer 2025",
         "href": "projects/ray-traces.html",
         "image": "assets/img/ray.png",
-        "target": "_self",
         "width": 180
     }
 ]
