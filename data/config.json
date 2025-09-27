@@ -5,6 +5,5 @@
         "by": "title",
         "asc": true
     },
-    "randomizeOnFirstLoad": true,
-    "dragBoundsPadding": 8
+    "randomizeOnFirstLoad": true
 }

@@ -29,8 +29,7 @@
         placeholderCount: 20,
         initialView: 'canvas',
         defaultSort: { by: 'title', asc: true },
-        randomizeOnFirstLoad: true,
-        dragBoundsPadding: 8,
+        randomizeOnFirstLoad: true
     });
 
     function mergeConfig(partial) {
@@ -42,7 +41,6 @@
             if (typeof partial.defaultSort.asc === 'boolean') CONFIG.defaultSort.asc = partial.defaultSort.asc;
         }
         if (typeof partial.randomizeOnFirstLoad === 'boolean') CONFIG.randomizeOnFirstLoad = partial.randomizeOnFirstLoad;
-        if (typeof partial.dragBoundsPadding === 'number') CONFIG.dragBoundsPadding = partial.dragBoundsPadding;
     }
 
     function loadConfig() {
@@ -301,7 +299,7 @@
             const rect = node.getBoundingClientRect();
             const w = rect.width || 220;
             const h = rect.height || 180;
-            const pad = Math.max(0, CONFIG.dragBoundsPadding || 0);
+            const pad = 0;
             const maxX = Math.max(0, cw - w - pad);
             const maxY = Math.max(0, ch - h - pad);
             const x = clamp(Math.random() * maxX, pad, maxX);
