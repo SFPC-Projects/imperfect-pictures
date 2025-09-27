@@ -242,7 +242,6 @@
             setPos(node, x, y);
             node.style.zIndex = String(z++);
         });
-        savePositions();
     }
 
     /* DRAGGING */
@@ -285,7 +284,6 @@
         const onPointerUp = (e) => {
             if (active) {
                 active.releasePointerCapture(e.pointerId);
-                savePositions();
             }
             active = null;
         };
@@ -305,35 +303,6 @@
 
     function getPos(el) {
         return { x: Number(el.dataset.x || 0), y: Number(el.dataset.y || 0) };
-    }
-
-    function savePositions() {
-        const data = {};
-        canvas.querySelectorAll('.node').forEach(n => {
-            const k = n.dataset.key || n.dataset.id;
-            if (!k) return;
-            data[k] = { x: Number(n.dataset.x || 0), y: Number(n.dataset.y || 0), z: Number(n.style.zIndex || 1) };
-        });
-        try { localStorage.setItem('ipos', JSON.stringify(data)); } catch (_e) { }
-    }
-
-    function restorePositions() {
-        let saved = null;
-        try { saved = JSON.parse(localStorage.getItem('ipos') || 'null'); } catch (_e) { }
-        if (!saved) return false;
-
-        const nodes = Array.from(canvas.querySelectorAll('.node'));
-        let appliedAny = false;
-        nodes.forEach((n, idx) => {
-            const key = n.dataset.key || n.dataset.id || String(idx);
-            const s = saved[key];
-            if (s) {
-                setPos(n, s.x || 0, s.y || 0);
-                n.style.zIndex = String(s.z || 1);
-                appliedAny = true;
-            }
-        });
-        return appliedAny;
     }
 
     /* OVERLAY HANDLING */
@@ -454,11 +423,7 @@
             renderCanvas(allItems);
             renderList(getSortedItems());
             updateSortIndicators();
-
-            const restored = restorePositions();
-            if (!restored) {
-                randomizePositions();
-            }
+            randomizePositions();
             enableDrag();
         })
         .catch(err => {
