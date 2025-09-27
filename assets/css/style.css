@@ -20,11 +20,11 @@
     --font-base: 13px;
     --font-lg: 14px;
 
-    --space-1: 4px;
-    --space-2: 6px;
-    --space-3: 8px;
-    --space-4: 10px;
-    --space-5: 12px;
+    --space-xs: 4px;
+    --space-sm: 6px;
+    --space-md: 8px;
+    --space-lg: 10px;
+    --space-xl: 12px;
     --radius-1: 4px;
 
     --zstep: 10;
@@ -111,14 +111,14 @@ a:visited {
 
 .window-panel.floating .window-viewport {
     overflow: auto;
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-lg) var(--space-xl);
 }
 
 .titlebar {
     height: var(--titlebar-h, 24px);
     display: flex;
     align-items: center;
-    padding: 0 var(--space-3);
+    padding: 0 var(--space-md);
     background: var(--ui-blue);
     color: #fff;
     box-shadow: inset 0 1px 0 #3a6ea5, inset 0 -1px 0 #000050;
@@ -138,7 +138,7 @@ a:visited {
     color: #fff;
     font-size: 18px;
     line-height: 1;
-    padding: calc(var(--space-1)/2) var(--space-2);
+    padding: calc(var(--space-xs)/2) var(--space-sm);
     cursor: pointer;
 }
 
@@ -289,7 +289,7 @@ ul.details li>* {
 
 .node .caption {
     margin-top: .25rem;
-    padding: calc(var(--space-1)/2) calc(var(--space-1)*0.75);
+    padding: calc(var(--space-xs)/2) calc(var(--space-xs)*0.75);
     border: 1px solid transparent;
     /* keep transparent baseline */
     background: transparent;
@@ -330,7 +330,7 @@ ul.details li>* {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-1) var(--space-2);
+    padding: var(--space-xs) var(--space-sm);
     z-index: var(--z-nav);
     font-size: var(--font-base);
 }
@@ -338,14 +338,14 @@ ul.details li>* {
 .nav-bar-left {
     display: flex;
     align-items: center;
-    gap: var(--space-2)
+    gap: var(--space-sm)
 }
 
 .task-btn {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
-    padding: calc(var(--space-1) - 1px) var(--space-3);
+    gap: var(--space-sm);
+    padding: calc(var(--space-xs) - 1px) var(--space-md);
     text-decoration: none;
     color: #000;
     background: var(--chrome);
