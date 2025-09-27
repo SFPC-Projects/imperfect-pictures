@@ -22,7 +22,7 @@
     let currentView = 'canvas';
 
     /* UTILITY */
-    
+
     function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
     function escapeHtml(str) {
         return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
@@ -43,6 +43,18 @@
             .replace(/[\s]+/g, '-').replace(/[^a-z0-9\-_.:/]/g, '');
         const t = slug(item.title), c = slug(item.creator), i = slug(item.image);
         return `tc:${t}|${c}|${i || idx}`;
+    }
+
+    // Placeholder images: assets/img/placeholder_XX.png (01..NN)
+    const PLACEHOLDER_COUNT = 20; // <-- set this to the number of placeholder images you have
+    function getPlaceholderSrc(key) {
+        // Deterministic pseudo-random pick based on the node key so it stays stable across renders
+        const n = Math.max(1, PLACEHOLDER_COUNT);
+        let h = 0;
+        for (let i = 0; i < key.length; i++) h = ((h << 5) - h) + key.charCodeAt(i) | 0;
+        const idx = Math.abs(h) % n + 1;
+        const xx = String(idx).padStart(2, '0');
+        return `assets/img/placeholder_${xx}.png`;
     }
 
     /* SELECTION STATE */
@@ -125,7 +137,9 @@
 
             const img = document.createElement('img');
             img.alt = `${item.title} — ${item.creator}`;
-            img.src = item.image;
+            const key = node.dataset.key || makeKey(item, idx);
+            const hasImage = item.image && String(item.image).trim().length > 0;
+            img.src = hasImage ? item.image : getPlaceholderSrc(key);
             img.draggable = false;
 
             const cap = document.createElement('figcaption');
