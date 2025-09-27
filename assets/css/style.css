@@ -5,6 +5,7 @@
     --accent: #000;
     --caption-bg: rgba(255, 255, 255, 0.8);
     --zstep: 10;
+    --thumb: 150px;
 }
 
 * {
@@ -90,6 +91,7 @@ body {
     -webkit-user-drag: none;
     cursor: grab;
     margin: 0;
+    width: var(--thumb);
 }
 
 .node:active {
@@ -100,8 +102,8 @@ body {
     display: block;
     text-decoration: none;
     outline: none;
-    width: 150px;
-    height: 150px;
+    width: var(--thumb);
+    height: var(--thumb);
 }
 
 .node img {
@@ -119,6 +121,11 @@ body {
     background: transparent;
     color: #000;
     text-shadow: 1px 1px 0 #fff;
+    display: block;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .node.selected .caption {
