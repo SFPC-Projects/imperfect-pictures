@@ -278,7 +278,6 @@
             const img = document.createElement('img');
             img.alt = `${item.title} — ${item.creator}`;
             img.src = item.image;
-            if (item.height) a.style.height = item.height + 'px';
             img.draggable = false;
 
             const cap = document.createElement('figcaption');
