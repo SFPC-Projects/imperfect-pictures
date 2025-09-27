@@ -66,8 +66,8 @@ a:visited {
 
 #app {
     position: relative;
-    width: 100vw;
-    height: calc(100dvh - var(--nav-height));
+    width: 100dvw;
+    height: 100dvh;
     margin: 0;
     padding: 0;
     max-width: none;
@@ -290,9 +290,8 @@ ul.details li>* {
 
 .node .caption {
     margin-top: .25rem;
-    padding: var(--space-xxs) calc(var(--space-xs)*0.75);
+    padding: var(--space-xxs) var(--space-xs);
     border: 1px solid transparent;
-    /* keep transparent baseline */
     background: transparent;
     color: var(--ink);
     text-shadow: 1px 1px 0 var(--border-light);
@@ -414,11 +413,6 @@ ul.details li>* {
         --nav-height: 48px;
         --titlebar-h: 32px;
         --font-base: 14px;
-        /* bump base font slightly on small screens */
-    }
-
-    #app {
-        height: calc(100dvh - var(--nav-height) - env(safe-area-inset-bottom, 0));
     }
 
     .window-panel.floating {
@@ -458,7 +452,7 @@ ul.details li>* {
     }
 
     .nav-bar {
-        padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0)) 8px;
+        padding: var(--space-sm) var(--space-md);
     }
 
     .nav-bar-left {
