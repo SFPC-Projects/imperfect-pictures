@@ -457,7 +457,7 @@ ul.details li>* {
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 430px) {
     .task-btn span {
         display: none;
     }
