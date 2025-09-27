@@ -55,17 +55,23 @@
         return `tc:${t}|${c}|${i || idx}`;
     }
 
-    function getPlaceholderSrc(key) {
-        // Deterministic pseudo-random pick based on the node key
+    function makePlaceholderPicker() {
         const n = Math.max(1, CONFIG.placeholderCount);
-        let h = 0;
-        for (let i = 0; i < key.length; i++) h = ((h << 5) - h) + key.charCodeAt(i) | 0;
-        const idx = Math.abs(h) % n + 1;
-        const padLen = String(n).length; // auto-pad based on count
-        const xx = String(idx).padStart(padLen, '0');
-        return String(CONFIG.placeholderPath).replace('{NN}', xx);
+        const padLen = String(n).length;
+        const pool = Array.from({ length: n }, (_, i) => String(i + 1).padStart(padLen, '0'));
+        // shuffle Fisher–Yates
+        for (let i = pool.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+        let idx = 0;
+        return function nextPlaceholder() {
+            if (idx >= pool.length) idx = 0; // allow repeats only after exhausting unique set
+            const xx = pool[idx++];
+            return String(CONFIG.placeholderPath).replace('{NN}', xx);
+        };
     }
-    
+
     /* SELECTION STATE */
 
     function selectNode(node) {
@@ -135,6 +141,7 @@
 
     function renderCanvas(items) {
         canvas.innerHTML = '';
+        const nextPlaceholder = makePlaceholderPicker();
         items.forEach((item, idx) => {
             const node = document.createElement('figure');
             node.className = 'node';
@@ -151,9 +158,8 @@
 
             const img = document.createElement('img');
             img.alt = `${item.title} — ${item.creator}`;
-            const key = node.dataset.key || makeKey(item, idx);
             const hasImage = item.image && String(item.image).trim().length > 0;
-            img.src = hasImage ? item.image : getPlaceholderSrc(key);
+            img.src = hasImage ? item.image : nextPlaceholder();
             img.draggable = false;
 
             const cap = document.createElement('figcaption');
