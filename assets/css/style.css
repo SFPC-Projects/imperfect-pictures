@@ -8,6 +8,8 @@
     --link: #000080;
     --link-visited: var(--link);
     --ui-blue: #000080;
+    --ui-blue-light: #3a6ea5;
+    --ui-blue-dark: #000050;
     --chrome: #c0c0c0;
     --panel: #fff;
     --border-light: #fff;
@@ -21,9 +23,6 @@
     --hover-overlay: rgba(255, 255, 255, 0.15);
     --gray-light: #eee;
     --gray-bg: #f2f2f2;
-    --shadow-float: 0 10px 30px rgba(0, 0, 0, 0.25);
-    --ui-blue-light: #3a6ea5;
-    --ui-blue-dark: #000050;
 
     --font-sm: 12px;
     --font-base: 13px;
@@ -38,17 +37,18 @@
     --radius-md: 4px;
     --radius-lg: 8px;
 
+    --thumbnail: 150px;
+    --icon: 20px;
+    --icon-btn: 36px;
+    --nav-height: 38px;
+    --nav-title-min: 90px;
+    --titlebar-close-size: 18px;
+
     --z-step: 10;
     --z-overlay: 4000;
     --z-nav: 3000;
 
-    --thumbnail: 150px;
-    --icon: 20px;
-    --icon-btn: 36px;
-    
-    --nav-height: 38px;
-    --nav-title-min: 90px;
-    --titlebar-close-size: 18px;
+    --shadow-float: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 * {
