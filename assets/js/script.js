@@ -25,6 +25,14 @@
 
     const CONFIG = {};
 
+    const DEFAULT_CONFIG = Object.freeze({
+        placeholderCount: 20,
+        initialView: 'canvas',
+        defaultSort: { by: 'title', asc: true },
+        randomizeOnFirstLoad: true,
+        dragBoundsPadding: 8,
+    });
+
     function mergeConfig(partial) {
         if (!partial || typeof partial !== 'object') return;
         if (typeof partial.placeholderCount === 'number') CONFIG.placeholderCount = partial.placeholderCount;
@@ -39,9 +47,12 @@
 
     function loadConfig() {
         return fetch('data/config.json', { cache: 'no-store' })
-            .then(r => r.ok ? r.json() : {})
-            .then(json => { mergeConfig(json); })
-            .catch(() => { /* ignore */ });
+            .then(r => r.ok ? r.json() : DEFAULT_CONFIG)
+            .catch(err => {
+                console.warn('config.json not available or invalid; using DEFAULT_CONFIG', err);
+                return DEFAULT_CONFIG;
+            })
+            .then(mergeConfig);
     }
 
     /* UTILITY */
