@@ -23,7 +23,6 @@
 
     const CONFIG = Object.freeze({
         placeholderCount: 42,
-        initialView: 'canvas',
         defaultSort: { by: 'title', asc: true }
     });
 
@@ -452,8 +451,8 @@
 
     /* INITIALIZATION */
 
-    setView(CONFIG.initialView === 'list' ? 'list' : 'canvas');
-    listOverlay && (listOverlay.hidden = CONFIG.initialView === 'list' ? false : true);
+    setView('canvas');
+    listOverlay && (listOverlay.hidden = true);
     updateControlsVisibility();
 
     listClose && listClose.addEventListener('click', (e) => {
