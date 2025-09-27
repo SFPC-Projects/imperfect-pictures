@@ -21,6 +21,9 @@
     --hover-overlay: rgba(255, 255, 255, 0.15);
     --gray-light: #eee;
     --gray-bg: #f2f2f2;
+    --shadow-float: 0 10px 30px rgba(0, 0, 0, 0.25);
+    --ui-blue-light: #3a6ea5;
+    --ui-blue-dark: #000050;
 
     --font-sm: 12px;
     --font-base: 13px;
@@ -33,15 +36,19 @@
     --space-lg: 10px;
     --space-xl: 12px;
     --radius-md: 4px;
+    --radius-lg: 8px;
 
     --z-step: 10;
     --z-overlay: 4000;
     --z-nav: 3000;
 
-    --thumb: 150px;
+    --thumbnail: 150px;
     --icon: 20px;
     --icon-btn: 36px;
+    
     --nav-height: 38px;
+    --nav-title-min: 90px;
+    --titlebar-close-size: 18px;
 }
 
 * {
@@ -112,7 +119,7 @@ a:visited {
     max-height: 80vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-float);
 }
 
 .window-panel.floating .window-viewport {
@@ -127,9 +134,9 @@ a:visited {
     padding: 0 var(--space-md);
     background: var(--ui-blue);
     color: var(--white);
-    box-shadow: inset 0 1px 0 #3a6ea5, inset 0 -1px 0 #000050;
+    box-shadow: inset 0 1px 0 var(--ui-blue-light), inset 0 -1px 0 var(--ui-blue-dark);
     justify-content: space-between;
-    gap: 8px;
+    gap: var(--space-md);
 }
 
 .titlebar-text {
@@ -141,7 +148,7 @@ a:visited {
     border: none;
     background: transparent;
     color: var(--white);
-    font-size: 18px;
+    font-size: var(--titlebar-close-size);
     line-height: 1;
     padding: var(--space-xxs) var(--space-sm);
     cursor: pointer;
@@ -165,7 +172,7 @@ a:visited {
 
 .list {
     margin: 0;
-    padding: 8px;
+    padding: var(--space-md);
     height: 100%;
 }
 
@@ -182,7 +189,7 @@ a:visited {
     top: 0;
     z-index: 1;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: var(--cols);
     gap: 0;
     background: var(--chrome);
     color: var(--ink);
@@ -191,10 +198,6 @@ a:visited {
         inset -1px -1px 0 var(--border-dark),
         inset 1px 1px 0 var(--border-light);
     font-size: var(--font-sm);
-}
-
-.list-header {
-    grid-template-columns: var(--cols);
 }
 
 ul.details {
@@ -247,7 +250,7 @@ ul.details li .name a:hover {
 
 .list-header .col,
 ul.details li>* {
-    padding: 4px 8px;
+    padding: var(--space-xs) var(--space-md);
 }
 
 .about-content p {
@@ -256,8 +259,8 @@ ul.details li>* {
 
 .about-content code {
     background: var(--gray-bg);
-    padding: 1px 4px;
-    border-radius: 4px;
+    padding: var(--space-xxs) var(--space-xs);
+    border-radius: var(--radius-md);
 }
 
 .node {
@@ -267,7 +270,7 @@ ul.details li>* {
     -webkit-user-drag: none;
     cursor: grab;
     margin: 0;
-    width: var(--thumb);
+    width: var(--thumbnail);
 }
 
 .node:active {
@@ -278,8 +281,8 @@ ul.details li>* {
     display: block;
     text-decoration: none;
     outline: none;
-    width: var(--thumb);
-    height: var(--thumb);
+    width: var(--thumbnail);
+    height: var(--thumbnail);
 }
 
 .node img {
@@ -381,7 +384,7 @@ ul.details li>* {
 }
 
 .nav-bar-right {
-    min-width: 90px;
+    min-width: var(--nav-title-min);
     text-align: right
 }
 
@@ -397,7 +400,7 @@ ul.details li>* {
     height: var(--icon-btn);
     border: none;
     background: none;
-    border-radius: 8px;
+    border-radius: var(--radius-lg);
     text-decoration: none;
     color: var(--ink);
     cursor: pointer;
@@ -411,7 +414,7 @@ ul.details li>* {
 
 @media (max-width: 640px) {
     :root {
-        --thumb: 110px;
+        --thumbnail: 110px;
         --nav-height: 48px;
         --titlebar-height: 32px;
         --font-base: 14px;
@@ -423,7 +426,7 @@ ul.details li>* {
     }
 
     .window-panel.floating .window-viewport {
-        padding: 8px 10px;
+        padding: var(--space-md) var(--space-lg);
     }
 
     .list .window-viewport {
@@ -437,8 +440,8 @@ ul.details li>* {
     ul.details li {
         grid-template-columns: 1fr;
         align-items: start;
-        padding: 8px 6px;
-        gap: 2px;
+        padding: var(--space-md) var(--space-sm);
+        gap: var(--space-xxs);
     }
 
     ul.details li .name {
@@ -448,9 +451,9 @@ ul.details li>* {
     ul.details li .creator,
     ul.details li .cls {
         display: block;
-        font-size: 12px;
+        font-size: var(--font-sm);
         color: var(--muted);
-        padding: 0 8px 0 8px;
+        padding: 0 var(--space-md);
     }
 
     .nav-bar {
@@ -458,11 +461,11 @@ ul.details li>* {
     }
 
     .nav-bar-left {
-        gap: 8px;
+        gap: var(--space-md);
     }
 
     .task-btn {
-        padding: 8px 10px;
+        padding: var(--space-md) var(--space-lg);
     }
 }
 
