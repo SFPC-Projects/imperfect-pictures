@@ -24,7 +24,7 @@
     let sortAsc = true;
     let currentView = 'canvas';
 
-    /* UTILITY */
+    /* UTILITIES */
 
     function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
 
