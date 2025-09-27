@@ -6,7 +6,7 @@
     --caption-bg: rgba(255, 255, 255, 0.8);
     --bg-app: #018281;
     --link: #000080;
-    --link-visited: #551a8b;
+    --link-visited: var(--link);
     --ui-blue: #000080;
     --chrome: #c0c0c0;
     --panel: #fff;
