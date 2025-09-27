@@ -365,9 +365,6 @@ ul.details li>* {
     height: 20px
 }
 
-/* =========================
-   REDUCED MOTION
-   ========================= */
 @media (prefers-reduced-motion: reduce) {
     * {
         scroll-behavior: auto !important;
