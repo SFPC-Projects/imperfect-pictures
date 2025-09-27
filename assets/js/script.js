@@ -299,11 +299,10 @@
             const rect = node.getBoundingClientRect();
             const w = rect.width || 220;
             const h = rect.height || 180;
-            const pad = 0;
-            const maxX = Math.max(0, cw - w - pad);
-            const maxY = Math.max(0, ch - h - pad);
-            const x = clamp(Math.random() * maxX, pad, maxX);
-            const y = clamp(Math.random() * maxY, pad, maxY);
+            const maxX = Math.max(0, cw - w);
+            const maxY = Math.max(0, ch - h);
+            const x = clamp(Math.random() * maxX, 0, maxX);
+            const y = clamp(Math.random() * maxY, 0, maxY);
             setPos(node, x, y);
             node.style.zIndex = String(z++);
         });
