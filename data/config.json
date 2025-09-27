@@ -1,9 +1,0 @@
-{
-    "placeholderCount": 20,
-    "initialView": "canvas",
-    "defaultSort": {
-        "by": "title",
-        "asc": true
-    },
-    "randomizeOnFirstLoad": true
-}

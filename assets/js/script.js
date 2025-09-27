@@ -21,37 +21,11 @@
     let sortAsc = true;
     let currentView = 'canvas';
 
-    /* CONFIGURATION */
-
-    const CONFIG = {};
-
-    const DEFAULT_CONFIG = Object.freeze({
-        placeholderCount: 20,
+    const CONFIG = Object.freeze({
+        placeholderCount: 42,
         initialView: 'canvas',
-        defaultSort: { by: 'title', asc: true },
-        randomizeOnFirstLoad: true
+        defaultSort: { by: 'title', asc: true }
     });
-
-    function mergeConfig(partial) {
-        if (!partial || typeof partial !== 'object') return;
-        if (typeof partial.placeholderCount === 'number') CONFIG.placeholderCount = partial.placeholderCount;
-        if (typeof partial.initialView === 'string') CONFIG.initialView = partial.initialView;
-        if (partial.defaultSort && typeof partial.defaultSort === 'object') {
-            if (typeof partial.defaultSort.by === 'string') CONFIG.defaultSort.by = partial.defaultSort.by;
-            if (typeof partial.defaultSort.asc === 'boolean') CONFIG.defaultSort.asc = partial.defaultSort.asc;
-        }
-        if (typeof partial.randomizeOnFirstLoad === 'boolean') CONFIG.randomizeOnFirstLoad = partial.randomizeOnFirstLoad;
-    }
-
-    function loadConfig() {
-        return fetch('data/config.json', { cache: 'no-store' })
-            .then(r => r.ok ? r.json() : DEFAULT_CONFIG)
-            .catch(err => {
-                console.warn('config.json not available or invalid; using DEFAULT_CONFIG', err);
-                return DEFAULT_CONFIG;
-            })
-            .then(mergeConfig);
-    }
 
     /* UTILITY */
 
@@ -478,68 +452,66 @@
 
     /* INITIALIZATION */
 
-    loadConfig().then(() => {
-        setView(CONFIG.initialView === 'list' ? 'list' : 'canvas');
-        listOverlay && (listOverlay.hidden = CONFIG.initialView === 'list' ? false : true);
-        updateControlsVisibility();
+    setView(CONFIG.initialView === 'list' ? 'list' : 'canvas');
+    listOverlay && (listOverlay.hidden = CONFIG.initialView === 'list' ? false : true);
+    updateControlsVisibility();
 
-        listClose && listClose.addEventListener('click', (e) => {
+    listClose && listClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        setView('canvas');
+    });
+    listOverlay && listOverlay.addEventListener('mousedown', (e) => {
+        if (e.target === listOverlay || (listWindow && !listWindow.contains(e.target))) {
+            setView('canvas');
+        }
+    });
+    window.addEventListener('keydown', (e) => {
+        if (currentView === 'list' && e.key === 'Escape') {
             e.preventDefault();
             setView('canvas');
-        });
-        listOverlay && listOverlay.addEventListener('mousedown', (e) => {
-            if (e.target === listOverlay || (listWindow && !listWindow.contains(e.target))) {
-                setView('canvas');
-            }
-        });
-        window.addEventListener('keydown', (e) => {
-            if (currentView === 'list' && e.key === 'Escape') {
-                e.preventDefault();
-                setView('canvas');
-            }
-        });
+        }
+    });
 
-        randomizeBtn.onclick = () => {
-            if (currentView === 'list') {
-                shuffleList();
-            } else {
+    randomizeBtn.onclick = () => {
+        if (currentView === 'list') {
+            shuffleList();
+        } else {
+            randomizePositions();
+        }
+    };
+    listViewLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        setView('list');
+    });
+
+    fetch('data/projects.json', { cache: 'no-store' })
+        .then(r => r.json())
+        .then(items => {
+            allItems = items;
+            sortBy = (CONFIG.defaultSort && CONFIG.defaultSort.by) || null;
+            sortAsc = (CONFIG.defaultSort && typeof CONFIG.defaultSort.asc === 'boolean')
+                ? CONFIG.defaultSort.asc : true;
+
+            renderCanvas(allItems);
+            renderList(getSortedItems());
+            updateSortIndicators();
+
+            const restored = restorePositions(allItems);
+            if (!restored) {
                 randomizePositions();
             }
-        };
-        listViewLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            setView('list');
+            enableDrag();
+        })
+        .catch(err => {
+            console.error('Failed to load data/projects.json', err);
+            canvas.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
         });
 
-        fetch('data/projects.json', { cache: 'no-store' })
-            .then(r => r.json())
-            .then(items => {
-                allItems = items;
-                sortBy = (CONFIG.defaultSort && CONFIG.defaultSort.by) || null;
-                sortAsc = (CONFIG.defaultSort && typeof CONFIG.defaultSort.asc === 'boolean')
-                    ? CONFIG.defaultSort.asc : true;
-
-                renderCanvas(allItems);
-                renderList(getSortedItems());
-                updateSortIndicators();
-
-                const restored = restorePositions(allItems);
-                if (!restored && CONFIG.randomizeOnFirstLoad) {
-                    randomizePositions();
-                }
-                enableDrag();
-            })
-            .catch(err => {
-                console.error('Failed to load data/projects.json', err);
-                canvas.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
-            });
-
-        // Header click sorting for list window
-        const hdrName = document.querySelector('#list .list-header .name');
-        const hdrCreator = document.querySelector('#list .list-header .creator');
-        const hdrCls = document.querySelector('#list .list-header .cls');
-        hdrName && hdrName.addEventListener('click', () => setSort('name'));
-        hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
-        hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
-    });
+    // Header click sorting for list window
+    const hdrName = document.querySelector('#list .list-header .name');
+    const hdrCreator = document.querySelector('#list .list-header .creator');
+    const hdrCls = document.querySelector('#list .list-header .cls');
+    hdrName && hdrName.addEventListener('click', () => setSort('name'));
+    hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
+    hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
 })();
