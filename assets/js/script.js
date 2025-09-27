@@ -14,17 +14,15 @@
     const aboutWindow = byId('aboutWindow');
     const aboutClose = byId('aboutClose');
 
+    const PLACEHOLDER_PATH = 'assets/img/placeholder_{NN}.png';
+    const PLACEHOLDER_COUNT = 42;
+
     let selectedNode = null;
     let selectedRow = null;
     let allItems = [];
     let sortBy = 'title';
     let sortAsc = true;
     let currentView = 'canvas';
-
-    const CONFIG = Object.freeze({
-        placeholderPath: 'assets/img/placeholder_{NN}.png',
-        placeholderCount: 42
-    });
 
     /* UTILITY */
 
@@ -55,7 +53,7 @@
     }
 
     function createPlaceholderSequence() {
-        const n = Math.max(1, CONFIG.placeholderCount);
+        const n = Math.max(1, PLACEHOLDER_COUNT);
         const padLen = String(n).length;
         const pool = Array.from({ length: n }, (_, i) => String(i + 1).padStart(padLen, '0'));
         // shuffle Fisher–Yates
@@ -65,9 +63,9 @@
         }
         let idx = 0;
         return function nextPlaceholder() {
-            if (idx >= pool.length) idx = 0; // allow repeats only after exhausting unique set
+            if (idx >= pool.length) idx = 0; // repeats only after exhausting unique set
             const xx = pool[idx++];
-            return String(CONFIG.placeholderPath).replace('{NN}', xx);
+            return String(PLACEHOLDER_PATH).replace('{NN}', xx);
         };
     }
 
