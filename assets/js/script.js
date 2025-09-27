@@ -17,14 +17,13 @@
     let selectedNode = null;
     let selectedRow = null;
     let allItems = [];
-    let sortBy = null;
+    let sortBy = 'title';
     let sortAsc = true;
     let currentView = 'canvas';
 
     const CONFIG = Object.freeze({
         placeholderPath: 'assets/img/placeholder_{NN}.png',
-        placeholderCount: 42,
-        defaultSort: { by: 'title', asc: true }
+        placeholderCount: 42
     });
 
     /* UTILITY */
@@ -453,9 +452,6 @@
         .then(r => r.json())
         .then(items => {
             allItems = items;
-            sortBy = (CONFIG.defaultSort && CONFIG.defaultSort.by) || null;
-            sortAsc = (CONFIG.defaultSort && typeof CONFIG.defaultSort.asc === 'boolean')
-                ? CONFIG.defaultSort.asc : true;
 
             renderCanvas(allItems);
             renderList(getSortedItems());
