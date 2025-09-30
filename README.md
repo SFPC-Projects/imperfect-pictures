@@ -12,7 +12,7 @@ An open, draggable desktop of student projects for **Imperfect Pictures** at the
 
 This is a static site built with plain **HTML/CSS/JS** and a single **JSON** file for project data. There are two primary views:
 
-- **Canvas view** (default): draggable PNG “icons” spread across the viewport. Positions are **randomized on each load** for a fresh layout.
+- **Canvas view** (default): draggable “icons” spread across the viewport. Positions are **randomized on each load** for a fresh layout.
 - **List window**: an overlay window that lists projects in a sortable table (by Name / Creator / Class). Users can close the window to return to the canvas.
 
 There’s also an **About window** with class information. The nav bar at the bottom contains buttons to open/close the About and List windows and a Shuffle button (visible in canvas mode only).
@@ -42,7 +42,7 @@ Edit `data/projects.json` and add a new object to the array.
 - `title` (string): Project name.
 - `class` (string): Session label, e.g. "Summer 2025".
 - `href` (string): Link target. May be an **internal page** (e.g. `projects/name.html`) or an **external URL**.
-- `image` (optional string): PNG/JPG/WebP thumbnail. If omitted, a placeholder image is used.
+- `image` (optional string): Project image thumbnail. If omitted, a placeholder image is used.
 
 **Note**
 - Internal project pages can be simple HTML stubs placed under `projects/` and linked from `href`.
