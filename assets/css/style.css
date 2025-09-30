@@ -77,7 +77,7 @@ a:visited {
 #app {
     position: relative;
     width: 100dvw;
-    height: 100dvh;
+    height: calc(100dvh - var(--nav-height));
     margin: 0;
     padding: 0;
 }
