@@ -74,6 +74,23 @@
                 </div>
             </section>
         </div>
+
+        <!-- Project viewer window -->
+        <div id="projectOverlay" class="overlay" hidden>
+            <section id="projectView" class="list" aria-label="Project viewer">
+                <div id="projectWindow" class="window-panel floating" role="dialog" aria-modal="true"
+                    aria-labelledby="projectTitle">
+                    <div class="titlebar">
+                        <span class="titlebar-text" id="projectTitle">Project</span>
+                        <button id="projectClose" class="titlebar-close" aria-label="Close">×</button>
+                    </div>
+                    <div class="window-viewport">
+                        <iframe id="projectFrame" class="project-frame" title="Embedded project"
+                            src="about:blank"></iframe>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
     <footer class="nav-bar" role="contentinfo" aria-label="Navigation bar">

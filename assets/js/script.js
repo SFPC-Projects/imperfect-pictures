@@ -14,6 +14,12 @@
     const aboutWindow = byId('aboutWindow');
     const aboutClose = byId('aboutClose');
 
+    const projectOverlay = byId('projectOverlay');
+    const projectWindow = byId('projectWindow');
+    const projectClose = byId('projectClose');
+    const projectTitle = byId('projectTitle');
+    const projectFrame = byId('projectFrame');
+
     const PLACEHOLDER_PATH = 'assets/img/placeholders/placeholder_{NN}.png';
     const PLACEHOLDER_COUNT = 30;
 
@@ -36,13 +42,17 @@
         return !!(aboutOverlay && !aboutOverlay.hidden);
     }
 
+    function toURL(href) {
+        try { return new URL(href, window.location.href); } catch { return null; }
+    }
     function isExternalHref(href) {
-        try {
-            const u = new URL(href, window.location.href);
-            return u.origin !== window.location.origin;
-        } catch (_e) {
-            return false;
-        }
+        const u = toURL(href); if (!u) return false;
+        return u.origin !== window.location.origin;
+    }
+    function isInternalNavigable(item) {
+        if (!item || !item.href) return false;
+        if (item.download) return false; // downloads should not embed
+        return !isExternalHref(item.href);
     }
 
     function makeKey(item, idx) {
@@ -86,12 +96,17 @@
     function openRow(row) {
         if (!row) return;
         const href = row.dataset.href;
-        if (href) {
-            const external = isExternalHref(href);
-            const target = external ? '_blank' : '_self';
-            const features = external ? 'noopener' : '';
-            window.open(href, target, features);
+        if (!href) return;
+
+        const item = allItems.find(it => it.href === href);
+        if (item && isInternalNavigable(item)) {
+            openProject(item.href, item.title);
+            return;
         }
+        const external = isExternalHref(href);
+        const target = external ? '_blank' : '_self';
+        const features = external ? 'noopener' : '';
+        window.open(href, target, features);
     }
 
     /* SORTING */
@@ -163,6 +178,13 @@
             a.tabIndex = 0;
             a.setAttribute('aria-label', `${item.title} by ${item.creator}${hasDownload ? ' — download' : ''}`);
 
+            if (isInternalNavigable(item)) {
+                a.addEventListener('click', (ev) => {
+                    ev.preventDefault();
+                    openProject(item.href, item.title);
+                });
+            }
+
             const img = document.createElement('img');
             img.alt = `${item.title} — ${item.creator}`;
             const hasImage = item.image && String(item.image).trim().length > 0;
@@ -223,6 +245,12 @@
             }
 
             anchor.textContent = item.title || '';
+            if (isInternalNavigable(item)) {
+                anchor.addEventListener('click', (ev) => {
+                    ev.preventDefault();
+                    openProject(item.href, item.title);
+                });
+            }
             name.appendChild(anchor);
 
             const creator = document.createElement('span');
@@ -345,6 +373,21 @@
         updateControlsVisibility();
     }
 
+    function openProject(href, titleText) {
+        if (!projectOverlay || !projectFrame) return;
+        if (projectTitle) projectTitle.textContent = titleText || 'Project';
+        projectFrame.src = href;
+        projectOverlay.hidden = false;
+        if (projectClose) projectClose.focus();
+        updateControlsVisibility();
+    }
+    function closeProject() {
+        if (!projectOverlay) return;
+        projectOverlay.hidden = true;
+        if (projectFrame) projectFrame.src = 'about:blank';
+        updateControlsVisibility();
+    }
+
     aboutBtn && aboutBtn.addEventListener('click', (e) => {
         e.preventDefault();
         openAbout();
@@ -381,6 +424,21 @@
         }
     });
 
+    // Close interactions
+    projectClose && projectClose.addEventListener('click', (e) => { e.preventDefault(); closeProject(); });
+    document.addEventListener('click', (e) => {
+        const btn = e.target && e.target.closest && e.target.closest('#projectClose');
+        if (btn && projectOverlay && !projectOverlay.hidden) { e.preventDefault(); closeProject(); }
+    }, true);
+    projectOverlay && projectOverlay.addEventListener('mousedown', (e) => {
+        if (projectOverlay && !projectOverlay.hidden) {
+            if (e.target === projectOverlay || (projectWindow && !projectWindow.contains(e.target))) closeProject();
+        }
+    });
+    window.addEventListener('keydown', (e) => {
+        if (projectOverlay && !projectOverlay.hidden && e.key === 'Escape') { e.preventDefault(); closeProject(); }
+    });
+
     /* VIEW TOGGLE */
 
     function setView(mode) {
@@ -397,15 +455,19 @@
         }
 
         updateControlsVisibility();
+        if (mode !== 'list' && projectOverlay && !projectOverlay.hidden) {
+            closeProject();
+        }
     }
 
     function updateControlsVisibility() {
         const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
+        const listOpen = currentView === 'list';
+        const projectOpen = !!(projectOverlay && !projectOverlay.hidden);
         if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
-        if (listViewLink) listViewLink.classList.toggle('active', currentView === 'list');
-        if (randomizeBtn) randomizeBtn.hidden = !(currentView === 'canvas' && !aboutOpen);
+        if (listViewLink) listViewLink.classList.toggle('active', listOpen);
+        if (randomizeBtn) randomizeBtn.hidden = !(currentView === 'canvas' && !aboutOpen && !projectOpen);
     }
-
     /* INITIALIZATION */
 
     setView('canvas');
