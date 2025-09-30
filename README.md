@@ -64,9 +64,9 @@ imperfect-pictures/
 ├── index.html                ← main entry (canvas + overlays)
 ├── assets/
 │   ├── css/style.css         ← global styles (CSS variables + responsive)
-│   └── js/script.js          ← rendering, drag, list/about windows
+│   ├── js/script.js          ← rendering, drag, list/about windows
+│   └── img/                  ← placeholder_XX.png and thumbnails
 ├── data/projects.json        ← all project data
-├── assets/img/               ← placeholder_XX.png and thumbnails
 └── projects/                 ← internal project pages (optional)
 ```
 
