@@ -500,6 +500,7 @@
     listViewLink.addEventListener('click', (e) => {
         e.preventDefault();
         setView('list');
+        if (projectOverlay && !projectOverlay.hidden) closeProject();
     });
 
     fetch('data/projects.json', { cache: 'no-store' })
