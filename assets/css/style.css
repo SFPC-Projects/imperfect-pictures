@@ -39,6 +39,7 @@
     --icon-btn: 36px;
     --nav-height: 38px;
     --nav-title-min: 90px;
+    --button-height: 28px;
     --titlebar-close-size: 18px;
 
     --z-overlay: 4000;
@@ -356,6 +357,21 @@ ul.details li>* {
         inset 1px 1px 0 var(--border-light),
         inset -2px -2px 0 var(--border-xdark),
         inset 2px 2px 0 var(--border-mid);
+    line-height: 1;
+    height: var(--button-height);
+}
+
+.task-btn>span {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.task-btn>span[aria-hidden="true"] {
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    font-size: 1em;
 }
 
 .task-btn[hidden] {
@@ -406,6 +422,7 @@ ul.details li>* {
         --nav-height: 48px;
         --titlebar-height: 32px;
         --font-base: 14px;
+        --button-height: 36px;
     }
 
     .window-panel.floating {
