@@ -148,8 +148,8 @@
             a.className = 'thumb';
             a.href = item.href;
 
-            const wantsDownload = !!item.download; // true or string filename
-            if (wantsDownload) {
+            const hasDownload = !!item.download; // true or string filename
+            if (hasDownload) {
                 if (typeof item.download === 'string') a.setAttribute('download', item.download);
                 else a.setAttribute('download', '');
                 a.target = '_self';
@@ -161,7 +161,7 @@
             }
 
             a.tabIndex = 0;
-            a.setAttribute('aria-label', `${item.title} by ${item.creator}${wantsDownload ? ' — download' : ''}`);
+            a.setAttribute('aria-label', `${item.title} by ${item.creator}${hasDownload ? ' — download' : ''}`);
 
             const img = document.createElement('img');
             img.alt = `${item.title} — ${item.creator}`;
@@ -212,8 +212,8 @@
             const anchor = document.createElement('a');
             anchor.href = item.href;
 
-            const wantsDownload = !!item.download;
-            if (wantsDownload) {
+            const hasDownload = !!item.download;
+            if (hasDownload) {
                 if (typeof item.download === 'string') anchor.setAttribute('download', item.download);
                 else anchor.setAttribute('download', '');
                 anchor.target = '_self';
