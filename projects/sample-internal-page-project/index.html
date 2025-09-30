@@ -20,12 +20,16 @@
     <style>
         :root {
             --page-max: 940px;
+            --window-top-vh: 6vh;
+            --font-body: 16px;
+            --font-title-min: 20px;
+            --font-title-max: 32px;
         }
 
         .proj-window.window-panel.floating {
-            width: min(900px, 94vw);
-            margin: 6vh auto var(--nav-height);
-            max-height: calc(100vh - var(--nav-height) - 12vh);
+            width: min(var(--page-max), 94vw);
+            margin: var(--window-top-vh) auto var(--nav-height);
+            max-height: calc(100vh - var(--nav-height) - var(--window-top-vh));
             overflow: auto;
         }
 
@@ -41,15 +45,15 @@
         .proj-wrap {
             max-width: var(--page-max);
             margin: 0 auto;
-            padding: 0 0 8px;
+            padding: 0 0 var(--space-md);
         }
 
         header.proj-head {
-            margin-bottom: 16px;
+            margin-bottom: calc(var(--space-md) * 2);
         }
 
         .proj-title {
-            font-size: clamp(20px, 3.6vw, 32px);
+            font-size: clamp(var(--font-title-min), 3.6vw, var(--font-title-max));
             margin: 0 0 4px 0;
         }
 
@@ -60,7 +64,7 @@
         }
 
         .proj-hero {
-            margin: 16px 0 20px;
+            margin: calc(var(--space-md) * 2) 0 calc(var(--space-xl) + var(--space-md));
         }
 
         .proj-hero img,
@@ -72,7 +76,7 @@
         }
 
         .proj-body {
-            font-size: 16px;
+            font-size: var(--font-body);
             line-height: 1.6;
         }
 
@@ -83,8 +87,8 @@
         .proj-media {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
-            gap: 12px;
-            margin: 20px 0;
+            gap: var(--space-xl);
+            margin: calc(var(--space-xl) + var(--space-md)) 0;
         }
 
         .proj-media figure {
@@ -95,21 +99,21 @@
         .proj-media figcaption {
             color: var(--muted);
             font-size: var(--font-sm);
-            margin-top: 6px;
+            margin-top: var(--space-sm);
         }
 
         .proj-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 20px;
+            gap: var(--space-md);
+            margin-top: calc(var(--space-xl) + var(--space-md));
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 6px 12px;
+            gap: var(--space-md);
+            padding: var(--space-sm) var(--space-xl);
             background: var(--chrome);
             color: var(--black);
             border: none;
@@ -123,15 +127,15 @@
 
         footer.proj-foot {
             border-top: 1px solid var(--border-mid);
-            margin-top: 28px;
-            padding-top: 14px;
+            margin-top: calc(var(--space-xl) + var(--space-lg) + var(--space-sm));
+            padding-top: var(--space-md);
             color: var(--muted);
             font-size: var(--font-sm);
         }
 
         @media (min-width: 720px) {
             .proj-hero {
-                margin-top: 24px;
+                margin-top: calc(var(--space-xl) * 2);
             }
 
             .proj-media figure.half {
