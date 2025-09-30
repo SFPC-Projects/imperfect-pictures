@@ -20,21 +20,7 @@
     <style>
         :root {
             --page-max: 940px;
-            --window-top-vh: 6vh;
             --font-body: 16px;
-            --font-title-min: 20px;
-            --font-title-max: 32px;
-        }
-
-        .proj-window.window-panel.floating {
-            width: min(var(--page-max), 94vw);
-            margin: var(--window-top-vh) auto var(--nav-height);
-            max-height: calc(100vh - var(--nav-height) - var(--window-top-vh));
-            overflow: auto;
-        }
-
-        .proj-window .window-viewport {
-            padding: var(--space-lg) var(--space-xl);
         }
 
         body {
@@ -50,11 +36,6 @@
 
         header.proj-head {
             margin-bottom: calc(var(--space-md) * 2);
-        }
-
-        .proj-title {
-            font-size: clamp(var(--font-title-min), 3.6vw, var(--font-title-max));
-            margin: 0 0 4px 0;
         }
 
         .proj-meta {
