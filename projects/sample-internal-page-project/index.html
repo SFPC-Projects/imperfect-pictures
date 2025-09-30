@@ -24,8 +24,9 @@
 
         .proj-window.window-panel.floating {
             width: min(900px, 94vw);
-            max-height: none;
-            margin: 6vh auto calc(var(--nav-height) + 24px);
+            margin: 6vh auto var(--nav-height);
+            max-height: calc(100vh - var(--nav-height) - 12vh);
+            overflow: auto;
         }
 
         .proj-window .window-viewport {
