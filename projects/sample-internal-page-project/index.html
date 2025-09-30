@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="../../favicon.ico" sizes="any">
+    <title>Sample Internal Project — Imperfect Pictures</title>
+    <meta name="description"
+        content="A sample internal project page demonstrating layout, media, and download links for the Imperfect Pictures archive." />
+
+    <!-- Social -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Sample Internal Project — Imperfect Pictures" />
+    <meta property="og:description"
+        content="A sample internal project page demonstrating layout, media, and download links." />
+    <meta property="og:url" content="../sample-internal-page-project/" />
+    <meta name="twitter:card" content="summary" />
+
+    <!-- Inherit global styles; add a small page-specific layer below -->
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <style>
+        :root {
+            --page-max: 940px;
+        }
+
+        body {
+            background: var(--panel);
+            color: var(--ink);
+        }
+
+        .proj-wrap {
+            max-width: var(--page-max);
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+        }
+
+        header.proj-head {
+            border-bottom: 1px solid var(--border-mid);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+        }
+
+        .proj-title {
+            font-size: clamp(20px, 3.6vw, 32px);
+            margin: 0 0 4px 0;
+        }
+
+        .proj-meta {
+            color: var(--muted);
+            font-size: var(--font-base);
+            margin: 0;
+        }
+
+        .proj-hero {
+            margin: 16px 0 20px;
+        }
+
+        .proj-hero img,
+        .proj-media img,
+        .proj-media video {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .proj-body {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .proj-body p {
+            margin: 0 0 1em;
+        }
+
+        .proj-media {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .proj-media figure {
+            grid-column: span 12;
+            margin: 0;
+        }
+
+        .proj-media figcaption {
+            color: var(--muted);
+            font-size: var(--font-sm);
+            margin-top: 6px;
+        }
+
+        .proj-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--chrome);
+            color: var(--black);
+            border: none;
+            box-shadow: inset -1px -1px 0 var(--border-dark), inset 1px 1px 0 var(--border-light), inset -2px -2px 0 var(--border-xdark), inset 2px 2px 0 var(--border-mid);
+            text-decoration: none;
+        }
+
+        .btn:active {
+            box-shadow: inset 1px 1px 0 var(--border-dark), inset -1px -1px 0 var(--border-light), inset 2px 2px 0 var(--border-xdark), inset -2px -2px 0 var(--border-mid);
+        }
+
+        footer.proj-foot {
+            border-top: 1px solid var(--border-mid);
+            margin-top: 28px;
+            padding-top: 14px;
+            color: var(--muted);
+            font-size: var(--font-sm);
+        }
+
+        @media (min-width: 720px) {
+            .proj-hero {
+                margin-top: 24px;
+            }
+
+            .proj-media figure.half {
+                grid-column: span 6;
+            }
+
+            .proj-media figure.third {
+                grid-column: span 4;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="proj-wrap" role="main">
+        <header class="proj-head">
+            <h1 class="proj-title">Sample Internal Project</h1>
+            <p class="proj-meta">By <strong>Example Student</strong> · Class: <strong>Summer 2025</strong></p>
+        </header>
+
+        <div class="proj-hero">
+            <img src="../specter/specter.png" alt="Sample hero image for the project" />
+        </div>
+
+        <section class="proj-body">
+            <p>This page demonstrates a simple pattern you can copy for internal projects hosted within the archive. You
+                can include text, images, video, and download links. The global CSS variables keep the look aligned with
+                the main site without requiring a complex framework.</p>
+
+            <div class="proj-media">
+                <figure class="half">
+                    <img src="../sample-download-project/fruit.png" alt="Fruit image example" />
+                    <figcaption>Example image with caption.</figcaption>
+                </figure>
+                <figure class="half">
+                    <img src="../specter/specter.png" alt="Specter image example" />
+                    <figcaption>Second image, arranged side-by-side on larger screens.</figcaption>
+                </figure>
+            </div>
+
+            <div class="proj-actions">
+                <a class="btn" href="../sample-download-project/fruit.png" download="Sample-Project.png"
+                    aria-label="Download sample asset">⇩ <span>Download asset</span></a>
+                <a class="btn" href="../../index.html" aria-label="Back to archive">← <span>Back to archive</span></a>
+            </div>
+        </section>
+
+        <footer class="proj-foot">
+            <p>Imperfect Pictures — a class at the School for Poetic Computation. This is a sample internal page
+                template.</p>
+        </footer>
+    </div>
+</body>
+
+</html>
