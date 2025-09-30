@@ -22,21 +22,29 @@
             --page-max: 940px;
         }
 
+        .proj-window.window-panel.floating {
+            width: min(900px, 94vw);
+            max-height: none;
+            margin: 6vh auto calc(var(--nav-height) + 24px);
+        }
+
+        .proj-window .window-viewport {
+            padding: var(--space-lg) var(--space-xl);
+        }
+
         body {
-            background: var(--panel);
+            background: var(--bg-app);
             color: var(--ink);
         }
 
         .proj-wrap {
             max-width: var(--page-max);
             margin: 0 auto;
-            padding: 24px 16px 40px;
+            padding: 0 0 8px;
         }
 
         header.proj-head {
-            border-bottom: 1px solid var(--border-mid);
             margin-bottom: 16px;
-            padding-bottom: 8px;
         }
 
         .proj-title {
@@ -137,43 +145,64 @@
 </head>
 
 <body>
-    <div class="proj-wrap" role="main">
-        <header class="proj-head">
-            <h1 class="proj-title">Sample Internal Project</h1>
-            <p class="proj-meta">By <strong>Example Student</strong> · Class: <strong>Summer 2025</strong></p>
-        </header>
-
-        <div class="proj-hero">
-            <img src="../../assets/img/placeholders/placeholder_01.png" alt="Sample hero image for the project" />
+    <div class="proj-window window-panel floating" role="main" aria-label="Project window">
+        <div class="titlebar">
+            <div class="titlebar-text">Sample Internal Project</div>
+            <button class="titlebar-close" type="button" aria-label="Close and go back" title="Close"
+                onclick="history.back()">×</button>
         </div>
+        <div class="window-viewport">
+            <div class="proj-wrap">
+                <header class="proj-head">
+                    <p class="proj-meta">By <strong>Example Student</strong> · Class: <strong>Summer 2025</strong></p>
+                </header>
 
-        <section class="proj-body">
-            <p>This page demonstrates a simple pattern to copy for internal projects hosted within the archive. You
-                can include text, images, video, and download links.</p>
+                <div class="proj-hero">
+                    <img src="../../assets/img/placeholders/placeholder_01.png"
+                        alt="Sample hero image for the project" />
+                </div>
 
-            <div class="proj-media">
-                <figure class="half">
-                    <img src="../../assets/img/placeholders/placeholder_02.png" alt="Project image example" />
-                    <figcaption>Example image with caption.</figcaption>
-                </figure>
-                <figure class="half">
-                    <img src="../../assets/img/placeholders/placeholder_01.png" alt="Project image example" />
-                    <figcaption>Second image, arranged side-by-side on larger screens.</figcaption>
-                </figure>
+                <section class="proj-body">
+                    <p>This page demonstrates a simple pattern to copy for internal projects hosted within the archive.
+                        You can include text, images, video, and download links.</p>
+
+                    <div class="proj-media">
+                        <figure class="half">
+                            <img src="../../assets/img/placeholders/placeholder_02.png" alt="Project image example" />
+                            <figcaption>Example image with caption.</figcaption>
+                        </figure>
+                        <figure class="half">
+                            <img src="../../assets/img/placeholders/placeholder_01.png" alt="Project image example" />
+                            <figcaption>Second image, arranged side-by-side on larger screens.</figcaption>
+                        </figure>
+                    </div>
+
+                    <div class="proj-actions">
+                        <a class="btn" href="../../assets/img/placeholders/placeholder_03.png"
+                            download="Sample-Project.png" aria-label="Download sample asset">⇩ <span>Download
+                                asset</span></a>
+                        <a class="btn" href="../../index.html" aria-label="Back to archive">← <span>Back to
+                                archive</span></a>
+                    </div>
+                </section>
+
+                <footer class="proj-foot">
+                    <p>Imperfect Pictures — a class at the School for Poetic Computation. This is a sample internal page
+                        template.</p>
+                </footer>
             </div>
-
-            <div class="proj-actions">
-                <a class="btn" href="../../assets/img/placeholders/placeholder_03.png" download="Sample-Project.png"
-                    aria-label="Download sample asset">⇩ <span>Download asset</span></a>
-                <a class="btn" href="../../index.html" aria-label="Back to archive">← <span>Back to archive</span></a>
-            </div>
-        </section>
-
-        <footer class="proj-foot">
-            <p>Imperfect Pictures — a class at the School for Poetic Computation. This is a sample internal page
-                template.</p>
-        </footer>
+        </div>
     </div>
+
+    <footer class="nav-bar" role="contentinfo" aria-label="Navigation bar">
+        <div class="nav-bar-left">
+            <a class="task-btn" href="../../index.html" aria-label="Back to archive" title="Back to archive">←
+                <span>Back</span></a>
+        </div>
+        <div class="nav-bar-right">
+            <span class="nav-bar-title" aria-label="Site title">Imperfect Pictures — Class Archive</span>
+        </div>
+    </footer>
 </body>
 
 </html>
