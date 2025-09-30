@@ -1,6 +1,6 @@
 # Imperfect Pictures — Class Archive
 
-An open, draggable desktop of student projects for **Imperfect Pictures** at the School for Poetic Computation (SFPC). The site serves as a lightweight archive: each project is a PNG node on the canvas with a caption (Creator / Project Title) that links to may link to an internal project page, an external site, or a downloadable file.
+An open, draggable desktop of student projects for **Imperfect Pictures** at the School for Poetic Computation (SFPC). The site serves as a lightweight archive: each project is a node on the canvas with a caption (Creator and Project Title) that links to may link to an internal project page, an external site, or a downloadable file.
 
 ## Live version
 
