@@ -147,11 +147,21 @@
             const a = document.createElement('a');
             a.className = 'thumb';
             a.href = item.href;
-            const external = isExternalHref(item.href);
-            a.target = external ? '_blank' : '_self';
-            a.rel = external ? 'noopener noreferrer' : '';
+
+            const wantsDownload = !!item.download; // true or string filename
+            if (wantsDownload) {
+                if (typeof item.download === 'string') a.setAttribute('download', item.download);
+                else a.setAttribute('download', '');
+                a.target = '_self';
+                a.rel = '';
+            } else {
+                const external = isExternalHref(item.href);
+                a.target = external ? '_blank' : '_self';
+                a.rel = external ? 'noopener noreferrer' : '';
+            }
+
             a.tabIndex = 0;
-            a.setAttribute('aria-label', `${item.title} by ${item.creator}`);
+            a.setAttribute('aria-label', `${item.title} by ${item.creator}${wantsDownload ? ' — download' : ''}`);
 
             const img = document.createElement('img');
             img.alt = `${item.title} — ${item.creator}`;
@@ -198,7 +208,22 @@
             const external = isExternalHref(item.href);
             const name = document.createElement('span');
             name.className = 'name';
-            name.innerHTML = `<a href="${item.href}" target="${external ? '_blank' : '_self'}" ${external ? 'rel="noopener noreferrer"' : ''}>${escapeHtml(item.title)}</a>`;
+
+            const anchor = document.createElement('a');
+            anchor.href = item.href;
+
+            const wantsDownload = !!item.download;
+            if (wantsDownload) {
+                if (typeof item.download === 'string') anchor.setAttribute('download', item.download);
+                else anchor.setAttribute('download', '');
+                anchor.target = '_self';
+            } else {
+                anchor.target = external ? '_blank' : '_self';
+                if (external) anchor.rel = 'noopener noreferrer';
+            }
+
+            anchor.textContent = item.title || '';
+            name.appendChild(anchor);
 
             const creator = document.createElement('span');
             creator.className = 'creator';
