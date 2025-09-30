@@ -14,7 +14,7 @@
     const aboutWindow = byId('aboutWindow');
     const aboutClose = byId('aboutClose');
 
-    const PLACEHOLDER_PATH = 'assets/img/placeholder_{NN}.png';
+    const PLACEHOLDER_PATH = 'assets/img/placeholders/placeholder_{NN}.png';
     const PLACEHOLDER_COUNT = 42;
 
     let selectedNode = null;
