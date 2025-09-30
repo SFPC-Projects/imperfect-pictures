@@ -13,6 +13,13 @@
         "href": "projects/sample-internal-page-project/index.html"
     },
     {
+        "creator": "Kevin Cunanan Chappelle",
+        "title": "Specter",
+        "class": "Summer 2025",
+        "href": "https://newart.city/show/specter/",
+        "image": "projects/specter/specter.png"
+    },
+    {
         "creator": "Cece Wettemann",
         "title": "Real Home Video",
         "class": "Summer 2025",
@@ -101,13 +108,6 @@
         "title": "Digital Garden",
         "class": "Summer 2025",
         "href": "projects/anoushka-carroll.html"
-    },
-    {
-        "creator": "Kevin Cunanan Chappelle",
-        "title": "Specter",
-        "class": "Summer 2025",
-        "href": "https://newart.city/show/specter/",
-        "image": "projects/specter/specter.png"
     },
     {
         "creator": "Sarah Alvarez",
