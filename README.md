@@ -18,7 +18,7 @@ This is a static site built with plain **HTML/CSS/JS** and a single **JSON** fil
 There’s also an **About window** with class information. The nav bar at the bottom contains buttons to open/close the About and List windows and a Shuffle button (visible in canvas mode only).
 
 ### Other Features
-- **Placeholders**: If a project has no `image`, a placeholder is chosen from `assets/img/placeholder_XX.png`.
+- **Placeholders**: If a project has no `image`, a placeholder is chosen from `assets/img/placeholders/placeholder_XX.png`.
 - **Mobile**: On small screens, the List view collapses to a single‑column stacked list and the nav buttons show icon glyphs.
 
 ---
@@ -65,7 +65,7 @@ imperfect-pictures/
 ├── assets/
 │   ├── css/style.css         ← global styles (CSS variables + responsive)
 │   ├── js/script.js          ← rendering, drag, list/about windows
-│   └── img/                  ← placeholder_XX.png and thumbnails
+│   └── img/                  ← placeholder images, thumbnails, and project images
 ├── data/projects.json        ← all project data
 └── projects/                 ← internal project pages (optional)
 ```
