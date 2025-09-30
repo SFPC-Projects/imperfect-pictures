@@ -65,9 +65,9 @@ imperfect-pictures/
 ├── assets/
 │   ├── css/style.css         ← global styles (CSS variables + responsive)
 │   ├── js/script.js          ← rendering, drag, list/about windows
-│   └── img/                  ← placeholder images, thumbnails, and project images
+│   └── img/                  ← placeholder images and thumbnails
 ├── data/projects.json        ← all project data
-└── projects/                 ← internal project pages (optional)
+└── projects/                 ← internal project pages and images
 ```
 
 ---
