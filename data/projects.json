@@ -1,5 +1,18 @@
 [
     {
+        "creator": "Scooby Doo",
+        "title": "Sample Download Project",
+        "class": "Summer 2025",
+        "href": "projects/sample-download-project/fruit.png",
+        "download": "Sample-Project.png"
+    },
+    {
+        "creator": "Minnie Mouse",
+        "title": "Sample Internal Page Project",
+        "class": "Summer 2025",
+        "href": "projects/sample-internal-page-project/index.html"
+    },
+    {
         "creator": "Cece Wettemann",
         "title": "Real Home Video",
         "class": "Summer 2025",
@@ -101,18 +114,5 @@
         "title": "Undocumented Places Google Street View",
         "class": "Summer 2025",
         "href": "projects/sarah-alvarez.html"
-    },
-    {
-        "creator": "Scooby Doo",
-        "title": "Sample Download Project",
-        "class": "Summer 2025",
-        "href": "projects/sample-download-project/fruit.png",
-        "download": "Sample-Project.png"
-    },
-    {
-        "creator": "Minnie Mouse",
-        "title": "Sample Internal Page Project",
-        "class": "Summer 2025",
-        "href": "projects/sample-internal-page-project/index.html"
     }
 ]
