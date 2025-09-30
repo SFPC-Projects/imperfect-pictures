@@ -16,10 +16,8 @@ An open, draggable desktop of student projects for **Imperfect Pictures** at the
 The bottom **nav bar** contains buttons for **About**, **List**, and **Shuffle**. Buttons use simple ASCII glyphs; **Shuffle** is visible only when no window is open (i.e., in canvas mode).
 
 ### Other Features
-- **Downloads**: Any project can prompt a file download by adding a `download` field in `data/projects.json` (see example below). Optional string value controls the saved filename.
-- **Placeholders**: If a project has no `image`, a placeholder is chosen from `assets/img/placeholders/placeholder_XX.png` (01 → 30) without repeating until the set is exhausted.
-- **Mobile**: On small screens, the List view collapses to a single‑column stacked list and the nav buttons can hide labels to show just icons.
-- **SEO & Favicon**: Basic Open Graph/Twitter meta tags are included in `index.html` and a `favicon.ico` lives at the repo root.
+- **Placeholders**: If a project has no `image` specified, a placeholder is chosen.
+- **Mobile**: On small screens, the List view collapses to a single‑column stacked list and the nav buttons hide labels to show just icons.
 
 ---
 
