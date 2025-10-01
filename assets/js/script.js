@@ -11,7 +11,11 @@
     const tplList = byId('listContentTemplate');
     const tplProject = byId('projectContentTemplate');
 
-    const windows = { about: null, list: null, project: null };
+    const windows = {
+        about: null,
+        list: null,
+        project: null
+    };
 
     let projectFrame = null;
 
@@ -26,20 +30,35 @@
 
     /* UTILITIES */
 
-    function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+    function clamp(v, min, max) {
+        return Math.min(Math.max(v, min), max);
+    }
 
-    function hasValue(v) { return v != null && String(v).trim().length > 0; }
+    function hasValue(v) {
+        return v != null && String(v).trim().length > 0;
+    }
 
     function escapeHtml(str) {
-        return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+        return String(str).replace(/[&<>"']/g, s => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[s]));
     }
 
     function toURL(link) {
-        try { return new URL(link, window.location.href); } catch { return null; }
+        try {
+            return new URL(link, window.location.href);
+        } catch {
+            return null;
+        }
     }
 
     function isExternalLink(link) {
-        const u = toURL(link); if (!u) return false;
+        const u = toURL(link);
+        if (!u) return false;
         return u.origin !== window.location.origin;
     }
 
@@ -52,14 +71,18 @@
     function makeKey(item, idx) {
         const slug = (s) => String(s || '').toLowerCase().trim()
             .replace(/[\s]+/g, '-').replace(/[^a-z0-9\-_.:/]/g, '');
-        const t = slug(item.title), c = slug(item.creator), i = slug(item.image);
+        const t = slug(item.title),
+            c = slug(item.creator),
+            i = slug(item.image);
         return `tc:${t}|${c}|${i || idx}`;
     }
 
     function createPlaceholderPicker() {
         const n = Math.max(1, PLACEHOLDER_COUNT);
         const padLen = String(n).length;
-        const pool = Array.from({ length: n }, (_, i) => String(i + 1).padStart(padLen, '0'));
+        const pool = Array.from({
+            length: n
+        }, (_, i) => String(i + 1).padStart(padLen, '0'));
         // Fisher–Yates shuffle
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -175,7 +198,9 @@
 
     /* SORTING */
 
-    function normalize(v) { return (v == null ? '' : String(v)).toLowerCase(); }
+    function normalize(v) {
+        return (v == null ? '' : String(v)).toLowerCase();
+    }
 
     function getSortedItems() {
         const arr = allItems.slice();
@@ -190,13 +215,18 @@
     }
 
     function setSort(column) {
-        const map = { name: 'title', creator: 'creator', session: 'session' };
+        const map = {
+            name: 'title',
+            creator: 'creator',
+            session: 'session'
+        };
         const field = map[column];
         if (!field) return;
         if (sortBy === field) {
             sortAsc = !sortAsc;
         } else {
-            sortBy = field; sortAsc = true;
+            sortBy = field;
+            sortAsc = true;
         }
         renderList(getSortedItems());
         updateSortIndicators();
@@ -362,7 +392,10 @@
 
     function shuffleNodes() {
         const nodes = Array.from(desktop.querySelectorAll('.node'));
-        const { width: cw, height: ch } = desktop.getBoundingClientRect();
+        const {
+            width: cw,
+            height: ch
+        } = desktop.getBoundingClientRect();
         let z = 1;
         nodes.forEach(node => {
             const rect = node.getBoundingClientRect();
@@ -381,7 +414,10 @@
 
     function enableDrag() {
         let active = null;
-        let startX = 0, startY = 0, origX = 0, origY = 0;
+        let startX = 0,
+            startY = 0,
+            origX = 0,
+            origY = 0;
         let zTop = 1000;
 
         const onPointerDown = (e) => {
@@ -393,8 +429,10 @@
             node.setPointerCapture(e.pointerId);
             node.style.zIndex = String(++zTop);
             const p = getNodePosition(node);
-            origX = p.x; origY = p.y;
-            startX = e.clientX; startY = e.clientY;
+            origX = p.x;
+            origY = p.y;
+            startX = e.clientX;
+            startY = e.clientY;
             e.preventDefault();
         };
 
@@ -402,12 +440,16 @@
             if (!active) return;
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
-            const { width: cw, height: ch } = desktop.getBoundingClientRect();
+            const {
+                width: cw,
+                height: ch
+            } = desktop.getBoundingClientRect();
             const rect = active.getBoundingClientRect();
             let nx = origX + dx;
             let ny = origY + dy;
 
-            const w = rect.width, h = rect.height;
+            const w = rect.width,
+                h = rect.height;
             nx = clamp(nx, 0, cw - w);
             ny = clamp(ny, 0, ch - h);
 
@@ -435,7 +477,10 @@
     }
 
     function getNodePosition(el) {
-        return { x: Number(el.dataset.x || 0), y: Number(el.dataset.y || 0) };
+        return {
+            x: Number(el.dataset.x || 0),
+            y: Number(el.dataset.y || 0)
+        };
     }
 
     /* OVERLAY HANDLING */
@@ -477,7 +522,9 @@
     updateToolbarState();
 
 
-    fetch('data/projects.json', { cache: 'no-store' })
+    fetch('data/projects.json', {
+        cache: 'no-store'
+    })
         .then(r => r.json())
         .then(items => {
             allItems = items;
@@ -608,21 +655,35 @@
             if (ev.key === 'ArrowDown') {
                 const next = rows[Math.min(idx + 1, rows.length - 1)] || rows[0];
                 selectRow(next);
-                next && next.scrollIntoView({ block: 'nearest' });
+                next && next.scrollIntoView({
+                    block: 'nearest'
+                });
                 ev.preventDefault();
             } else if (ev.key === 'ArrowUp') {
                 const prev = rows[Math.max(idx - 1, 0)] || rows[0];
                 selectRow(prev);
-                prev && prev.scrollIntoView({ block: 'nearest' });
+                prev && prev.scrollIntoView({
+                    block: 'nearest'
+                });
                 ev.preventDefault();
             } else if (ev.key === 'Enter') {
                 openListRow(selectedRow);
                 ev.preventDefault();
             } else if (ev.key === 'Home') {
-                if (rows[0]) { selectRow(rows[0]); rows[0].scrollIntoView({ block: 'nearest' }); }
+                if (rows[0]) {
+                    selectRow(rows[0]);
+                    rows[0].scrollIntoView({
+                        block: 'nearest'
+                    });
+                }
                 ev.preventDefault();
             } else if (ev.key === 'End') {
-                if (rows[rows.length - 1]) { selectRow(rows[rows.length - 1]); rows[rows.length - 1].scrollIntoView({ block: 'nearest' }); }
+                if (rows[rows.length - 1]) {
+                    selectRow(rows[rows.length - 1]);
+                    rows[rows.length - 1].scrollIntoView({
+                        block: 'nearest'
+                    });
+                }
                 ev.preventDefault();
             }
         });
