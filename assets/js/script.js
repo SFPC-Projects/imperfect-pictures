@@ -6,13 +6,9 @@
     const listViewLink = byId('listViewLink');
 
     const listOverlay = byId('listOverlay');
-
     const aboutBtn = byId('aboutBtn');
     const aboutOverlay = byId('aboutOverlay');
-    const aboutClose = byId('aboutClose');
-
     const projectOverlay = byId('projectOverlay');
-    const projectClose = byId('projectClose');
     const projectTitle = byId('projectTitle');
     const projectFrame = byId('projectFrame');
 
