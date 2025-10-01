@@ -370,34 +370,25 @@
 
     /* OVERLAY HANDLING */
 
-    function openAbout() {
-        if (!aboutOverlay) return;
-        aboutOverlay.hidden = false;
-        aboutClose && aboutClose.focus();
+    function openOverlay(overlay, onOpen) {
+        if (!overlay) return;
+        overlay.hidden = false;
+        if (onOpen) onOpen();
         updateControlsVisibility();
     }
 
-    function closeAbout() {
-        if (!aboutOverlay) return;
-        aboutOverlay.hidden = true;
+    function closeOverlay(overlay, onClose) {
+        if (!overlay) return;
+        overlay.hidden = true;
+        if (onClose) onClose();
         updateControlsVisibility();
     }
 
     function openProject(link, titleText) {
-        if (!projectOverlay || !projectFrame) return;
-        if (projectTitle) projectTitle.textContent = titleText || 'Project';
-        projectFrame.src = link;
-        projectOverlay.hidden = false;
-        if (projectClose) projectClose.focus();
-        updateControlsVisibility();
-    }
-    function closeProject() {
-        if (!projectOverlay) return;
-        projectOverlay.hidden = true;
-        if (projectFrame) {
-            projectFrame.removeAttribute('src');
-        }
-        updateControlsVisibility();
+        openOverlay(projectOverlay, () => {
+            if (projectTitle) projectTitle.textContent = titleText || 'Project';
+            projectFrame.src = link;
+        });
     }
 
     function updateControlsVisibility() {
@@ -434,14 +425,12 @@
     // Nav bar
     aboutBtn && aboutBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        openAbout();
+        openOverlay(aboutOverlay);
     });
     listViewLink && listViewLink.addEventListener('click', (e) => {
         e.preventDefault();
-        if (listOverlay) listOverlay.hidden = false;
-        if (listUl) listUl.focus();
-        if (projectOverlay && !projectOverlay.hidden) closeProject();
-        updateControlsVisibility();
+        openOverlay(listOverlay, () => listUl && listUl.focus());
+        if (projectOverlay && !projectOverlay.hidden) closeOverlay(projectOverlay, () => projectFrame.removeAttribute('src'));
     });
     if (randomizeBtn) {
         randomizeBtn.addEventListener('click', () => {
@@ -491,13 +480,9 @@
         });
     }
 
-    // Attach controls to overlays
-    attachWindowControls(aboutOverlay, closeAbout);
-    attachWindowControls(listOverlay, () => {
-        if (listOverlay) listOverlay.hidden = true;
-        updateControlsVisibility();
-    });
-    attachWindowControls(projectOverlay, closeProject);
+    attachWindowControls(aboutOverlay, () => closeOverlay(aboutOverlay));
+    attachWindowControls(listOverlay, () => closeOverlay(listOverlay));
+    attachWindowControls(projectOverlay, () => closeOverlay(projectOverlay, () => projectFrame.removeAttribute('src')));
 
     // Sorting headers
     const hdrName = document.querySelector('#list .list-header .name');
