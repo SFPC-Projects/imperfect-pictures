@@ -5,12 +5,12 @@
     const shuffleBtn = byId('shuffle-button');
     const listBtn = byId('list-button');
 
-    const listOverlay = byId('listOverlay');
+    const listOverlay = byId('list-overlay');
     const aboutBtn = byId('about-button');
-    const aboutOverlay = byId('aboutOverlay');
-    const projectOverlay = byId('projectOverlay');
-    const projectTitle = byId('projectTitle');
-    const projectFrame = byId('projectFrame');
+    const aboutOverlay = byId('about-overlay');
+    const projectOverlay = byId('project-overlay');
+    const projectTitle = byId('project-title');
+    const projectFrame = byId('project-frame');
 
     const PLACEHOLDER_PATH = 'assets/img/placeholders/placeholder_{NN}.png';
     const PLACEHOLDER_COUNT = 30;
