@@ -2,11 +2,11 @@
     const byId = (id) => document.getElementById(id);
     const desktop = byId('desktop');
     const listContainer = byId('list-container');
-    const shuffleBtn = byId('randomizeBtn');
-    const listBtn = byId('listViewLink');
+    const shuffleBtn = byId('shuffle-button');
+    const listBtn = byId('list-button');
 
     const listOverlay = byId('listOverlay');
-    const aboutBtn = byId('aboutBtn');
+    const aboutBtn = byId('about-button');
     const aboutOverlay = byId('aboutOverlay');
     const projectOverlay = byId('projectOverlay');
     const projectTitle = byId('projectTitle');
