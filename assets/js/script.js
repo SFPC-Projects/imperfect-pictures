@@ -42,9 +42,6 @@
         return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
     }
 
-    function isOverlayOpen() {
-        return !!(aboutOverlay && !aboutOverlay.hidden);
-    }
 
     function toURL(link) {
         try { return new URL(link, window.location.href); } catch { return null; }
@@ -180,7 +177,6 @@
             }
 
             a.tabIndex = 0;
-            a.setAttribute('aria-label', `${item.title} by ${item.creator}${hasDownload ? ' — download' : ''}`);
 
             if (isInternalNavigable(item)) {
                 a.addEventListener('click', (ev) => {
@@ -455,14 +451,16 @@
         if (projectOverlay && !projectOverlay.hidden) closeProject();
         updateControlsVisibility();
     });
-    randomizeBtn && (randomizeBtn.onclick = () => {
-        const listOpen = !!(listOverlay && !listOverlay.hidden);
-        if (listOpen) {
-            shuffleList();
-        } else {
-            randomizePositions();
-        }
-    });
+    if (randomizeBtn) {
+        randomizeBtn.addEventListener('click', () => {
+            const listOpen = !!(listOverlay && !listOverlay.hidden);
+            if (listOpen) {
+                shuffleList();
+            } else {
+                randomizePositions();
+            }
+        });
+    }
 
     // Window controls for overlays
     function attachWindowControls(overlay, onClose) {

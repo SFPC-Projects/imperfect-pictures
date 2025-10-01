@@ -20,7 +20,7 @@
         <!-- Overlay window template -->
         <template id="overlayTemplate">
             <div class="overlay" hidden>
-                <section class="list" aria-label="Overlay window">
+                <section class="list" aria-label="Overlay content window">
                     <div class="window-panel floating" role="dialog" aria-modal="true">
                         <div class="titlebar">
                             <span class="titlebar-text"></span>
@@ -77,11 +77,12 @@
 
     <footer class="nav-bar" role="contentinfo" aria-label="Navigation bar">
         <div class="nav-bar-left">
-            <button id="aboutBtn" class="task-btn" type="button" aria-label="About" title="About">
+            <button id="aboutBtn" class="task-btn" type="button" aria-label="About" title="About" aria-pressed="false">
                 <span aria-hidden="true">?</span>
                 <span>About</span>
             </button>
-            <button id="listViewLink" class="task-btn" type="button" aria-label="Switch to list view" title="List">
+            <button id="listViewLink" class="task-btn" type="button" aria-label="Switch to list view" title="List"
+                aria-pressed="false">
                 <span aria-hidden="true">≡</span>
                 <span>List</span>
             </button>
