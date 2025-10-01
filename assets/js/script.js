@@ -48,17 +48,17 @@
         return !!(aboutOverlay && !aboutOverlay.hidden);
     }
 
-    function toURL(href) {
-        try { return new URL(href, window.location.href); } catch { return null; }
+    function toURL(link) {
+        try { return new URL(link, window.location.href); } catch { return null; }
     }
-    function isExternalHref(href) {
-        const u = toURL(href); if (!u) return false;
+    function isExternalLink(link) {
+        const u = toURL(link); if (!u) return false;
         return u.origin !== window.location.origin;
     }
     function isInternalNavigable(item) {
-        if (!item || !item.href) return false;
+        if (!item || !item.link) return false;
         if (item.download) return false; // downloads should not embed
-        return !isExternalHref(item.href);
+        return !isExternalLink(item.link);
     }
 
     function makeKey(item, idx) {
@@ -101,18 +101,18 @@
 
     function openRow(row) {
         if (!row) return;
-        const href = row.dataset.href;
-        if (!href) return;
+        const link = row.dataset.link;
+        if (!link) return;
 
-        const item = allItems.find(it => it.href === href);
+        const item = allItems.find(it => it.link === link);
         if (item && isInternalNavigable(item)) {
-            openProject(item.href, item.title);
+            openProject(item.link, item.title);
             return;
         }
-        const external = isExternalHref(href);
+        const external = isExternalLink(link);
         const target = external ? '_blank' : '_self';
         const features = external ? 'noopener' : '';
-        window.open(href, target, features);
+        window.open(link, target, features);
     }
 
     /* SORTING */
@@ -167,7 +167,7 @@
 
             const a = document.createElement('a');
             a.className = 'thumb';
-            a.href = item.href;
+            a.href = item.link;
 
             const hasDownload = !!item.download; // true or string filename
             if (hasDownload) {
@@ -176,7 +176,7 @@
                 a.target = '_self';
                 a.rel = '';
             } else {
-                const external = isExternalHref(item.href);
+                const external = isExternalLink(item.link);
                 a.target = external ? '_blank' : '_self';
                 a.rel = external ? 'noopener noreferrer' : '';
             }
@@ -187,7 +187,7 @@
             if (isInternalNavigable(item)) {
                 a.addEventListener('click', (ev) => {
                     ev.preventDefault();
-                    openProject(item.href, item.title);
+                    openProject(item.link, item.title);
                 });
             }
 
@@ -199,7 +199,14 @@
 
             const cap = document.createElement('figcaption');
             cap.className = 'caption';
-            cap.innerHTML = `<div class="creator">${escapeHtml(item.creator)}</div>
+            // Creator with optional link
+            let creatorHtml;
+            if (item.creatorLink !== undefined && item.creatorLink !== null && String(item.creatorLink).trim().length > 0) {
+                creatorHtml = `<a href="${escapeHtml(item.creatorLink)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.creator)}</a>`;
+            } else {
+                creatorHtml = escapeHtml(item.creator);
+            }
+            cap.innerHTML = `<div class="creator">${creatorHtml}</div>
                        <div class="title">${escapeHtml(item.title)}</div>`;
 
             a.appendChild(img);
@@ -231,14 +238,14 @@
         items.forEach((item, idx) => {
             const li = document.createElement('li');
             li.setAttribute('role', 'option');
-            li.dataset.href = item.href;
+            li.dataset.link = item.link;
 
-            const external = isExternalHref(item.href);
+            const external = isExternalLink(item.link);
             const name = document.createElement('span');
             name.className = 'name';
 
             const anchor = document.createElement('a');
-            anchor.href = item.href;
+            anchor.href = item.link;
 
             const hasDownload = !!item.download;
             if (hasDownload) {
@@ -254,14 +261,24 @@
             if (isInternalNavigable(item)) {
                 anchor.addEventListener('click', (ev) => {
                     ev.preventDefault();
-                    openProject(item.href, item.title);
+                    openProject(item.link, item.title);
                 });
             }
             name.appendChild(anchor);
 
             const creator = document.createElement('span');
             creator.className = 'creator';
-            creator.textContent = item.creator || '';
+            // If creatorLink exists and is non-empty, make creator a link
+            if (item.creatorLink !== undefined && item.creatorLink !== null && String(item.creatorLink).trim().length > 0) {
+                const creatorA = document.createElement('a');
+                creatorA.href = item.creatorLink;
+                creatorA.target = '_blank';
+                creatorA.rel = 'noopener noreferrer';
+                creatorA.textContent = item.creator || '';
+                creator.appendChild(creatorA);
+            } else {
+                creator.textContent = item.creator || '';
+            }
 
             const cls = document.createElement('span');
             cls.className = 'cls';
@@ -379,10 +396,10 @@
         updateControlsVisibility();
     }
 
-    function openProject(href, titleText) {
+    function openProject(link, titleText) {
         if (!projectOverlay || !projectFrame) return;
         if (projectTitle) projectTitle.textContent = titleText || 'Project';
-        projectFrame.src = href;
+        projectFrame.src = link;
         projectOverlay.hidden = false;
         if (projectClose) projectClose.focus();
         updateControlsVisibility();
@@ -444,7 +461,7 @@
         })
         .catch(err => {
             console.error('Failed to load data/projects.json', err);
-            desktop.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
+            desktop.innerHTML = '<p style="padding:1rem">Error loading projects, please try refreshing.</p>';
         });
 
     // Nav bar
