@@ -26,6 +26,7 @@
                         <span class="titlebar-text" id="listTitle">Projects</span>
                         <button id="listClose" class="titlebar-close" aria-label="Close">×</button>
                     </div>
+
                     <div class="window-viewport">
                         <div class="list-header" role="row">
                             <span class="col name" role="columnheader">Name</span>
@@ -82,7 +83,11 @@
                     aria-labelledby="projectTitle">
                     <div class="titlebar">
                         <span class="titlebar-text" id="projectTitle">Project</span>
-                        <button id="projectClose" class="titlebar-close" aria-label="Close">×</button>
+                        <div class="titlebar-controls">
+                            <button id="projectMinimize" class="titlebar-btn" aria-label="Minimize">–</button>
+                            <button id="projectMaximize" class="titlebar-btn" aria-label="Maximize">□</button>
+                            <button id="projectClose" class="titlebar-close" aria-label="Close">×</button>
+                        </div>
                     </div>
                     <div class="window-viewport">
                         <iframe id="projectFrame" class="project-frame" title="Embedded project"

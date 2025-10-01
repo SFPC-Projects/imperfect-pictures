@@ -16,7 +16,8 @@
 
     const projectOverlay = byId('projectOverlay');
     const projectWindow = byId('projectWindow');
-    const projectClose = byId('projectClose');
+    const projectMinBtn = byId("projectMinimize");
+    const projectMaxBtn = byId("projectMaximize");
     const projectTitle = byId('projectTitle');
     const projectFrame = byId('projectFrame');
 
@@ -29,6 +30,7 @@
     let sortBy = 'title';
     let sortAsc = true;
     let currentView = 'canvas';
+    let isMaximized = false;
 
     /* UTILITIES */
 
@@ -437,6 +439,17 @@
     });
     window.addEventListener('keydown', (e) => {
         if (projectOverlay && !projectOverlay.hidden && e.key === 'Escape') { e.preventDefault(); closeProject(); }
+    });
+
+    // Project window controls
+    projectMinBtn.addEventListener("click", () => {
+        projectWindow.classList.toggle("minimized");
+    });
+
+    projectMaxBtn.addEventListener("click", () => {
+        isMaximized = !isMaximized;
+        projectWindow.classList.toggle("maximized", isMaximized);
+        projectMaxBtn.textContent = isMaximized ? "❐" : "□"; // switch icon
     });
 
     /* VIEW TOGGLE */
