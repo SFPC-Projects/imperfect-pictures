@@ -6,10 +6,10 @@
     const listBtn = byId('list-button');
     const aboutBtn = byId('about-button');
 
-    const tplOverlay = byId('overlayTemplate');
-    const tplAbout = byId('aboutContentTemplate');
-    const tplList = byId('listContentTemplate');
-    const tplProject = byId('projectContentTemplate');
+    const tplOverlay = byId('overlay-template');
+    const tplAbout = byId('about-content-template');
+    const tplList = byId('list-content-template');
+    const tplProject = byId('project-content-template');
 
     const windows = {
         about: null,
@@ -242,7 +242,7 @@
     }
 
     function updateSortIndicators() {
-        const header = document.querySelector('#list .list-header');
+        const header = windows.list ? windows.list.overlay.querySelector('.list-header') : null;
         if (!header) return;
         header.querySelectorAll('.col').forEach(el => el.removeAttribute('data-sort'));
         const active =
