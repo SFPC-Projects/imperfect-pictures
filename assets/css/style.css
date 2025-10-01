@@ -341,6 +341,10 @@ ul.details li>* {
     text-shadow: none;
 }
 
+.node.selected .caption a {
+    color: var(--border-light);
+}
+
 .node .creator {
     font-size: .85rem;
     color: var(--muted)
