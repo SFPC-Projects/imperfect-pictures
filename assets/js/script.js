@@ -272,8 +272,8 @@
             a.tabIndex = 0;
 
             if (isInternalNavigable(item)) {
-                a.addEventListener('click', (ev) => {
-                    ev.preventDefault();
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
                     openProject(item.link, item.title);
                 });
             }
@@ -301,19 +301,19 @@
             node.appendChild(cap);
             desktop.appendChild(node);
 
-            node.addEventListener('click', (ev) => {
-                ev.stopPropagation();
+            node.addEventListener('click', (e) => {
+                e.stopPropagation();
                 selectNode(node);
             });
-            node.addEventListener('dblclick', (ev) => {
-                ev.preventDefault();
+            node.addEventListener('dblclick', (e) => {
+                e.preventDefault();
                 a.click();
             });
 
-            node.addEventListener('keydown', (ev) => {
-                if (ev.key === 'Enter' || ev.key === ' ') {
+            node.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
                     a.click();
-                    ev.preventDefault();
+                    e.preventDefault();
                 }
             });
             node.tabIndex = 0;
@@ -346,8 +346,8 @@
 
             anchor.textContent = item.title || '';
             if (isInternalNavigable(item)) {
-                anchor.addEventListener('click', (ev) => {
-                    ev.preventDefault();
+                anchor.addEventListener('click', (e) => {
+                    e.preventDefault();
                     openProject(item.link, item.title);
                 });
             }
@@ -633,58 +633,58 @@
     function bindListInteractions() {
         if (!listContainer) return;
         listContainer.tabIndex = 0;
-        listContainer.addEventListener('click', (ev) => {
-            const li = ev.target.closest('li');
+        listContainer.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
             if (li && listContainer.contains(li)) {
-                ev.stopPropagation();
+                e.stopPropagation();
                 selectRow(li);
             } else {
                 selectRow(null);
             }
         });
-        listContainer.addEventListener('dblclick', (ev) => {
-            const li = ev.target.closest('li');
+        listContainer.addEventListener('dblclick', (e) => {
+            const li = e.target.closest('li');
             if (li && listContainer.contains(li)) {
-                ev.preventDefault();
+                e.preventDefault();
                 openListRow(li);
             }
         });
-        listContainer.addEventListener('keydown', (ev) => {
+        listContainer.addEventListener('keydown', (e) => {
             const rows = Array.from(listContainer.children);
             const idx = selectedRow ? rows.indexOf(selectedRow) : -1;
-            if (ev.key === 'ArrowDown') {
+            if (e.key === 'ArrowDown') {
                 const next = rows[Math.min(idx + 1, rows.length - 1)] || rows[0];
                 selectRow(next);
                 next && next.scrollIntoView({
                     block: 'nearest'
                 });
-                ev.preventDefault();
-            } else if (ev.key === 'ArrowUp') {
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp') {
                 const prev = rows[Math.max(idx - 1, 0)] || rows[0];
                 selectRow(prev);
                 prev && prev.scrollIntoView({
                     block: 'nearest'
                 });
-                ev.preventDefault();
-            } else if (ev.key === 'Enter') {
+                e.preventDefault();
+            } else if (e.key === 'Enter') {
                 openListRow(selectedRow);
-                ev.preventDefault();
-            } else if (ev.key === 'Home') {
+                e.preventDefault();
+            } else if (e.key === 'Home') {
                 if (rows[0]) {
                     selectRow(rows[0]);
                     rows[0].scrollIntoView({
                         block: 'nearest'
                     });
                 }
-                ev.preventDefault();
-            } else if (ev.key === 'End') {
+                e.preventDefault();
+            } else if (e.key === 'End') {
                 if (rows[rows.length - 1]) {
                     selectRow(rows[rows.length - 1]);
                     rows[rows.length - 1].scrollIntoView({
                         block: 'nearest'
                     });
                 }
-                ev.preventDefault();
+                e.preventDefault();
             }
         });
     }
