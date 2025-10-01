@@ -66,10 +66,6 @@ body {
     overflow: hidden;
 }
 
-body.embedded {
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-}
 
 a {
     color: var(--link);
