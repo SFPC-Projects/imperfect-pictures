@@ -1,6 +1,6 @@
 # Imperfect Pictures — Class Archive
 
-An open, draggable desktop of student projects for **Imperfect Pictures** at the [School For Poetic Computation](https://sfpc.study/) (SFPC). The site serves as a lightweight archive: each project is a node on the canvas with a caption (Creator and Project Title) that links to an internal project page, an external site, or downloadable file.
+An open, draggable desktop of student projects for **Imperfect Pictures** at the [School For Poetic Computation](https://sfpc.study/) (SFPC). The site serves as a lightweight archive: each project is a node on the desktop with a caption (Creator and Project Title) that links to an internal project page, an external site, or downloadable file.
 
 ## Live version
 
@@ -10,10 +10,10 @@ An open, draggable desktop of student projects for **Imperfect Pictures** at the
 
 ## Site Overview
 
-- **Canvas view** (default): draggable “icons” spread across the viewport. Positions are **randomized on each load** for a fresh layout.
-- **List view**: an overlay window that opens above the canvas and lists projects in a sortable table (by **Name / Creator / Class**). Click column headers to sort ascending/descending. Close the window to return to the canvas.
+- **desktop view** (default): draggable “icons” spread across the viewport. Positions are **randomized on each load** for a fresh layout.
+- **List view**: an overlay window that opens above the desktop and lists projects in a sortable table (by **Name / Creator / Class**). Click column headers to sort ascending/descending. Close the window to return to the desktop.
 
-The bottom **nav bar** contains buttons for **About**, **List**, and **Shuffle**. Buttons use simple ASCII glyphs; **Shuffle** is visible only when no window is open (i.e., in canvas mode).
+The bottom **nav bar** contains buttons for **About**, **List**, and **Shuffle**. Buttons use simple ASCII glyphs; **Shuffle** is visible only when no window is open (i.e., in desktop mode).
 
 ### Other Features
 - **Placeholders**: If a project has no `image` specified, a placeholder is chosen.

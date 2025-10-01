@@ -504,7 +504,7 @@
 
     // Attach controls to overlays
     attachWindowControls(aboutOverlay, closeAbout);
-    attachWindowControls(listOverlay, () => setView('canvas'));
+    attachWindowControls(listOverlay, () => setView('desktop'));
     attachWindowControls(projectOverlay, closeProject);
 
     // Sorting headers
