@@ -200,10 +200,6 @@ a:visited {
     height: 100%;
 }
 
-.list[hidden] {
-    display: none
-}
-
 .list .window-viewport {
     --cols: 2fr 1fr 1fr;
 }
@@ -431,26 +427,6 @@ ul.details li>* {
     white-space: nowrap;
 }
 
-.icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--icon-btn);
-    height: var(--icon-btn);
-    border: none;
-    background: none;
-    border-radius: var(--radius-lg);
-    text-decoration: none;
-    color: var(--ink);
-    cursor: pointer;
-}
-
-.icon-btn svg {
-    display: block;
-    width: var(--icon);
-    height: var(--icon);
-}
-
 @media (max-width: 640px) {
     :root {
         --thumbnail: 110px;
@@ -489,7 +465,7 @@ ul.details li>* {
     }
 
     ul.details li .creator,
-    ul.details li .cls {
+    ul.details li .session {
         display: block;
         font-size: var(--font-sm);
         color: var(--muted);

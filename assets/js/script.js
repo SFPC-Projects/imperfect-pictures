@@ -6,20 +6,13 @@
     const listViewLink = byId('listViewLink');
 
     const listOverlay = byId('listOverlay');
-    const listWindow = byId('listWindow');
-    const listClose = byId('listClose');
-    const listMaxBtn = byId("listMaximize");
 
     const aboutBtn = byId('aboutBtn');
     const aboutOverlay = byId('aboutOverlay');
-    const aboutWindow = byId('aboutWindow');
     const aboutClose = byId('aboutClose');
-    const aboutMaxBtn = byId("aboutMaximize");
 
     const projectOverlay = byId('projectOverlay');
-    const projectWindow = byId('projectWindow');
     const projectClose = byId('projectClose');
-    const projectMaxBtn = byId("projectMaximize");
     const projectTitle = byId('projectTitle');
     const projectFrame = byId('projectFrame');
 
@@ -401,12 +394,11 @@
     function closeProject() {
         if (!projectOverlay) return;
         projectOverlay.hidden = true;
-        if (projectFrame) projectFrame.src = 'about:blank';
+        if (projectFrame) {
+            projectFrame.removeAttribute('src');
+        }
         updateControlsVisibility();
     }
-
-
-    /* VIEW TOGGLE */
 
     function updateControlsVisibility() {
         const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
@@ -416,9 +408,9 @@
         if (listViewLink) listViewLink.classList.toggle('active', listOpen);
         if (randomizeBtn) randomizeBtn.hidden = (aboutOpen || listOpen || projectOpen);
     }
+
     /* INITIALIZATION */
 
-    // Ensure listOverlay is hidden at start
     listOverlay && (listOverlay.hidden = true);
     updateControlsVisibility();
 
