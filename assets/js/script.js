@@ -112,6 +112,15 @@
         section.classList.remove('list');
         section.classList.add(kind);
 
+        // Dynamic ARIA label per window kind
+        const defaultAria = (
+            kind === 'about' ? 'About window' :
+                kind === 'list' ? 'Project list window' :
+                    kind === 'project' ? 'Project window' :
+                        'Overlay window'
+        );
+        section.setAttribute('aria-label', defaultAria);
+
         // Title
         titleSpan.textContent = titleText || '';
 
@@ -505,6 +514,11 @@
         openOverlay(w.overlay, () => {
             w.titleSpan.textContent = titleText || 'Project';
             if (projectFrame) projectFrame.src = link;
+            const section = w.overlay.querySelector('section');
+            if (section) {
+                const base = 'Project window';
+                section.setAttribute('aria-label', titleText ? `${base} — ${titleText}` : base);
+            }
         });
     }
 
@@ -512,8 +526,14 @@
         const aboutOpen = !!(windows.about && !windows.about.overlay.hidden);
         const listOpen = !!(windows.list && !windows.list.overlay.hidden);
         const projectOpen = !!(windows.project && !windows.project.overlay.hidden);
-        if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
-        if (listBtn) listBtn.classList.toggle('active', listOpen);
+        if (aboutBtn) {
+            aboutBtn.classList.toggle('active', aboutOpen);
+            aboutBtn.setAttribute('aria-pressed', String(aboutOpen));
+        }
+        if (listBtn) {
+            listBtn.classList.toggle('active', listOpen);
+            listBtn.setAttribute('aria-pressed', String(listOpen));
+        }
         if (shuffleBtn) shuffleBtn.hidden = (aboutOpen || listOpen || projectOpen);
     }
 
