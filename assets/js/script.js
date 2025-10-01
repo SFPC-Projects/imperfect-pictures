@@ -64,7 +64,7 @@
 
     function isInternalNavigable(item) {
         if (!item || !item.link) return false;
-        if (item.download) return false; // downloads should not embed
+        if (item.download) return false;
         return !isExternalLink(item.link);
     }
 
@@ -90,7 +90,7 @@
         }
         let idx = 0;
         return function nextPlaceholder() {
-            if (idx >= pool.length) idx = 0; // repeats only after exhausting unique set
+            if (idx >= pool.length) idx = 0;
             const xx = pool[idx++];
             return String(PLACEHOLDER_PATH).replace('{NN}', xx);
         };
@@ -107,12 +107,10 @@
         const titleSpan = frag.querySelector('.titlebar-text');
         const viewport = frag.querySelector('.window-viewport');
 
-        // Identify overlay
         overlay.id = `${kind}-overlay`;
         section.classList.remove('list');
         section.classList.add(kind);
 
-        // Dynamic ARIA label per window kind
         const defaultAria = (
             kind === 'about' ? 'About window' :
                 kind === 'list' ? 'Project list window' :
@@ -121,18 +119,14 @@
         );
         section.setAttribute('aria-label', defaultAria);
 
-        // Title
         titleSpan.textContent = titleText || '';
 
-        // Inject content
         if (contentTemplate && contentTemplate.content) {
             viewport.appendChild(contentTemplate.content.cloneNode(true));
         }
 
-        // Attach controls
         attachWindowControls(overlay, () => closeOverlay(overlay));
 
-        // Append to DOM and return refs
         document.getElementById('app').appendChild(frag);
         const appended = document.getElementById(`${kind}-overlay`);
         return {
@@ -156,7 +150,6 @@
         if (windows.list) return windows.list;
         const w = createWindow('list', 'Projects', tplList);
         if (!w) return null;
-        // cache list container & bind sorting headers
         listContainer = w.viewport.querySelector('#list-container');
         bindSortingHeaders(w.overlay);
         bindListInteractions();
@@ -266,7 +259,7 @@
             a.className = 'thumb';
             a.href = item.link;
 
-            const hasDownload = !!item.download; // true or string filename
+            const hasDownload = !!item.download;
             if (hasDownload) {
                 if (typeof item.download === 'string') a.setAttribute('download', item.download);
                 else a.setAttribute('download', '');
@@ -295,7 +288,6 @@
 
             const cap = document.createElement('figcaption');
             cap.className = 'caption';
-            // Creator with optional link
             let creatorHtml;
             if (hasValue(item.creatorLink)) {
                 creatorHtml = `<a href="${escapeHtml(item.creatorLink)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.creator)}</a>`;
@@ -364,7 +356,6 @@
 
             const creator = document.createElement('span');
             creator.className = 'creator';
-            // If creatorLink exists and is non-empty, make creator a link
             if (hasValue(item.creatorLink)) {
                 const creatorA = document.createElement('a');
                 creatorA.href = item.creatorLink;
@@ -561,7 +552,6 @@
             desktop.innerHTML = '<p style="padding:1rem">Error loading projects, please try refreshing.</p>';
         });
 
-    // Nav bar listeners — open via ensure* and close project if list is opened:
     aboutBtn && aboutBtn.addEventListener('click', (e) => {
         e.preventDefault();
         const w = ensureAbout();
@@ -588,7 +578,6 @@
         });
     }
 
-    // Window controls for overlays
     function attachWindowControls(overlay, onClose) {
         if (!overlay) return;
         const windowPanel = overlay.querySelector('.window-panel');
@@ -609,13 +598,11 @@
                 onClose && onClose();
             });
         }
-        // Overlay click outside closes
         overlay.addEventListener('mousedown', (e) => {
             if (e.target === overlay || (windowPanel && !windowPanel.contains(e.target))) {
                 onClose && onClose();
             }
         });
-        // Escape closes
         window.addEventListener('keydown', (e) => {
             const isOpen = !overlay.hidden;
             if (isOpen && e.key === 'Escape') {
@@ -625,16 +612,13 @@
         });
     }
 
-    // Attach controls to ensured overlays and proper onClose hooks
     (() => {
         const aw = ensureAbout();
         const lw = ensureList();
         const pw = ensureProject();
-        // Re-attach project close hook to also clear iframe
         attachWindowControls(pw.overlay, () => closeOverlay(pw.overlay, () => projectFrame && projectFrame.removeAttribute('src')));
     })();
 
-    // Sorting header scoping and binding
     function bindSortingHeaders(root) {
         const sortHeaderName = root.querySelector('.list-header .name');
         const sortHeaderCreator = root.querySelector('.list-header .creator');
@@ -644,12 +628,10 @@
         sortHeaderSession && sortHeaderSession.addEventListener('click', () => setSort('session'));
     }
 
-    // Desktop
     if (desktop) {
         desktop.addEventListener('click', () => selectNode(null));
     }
 
-    // List interactions need to defer until list overlay is created
     function bindListInteractions() {
         if (!listContainer) return;
         listContainer.tabIndex = 0;
