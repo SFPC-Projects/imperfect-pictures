@@ -2,7 +2,7 @@
     --ink: #111;
     --muted: #666;
     --bg-app: #ccc;
-    --link: #000080;
+    --link: var(--ink);
     --link-visited: var(--link);
     --ui-blue: #000080;
     --ui-blue-light: #3a6ea5;
