@@ -98,7 +98,7 @@
 
     /* WINDOW CREATION */
 
-    function createWindow(kind, titleText, contentTemplate) {
+    function createWindow(kind, titleText, contentTemplate, onClose) {
         if (!tplOverlay || !tplOverlay.content) return null;
         const frag = tplOverlay.content.cloneNode(true);
         const overlay = frag.querySelector('.overlay');
@@ -121,14 +121,18 @@
 
         titleSpan.textContent = titleText || '';
 
+        // Add ARIA title id and aria-labelledby to panel
+        const titleId = `${kind}-window-title`;
+        titleSpan.id = titleId;
+        if (panel) panel.setAttribute('aria-labelledby', titleId);
+
         if (contentTemplate && contentTemplate.content) {
             viewport.appendChild(contentTemplate.content.cloneNode(true));
         }
 
-        attachWindowControls(overlay, () => closeOverlay(overlay));
-
         document.getElementById('app').appendChild(frag);
         const appended = document.getElementById(`${kind}-overlay`);
+        attachWindowControls(appended, () => (onClose ? onClose() : closeOverlay(appended)));
         return {
             overlay: appended,
             panel: appended.querySelector('.window-panel'),
@@ -139,7 +143,7 @@
 
     function ensureAbout() {
         if (windows.about) return windows.about;
-        const w = createWindow('about', 'About — Imperfect Pictures', tplAbout);
+        const w = createWindow('about', 'About — Imperfect Pictures', tplAbout, () => closeOverlay(w.overlay));
         if (!w) return null;
         w.overlay.hidden = true;
         windows.about = w;
@@ -148,7 +152,7 @@
 
     function ensureList() {
         if (windows.list) return windows.list;
-        const w = createWindow('list', 'Projects', tplList);
+        const w = createWindow('list', 'Projects', tplList, () => closeOverlay(w.overlay));
         if (!w) return null;
         listContainer = w.viewport.querySelector('#list-container');
         bindSortingHeaders(w.overlay);
@@ -160,7 +164,7 @@
 
     function ensureProject() {
         if (windows.project) return windows.project;
-        const w = createWindow('project', 'Project', tplProject);
+        const w = createWindow('project', 'Project', tplProject, () => closeOverlay(w.overlay, () => projectFrame && projectFrame.removeAttribute('src')));
         if (!w) return null;
         projectFrame = w.viewport.querySelector('#project-frame');
         w.overlay.hidden = true;
@@ -586,10 +590,17 @@
         const closeBtn = windowPanel.querySelector('.titlebar-close');
         let maximized = false;
         if (maxBtn) {
+            const getKind = () => windowPanel.closest('section')?.classList[0] || 'overlay';
+            const setMaxAria = () => {
+                const kind = getKind();
+                maxBtn.setAttribute('aria-label', maximized ? `Restore ${kind} window` : `Maximize ${kind} window`);
+            };
+            setMaxAria();
             maxBtn.addEventListener('click', () => {
                 maximized = !maximized;
                 windowPanel.classList.toggle('maximized', maximized);
-                maxBtn.textContent = maximized ? "❐" : "□";
+                maxBtn.textContent = maximized ? '❐' : '□';
+                setMaxAria();
             });
         }
         if (closeBtn) {
@@ -612,12 +623,7 @@
         });
     }
 
-    (() => {
-        const aw = ensureAbout();
-        const lw = ensureList();
-        const pw = ensureProject();
-        attachWindowControls(pw.overlay, () => closeOverlay(pw.overlay, () => projectFrame && projectFrame.removeAttribute('src')));
-    })();
+
 
     function bindSortingHeaders(root) {
         const sortHeaderName = root.querySelector('.list-header .name');
