@@ -465,81 +465,47 @@
         }
     });
 
-    // About window
-    aboutClose && aboutClose.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeAbout();
-    });
-    aboutMaxBtn && aboutMaxBtn.addEventListener("click", () => {
-        aboutMaximized = !aboutMaximized;
-        aboutWindow.classList.toggle("maximized", aboutMaximized);
-        aboutMaxBtn.textContent = aboutMaximized ? "❐" : "□";
-    });
-    document.addEventListener('click', (e) => {
-        const btn = e.target && e.target.closest && e.target.closest('#aboutClose');
-        if (btn && isOverlayOpen()) {
-            e.preventDefault();
-            closeAbout();
+    // Window controls for overlays
+    function attachWindowControls(overlay, onClose) {
+        if (!overlay) return;
+        const windowPanel = overlay.querySelector('.window-panel');
+        if (!windowPanel) return;
+        const maxBtn = windowPanel.querySelector('.titlebar-btn.maximize');
+        const closeBtn = windowPanel.querySelector('.titlebar-btn.titlebar-close');
+        let maximized = false;
+        if (maxBtn) {
+            maxBtn.addEventListener('click', () => {
+                maximized = !maximized;
+                windowPanel.classList.toggle('maximized', maximized);
+                maxBtn.textContent = maximized ? "❐" : "□";
+            });
         }
-    }, true);
-    aboutOverlay && aboutOverlay.addEventListener('mousedown', (e) => {
-        if (!isOverlayOpen()) return;
-        if (e.target === aboutOverlay || (aboutWindow && !aboutWindow.contains(e.target))) {
-            closeAbout();
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                onClose && onClose();
+            });
         }
-    });
-    window.addEventListener('keydown', (e) => {
-        if (!isOverlayOpen()) return;
-        if (e.key === 'Escape') {
-            e.preventDefault();
-            closeAbout();
-        } else if ((e.key === 'Enter' || e.key === ' ') && document.activeElement === aboutClose) {
-            e.preventDefault();
-            closeAbout();
-        }
-    });
+        // Overlay click outside closes
+        overlay.addEventListener('mousedown', (e) => {
+            if (e.target === overlay || (windowPanel && !windowPanel.contains(e.target))) {
+                onClose && onClose();
+            }
+        });
+        // Escape closes
+        window.addEventListener('keydown', (e) => {
+            const isOpen = !overlay.hidden;
+            if (isOpen && e.key === 'Escape') {
+                e.preventDefault();
+                onClose && onClose();
+            }
+        });
+    }
 
-    // Project window
-    projectClose && projectClose.addEventListener('click', (e) => { e.preventDefault(); closeProject(); });
-    document.addEventListener('click', (e) => {
-        const btn = e.target && e.target.closest && e.target.closest('#projectClose');
-        if (btn && projectOverlay && !projectOverlay.hidden) { e.preventDefault(); closeProject(); }
-    }, true);
-    projectOverlay && projectOverlay.addEventListener('mousedown', (e) => {
-        if (projectOverlay && !projectOverlay.hidden) {
-            if (e.target === projectOverlay || (projectWindow && !projectWindow.contains(e.target))) closeProject();
-        }
-    });
-    window.addEventListener('keydown', (e) => {
-        if (projectOverlay && !projectOverlay.hidden && e.key === 'Escape') { e.preventDefault(); closeProject(); }
-    });
-    projectMaxBtn && projectMaxBtn.addEventListener("click", () => {
-        isMaximized = !isMaximized;
-        projectWindow.classList.toggle("maximized", isMaximized);
-        projectMaxBtn.textContent = isMaximized ? "❐" : "□"; // switch icon
-    });
-
-    // List window
-    listClose && listClose.addEventListener('click', (e) => {
-        e.preventDefault();
-        setView('canvas');
-    });
-    listOverlay && listOverlay.addEventListener('mousedown', (e) => {
-        if (e.target === listOverlay || (listWindow && !listWindow.contains(e.target))) {
-            setView('canvas');
-        }
-    });
-    window.addEventListener('keydown', (e) => {
-        if (currentView === 'list' && e.key === 'Escape') {
-            e.preventDefault();
-            setView('canvas');
-        }
-    });
-    listMaxBtn && listMaxBtn.addEventListener("click", () => {
-        listMaximized = !listMaximized;
-        listWindow.classList.toggle("maximized", listMaximized);
-        listMaxBtn.textContent = listMaximized ? "❐" : "□";
-    });
+    // Attach controls to overlays
+    attachWindowControls(aboutOverlay, closeAbout);
+    attachWindowControls(listOverlay, () => setView('canvas'));
+    attachWindowControls(projectOverlay, closeProject);
 
     // Sorting headers
     const hdrName = document.querySelector('#list .list-header .name');
