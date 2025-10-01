@@ -1,7 +1,7 @@
 (function () {
     const byId = (id) => document.getElementById(id);
     const desktop = byId('desktop');
-    const listContainer = byId('listUl');
+    const listContainer = byId('list-container');
     const shuffleBtn = byId('randomizeBtn');
     const listBtn = byId('listViewLink');
 
