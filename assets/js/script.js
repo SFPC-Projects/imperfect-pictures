@@ -1,9 +1,9 @@
 (function () {
     const byId = (id) => document.getElementById(id);
     const desktop = byId('desktop');
-    const listUl = byId('listUl');
-    const randomizeBtn = byId('randomizeBtn');
-    const listViewLink = byId('listViewLink');
+    const listContainer = byId('listUl');
+    const shuffleBtn = byId('randomizeBtn');
+    const listBtn = byId('listViewLink');
 
     const listOverlay = byId('listOverlay');
     const aboutBtn = byId('aboutBtn');
@@ -53,7 +53,7 @@
         return `tc:${t}|${c}|${i || idx}`;
     }
 
-    function createPlaceholderSequence() {
+    function createPlaceholderPicker() {
         const n = Math.max(1, PLACEHOLDER_COUNT);
         const padLen = String(n).length;
         const pool = Array.from({ length: n }, (_, i) => String(i + 1).padStart(padLen, '0'));
@@ -84,7 +84,7 @@
         if (row) row.classList.add('selected');
     }
 
-    function openRow(row) {
+    function openListRow(row) {
         if (!row) return;
         const link = row.dataset.link;
         if (!link) return;
@@ -142,9 +142,9 @@
 
     /* RENDERING */
 
-    function renderDesktop(items) {
+    function renderNodes(items) {
         desktop.innerHTML = '';
-        const nextPlaceholder = createPlaceholderSequence();
+        const nextPlaceholder = createPlaceholderPicker();
         items.forEach((item, idx) => {
             const node = document.createElement('figure');
             node.className = 'node';
@@ -218,7 +218,7 @@
     }
 
     function renderList(items) {
-        listUl.innerHTML = '';
+        listContainer.innerHTML = '';
         items.forEach((item, idx) => {
             const li = document.createElement('li');
             li.setAttribute('role', 'option');
@@ -271,23 +271,23 @@
             li.appendChild(name);
             li.appendChild(creator);
             li.appendChild(session);
-            listUl.appendChild(li);
+            listContainer.appendChild(li);
         });
     }
 
     /* SHUFFLING */
 
     function shuffleList() {
-        if (!listUl) return;
-        const nodes = Array.from(listUl.children);
+        if (!listContainer) return;
+        const nodes = Array.from(listContainer.children);
         for (let i = nodes.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [nodes[i], nodes[j]] = [nodes[j], nodes[i]];
         }
-        nodes.forEach(n => listUl.appendChild(n));
+        nodes.forEach(n => listContainer.appendChild(n));
     }
 
-    function randomizePositions() {
+    function shuffleNodes() {
         const nodes = Array.from(desktop.querySelectorAll('.node'));
         const { width: cw, height: ch } = desktop.getBoundingClientRect();
         let z = 1;
@@ -299,7 +299,7 @@
             const maxY = Math.max(0, ch - h);
             const x = clamp(Math.random() * maxX, 0, maxX);
             const y = clamp(Math.random() * maxY, 0, maxY);
-            setPos(node, x, y);
+            setNodePosition(node, x, y);
             node.style.zIndex = String(z++);
         });
     }
@@ -319,7 +319,7 @@
             selectNode(node);
             node.setPointerCapture(e.pointerId);
             node.style.zIndex = String(++zTop);
-            const p = getPos(node);
+            const p = getNodePosition(node);
             origX = p.x; origY = p.y;
             startX = e.clientX; startY = e.clientY;
             e.preventDefault();
@@ -338,7 +338,7 @@
             nx = clamp(nx, 0, cw - w);
             ny = clamp(ny, 0, ch - h);
 
-            setPos(active, nx, ny);
+            setNodePosition(active, nx, ny);
         };
 
         const onPointerUp = (e) => {
@@ -355,13 +355,13 @@
         desktop.addEventListener('dragstart', (e) => e.preventDefault());
     }
 
-    function setPos(el, x, y) {
+    function setNodePosition(el, x, y) {
         el.style.transform = `translate(${x}px, ${y}px)`;
         el.dataset.x = String(Math.round(x));
         el.dataset.y = String(Math.round(y));
     }
 
-    function getPos(el) {
+    function getNodePosition(el) {
         return { x: Number(el.dataset.x || 0), y: Number(el.dataset.y || 0) };
     }
 
@@ -371,14 +371,14 @@
         if (!overlay) return;
         overlay.hidden = false;
         if (onOpen) onOpen();
-        updateControlsVisibility();
+        updateToolbarState();
     }
 
     function closeOverlay(overlay, onClose) {
         if (!overlay) return;
         overlay.hidden = true;
         if (onClose) onClose();
-        updateControlsVisibility();
+        updateToolbarState();
     }
 
     function openProject(link, titleText) {
@@ -388,19 +388,19 @@
         });
     }
 
-    function updateControlsVisibility() {
+    function updateToolbarState() {
         const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
         const listOpen = !!(listOverlay && !listOverlay.hidden);
         const projectOpen = !!(projectOverlay && !projectOverlay.hidden);
         if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
-        if (listViewLink) listViewLink.classList.toggle('active', listOpen);
-        if (randomizeBtn) randomizeBtn.hidden = (aboutOpen || listOpen || projectOpen);
+        if (listBtn) listBtn.classList.toggle('active', listOpen);
+        if (shuffleBtn) shuffleBtn.hidden = (aboutOpen || listOpen || projectOpen);
     }
 
     /* INITIALIZATION */
 
     listOverlay && (listOverlay.hidden = true);
-    updateControlsVisibility();
+    updateToolbarState();
 
 
     fetch('data/projects.json', { cache: 'no-store' })
@@ -408,10 +408,10 @@
         .then(items => {
             allItems = items;
 
-            renderDesktop(allItems);
+            renderNodes(allItems);
             renderList(getSortedItems());
             updateSortIndicators();
-            randomizePositions();
+            shuffleNodes();
             enableDrag();
         })
         .catch(err => {
@@ -424,18 +424,18 @@
         e.preventDefault();
         openOverlay(aboutOverlay);
     });
-    listViewLink && listViewLink.addEventListener('click', (e) => {
+    listBtn && listBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        openOverlay(listOverlay, () => listUl && listUl.focus());
+        openOverlay(listOverlay, () => listContainer && listContainer.focus());
         if (projectOverlay && !projectOverlay.hidden) closeOverlay(projectOverlay, () => projectFrame.removeAttribute('src'));
     });
-    if (randomizeBtn) {
-        randomizeBtn.addEventListener('click', () => {
+    if (shuffleBtn) {
+        shuffleBtn.addEventListener('click', () => {
             const listOpen = !!(listOverlay && !listOverlay.hidden);
             if (listOpen) {
                 shuffleList();
             } else {
-                randomizePositions();
+                shuffleNodes();
             }
         });
     }
@@ -482,12 +482,12 @@
     attachWindowControls(projectOverlay, () => closeOverlay(projectOverlay, () => projectFrame.removeAttribute('src')));
 
     // Sorting headers
-    const hdrName = document.querySelector('#list .list-header .name');
-    const hdrCreator = document.querySelector('#list .list-header .creator');
-    const hdrSession = document.querySelector('#list .list-header .session');
-    hdrName && hdrName.addEventListener('click', () => setSort('name'));
-    hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
-    hdrSession && hdrSession.addEventListener('click', () => setSort('session'));
+    const sortHeaderName = document.querySelector('#list .list-header .name');
+    const sortHeaderCreator = document.querySelector('#list .list-header .creator');
+    const sortHeaderSession = document.querySelector('#list .list-header .session');
+    sortHeaderName && sortHeaderName.addEventListener('click', () => setSort('name'));
+    sortHeaderCreator && sortHeaderCreator.addEventListener('click', () => setSort('creator'));
+    sortHeaderSession && sortHeaderSession.addEventListener('click', () => setSort('session'));
 
     // Desktop
     if (desktop) {
@@ -495,26 +495,26 @@
     }
 
     // List
-    if (listUl) {
-        listUl.tabIndex = 0;
-        listUl.addEventListener('click', (ev) => {
+    if (listContainer) {
+        listContainer.tabIndex = 0;
+        listContainer.addEventListener('click', (ev) => {
             const li = ev.target.closest('li');
-            if (li && listUl.contains(li)) {
+            if (li && listContainer.contains(li)) {
                 ev.stopPropagation();
                 selectRow(li);
             } else {
                 selectRow(null);
             }
         });
-        listUl.addEventListener('dblclick', (ev) => {
+        listContainer.addEventListener('dblclick', (ev) => {
             const li = ev.target.closest('li');
-            if (li && listUl.contains(li)) {
+            if (li && listContainer.contains(li)) {
                 ev.preventDefault();
-                openRow(li);
+                openListRow(li);
             }
         });
-        listUl.addEventListener('keydown', (ev) => {
-            const rows = Array.from(listUl.children);
+        listContainer.addEventListener('keydown', (ev) => {
+            const rows = Array.from(listContainer.children);
             const idx = selectedRow ? rows.indexOf(selectedRow) : -1;
             if (ev.key === 'ArrowDown') {
                 const next = rows[Math.min(idx + 1, rows.length - 1)] || rows[0];
@@ -527,7 +527,7 @@
                 prev && prev.scrollIntoView({ block: 'nearest' });
                 ev.preventDefault();
             } else if (ev.key === 'Enter') {
-                openRow(selectedRow);
+                openListRow(selectedRow);
                 ev.preventDefault();
             } else if (ev.key === 'Home') {
                 if (rows[0]) { selectRow(rows[0]); rows[0].scrollIntoView({ block: 'nearest' }); }
