@@ -16,7 +16,6 @@
 
     const projectOverlay = byId('projectOverlay');
     const projectWindow = byId('projectWindow');
-    const projectMinBtn = byId("projectMinimize");
     const projectMaxBtn = byId("projectMaximize");
     const projectTitle = byId('projectTitle');
     const projectFrame = byId('projectFrame');
@@ -442,10 +441,6 @@
     });
 
     // Project window controls
-    projectMinBtn.addEventListener("click", () => {
-        projectWindow.classList.toggle("minimized");
-    });
-
     projectMaxBtn.addEventListener("click", () => {
         isMaximized = !isMaximized;
         projectWindow.classList.toggle("maximized", isMaximized);
