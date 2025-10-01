@@ -35,14 +35,15 @@
         return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
     }
 
-
     function toURL(link) {
         try { return new URL(link, window.location.href); } catch { return null; }
     }
+
     function isExternalLink(link) {
         const u = toURL(link); if (!u) return false;
         return u.origin !== window.location.origin;
     }
+
     function isInternalNavigable(item) {
         if (!item || !item.link) return false;
         if (item.download) return false; // downloads should not embed
