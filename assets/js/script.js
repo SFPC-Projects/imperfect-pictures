@@ -1,16 +1,19 @@
 (function () {
     const byId = (id) => document.getElementById(id);
     const desktop = byId('desktop');
-    const listContainer = byId('list-container');
+    let listContainer = null;
     const shuffleBtn = byId('shuffle-button');
     const listBtn = byId('list-button');
-
-    const listOverlay = byId('list-overlay');
     const aboutBtn = byId('about-button');
-    const aboutOverlay = byId('about-overlay');
-    const projectOverlay = byId('project-overlay');
-    const projectTitle = byId('project-title');
-    const projectFrame = byId('project-frame');
+
+    const tplOverlay = byId('overlayTemplate');
+    const tplAbout = byId('aboutContentTemplate');
+    const tplList = byId('listContentTemplate');
+    const tplProject = byId('projectContentTemplate');
+
+    const windows = { about: null, list: null, project: null };
+
+    let projectFrame = null;
 
     const PLACEHOLDER_PATH = 'assets/img/placeholders/placeholder_{NN}.png';
     const PLACEHOLDER_COUNT = 30;
@@ -68,6 +71,76 @@
             const xx = pool[idx++];
             return String(PLACEHOLDER_PATH).replace('{NN}', xx);
         };
+    }
+
+    /* WINDOW CREATION */
+
+    function createWindow(kind, titleText, contentTemplate) {
+        if (!tplOverlay || !tplOverlay.content) return null;
+        const frag = tplOverlay.content.cloneNode(true);
+        const overlay = frag.querySelector('.overlay');
+        const section = frag.querySelector('section');
+        const panel = frag.querySelector('.window-panel');
+        const titleSpan = frag.querySelector('.titlebar-text');
+        const viewport = frag.querySelector('.window-viewport');
+
+        // Identify overlay
+        overlay.id = `${kind}-overlay`;
+        section.classList.remove('list');
+        section.classList.add(kind);
+
+        // Title
+        titleSpan.textContent = titleText || '';
+
+        // Inject content
+        if (contentTemplate && contentTemplate.content) {
+            viewport.appendChild(contentTemplate.content.cloneNode(true));
+        }
+
+        // Attach controls
+        attachWindowControls(overlay, () => closeOverlay(overlay));
+
+        // Append to DOM and return refs
+        document.getElementById('app').appendChild(frag);
+        const appended = document.getElementById(`${kind}-overlay`);
+        return {
+            overlay: appended,
+            panel: appended.querySelector('.window-panel'),
+            titleSpan: appended.querySelector('.titlebar-text'),
+            viewport: appended.querySelector('.window-viewport')
+        };
+    }
+
+    function ensureAbout() {
+        if (windows.about) return windows.about;
+        const w = createWindow('about', 'About — Imperfect Pictures', tplAbout);
+        if (!w) return null;
+        w.overlay.hidden = true;
+        windows.about = w;
+        return w;
+    }
+
+    function ensureList() {
+        if (windows.list) return windows.list;
+        const w = createWindow('list', 'Projects', tplList);
+        if (!w) return null;
+        // cache list container & bind sorting headers
+        listContainer = w.viewport.querySelector('#list-container');
+        bindSortingHeaders(w.overlay);
+        bindListInteractions();
+        w.overlay.hidden = true;
+        windows.list = w;
+        return w;
+    }
+
+    function ensureProject() {
+        if (windows.project) return windows.project;
+        const w = createWindow('project', 'Project', tplProject);
+        if (!w) return null;
+        projectFrame = w.viewport.querySelector('#project-frame');
+        w.overlay.hidden = true;
+        windows.project = w;
+        return w;
     }
 
     /* SELECTION STATE */
@@ -382,16 +455,18 @@
     }
 
     function openProject(link, titleText) {
-        openOverlay(projectOverlay, () => {
-            if (projectTitle) projectTitle.textContent = titleText || 'Project';
-            projectFrame.src = link;
+        const w = ensureProject();
+        if (!w) return;
+        openOverlay(w.overlay, () => {
+            w.titleSpan.textContent = titleText || 'Project';
+            if (projectFrame) projectFrame.src = link;
         });
     }
 
     function updateToolbarState() {
-        const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
-        const listOpen = !!(listOverlay && !listOverlay.hidden);
-        const projectOpen = !!(projectOverlay && !projectOverlay.hidden);
+        const aboutOpen = !!(windows.about && !windows.about.overlay.hidden);
+        const listOpen = !!(windows.list && !windows.list.overlay.hidden);
+        const projectOpen = !!(windows.project && !windows.project.overlay.hidden);
         if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
         if (listBtn) listBtn.classList.toggle('active', listOpen);
         if (shuffleBtn) shuffleBtn.hidden = (aboutOpen || listOpen || projectOpen);
@@ -399,7 +474,6 @@
 
     /* INITIALIZATION */
 
-    listOverlay && (listOverlay.hidden = true);
     updateToolbarState();
 
 
@@ -409,6 +483,7 @@
             allItems = items;
 
             renderNodes(allItems);
+            ensureList();
             renderList(getSortedItems());
             updateSortIndicators();
             shuffleNodes();
@@ -419,19 +494,25 @@
             desktop.innerHTML = '<p style="padding:1rem">Error loading projects, please try refreshing.</p>';
         });
 
-    // Nav bar
+    // Nav bar listeners — open via ensure* and close project if list is opened:
     aboutBtn && aboutBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        openOverlay(aboutOverlay);
+        const w = ensureAbout();
+        w && openOverlay(w.overlay);
     });
+
     listBtn && listBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        openOverlay(listOverlay, () => listContainer && listContainer.focus());
-        if (projectOverlay && !projectOverlay.hidden) closeOverlay(projectOverlay, () => projectFrame.removeAttribute('src'));
+        const w = ensureList();
+        if (!w) return;
+        openOverlay(w.overlay, () => listContainer && listContainer.focus());
+        if (windows.project && !windows.project.overlay.hidden) {
+            closeOverlay(windows.project.overlay, () => projectFrame && projectFrame.removeAttribute('src'));
+        }
     });
     if (shuffleBtn) {
         shuffleBtn.addEventListener('click', () => {
-            const listOpen = !!(listOverlay && !listOverlay.hidden);
+            const listOpen = !!(windows.list && !windows.list.overlay.hidden);
             if (listOpen) {
                 shuffleList();
             } else {
@@ -446,7 +527,7 @@
         const windowPanel = overlay.querySelector('.window-panel');
         if (!windowPanel) return;
         const maxBtn = windowPanel.querySelector('.titlebar-btn.maximize');
-        const closeBtn = windowPanel.querySelector('.titlebar-btn.titlebar-close');
+        const closeBtn = windowPanel.querySelector('.titlebar-close');
         let maximized = false;
         if (maxBtn) {
             maxBtn.addEventListener('click', () => {
@@ -477,25 +558,33 @@
         });
     }
 
-    attachWindowControls(aboutOverlay, () => closeOverlay(aboutOverlay));
-    attachWindowControls(listOverlay, () => closeOverlay(listOverlay));
-    attachWindowControls(projectOverlay, () => closeOverlay(projectOverlay, () => projectFrame.removeAttribute('src')));
+    // Attach controls to ensured overlays and proper onClose hooks
+    (() => {
+        const aw = ensureAbout();
+        const lw = ensureList();
+        const pw = ensureProject();
+        // Re-attach project close hook to also clear iframe
+        attachWindowControls(pw.overlay, () => closeOverlay(pw.overlay, () => projectFrame && projectFrame.removeAttribute('src')));
+    })();
 
-    // Sorting headers
-    const sortHeaderName = document.querySelector('#list .list-header .name');
-    const sortHeaderCreator = document.querySelector('#list .list-header .creator');
-    const sortHeaderSession = document.querySelector('#list .list-header .session');
-    sortHeaderName && sortHeaderName.addEventListener('click', () => setSort('name'));
-    sortHeaderCreator && sortHeaderCreator.addEventListener('click', () => setSort('creator'));
-    sortHeaderSession && sortHeaderSession.addEventListener('click', () => setSort('session'));
+    // Sorting header scoping and binding
+    function bindSortingHeaders(root) {
+        const sortHeaderName = root.querySelector('.list-header .name');
+        const sortHeaderCreator = root.querySelector('.list-header .creator');
+        const sortHeaderSession = root.querySelector('.list-header .session');
+        sortHeaderName && sortHeaderName.addEventListener('click', () => setSort('name'));
+        sortHeaderCreator && sortHeaderCreator.addEventListener('click', () => setSort('creator'));
+        sortHeaderSession && sortHeaderSession.addEventListener('click', () => setSort('session'));
+    }
 
     // Desktop
     if (desktop) {
         desktop.addEventListener('click', () => selectNode(null));
     }
 
-    // List
-    if (listContainer) {
+    // List interactions need to defer until list overlay is created
+    function bindListInteractions() {
+        if (!listContainer) return;
         listContainer.tabIndex = 0;
         listContainer.addEventListener('click', (ev) => {
             const li = ev.target.closest('li');
