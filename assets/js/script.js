@@ -31,14 +31,12 @@
     let allItems = [];
     let sortBy = 'title';
     let sortAsc = true;
-    let currentView = 'desktop';
-    let isMaximized = false;
-    let listMaximized = false;
-    let aboutMaximized = false;
 
     /* UTILITIES */
 
     function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+
+    function hasValue(v) { return v != null && String(v).trim().length > 0; }
 
     function escapeHtml(str) {
         return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
@@ -132,7 +130,7 @@
     }
 
     function setSort(column) {
-        const map = { name: 'title', creator: 'creator', cls: 'class' };
+        const map = { name: 'title', creator: 'creator', session: 'session' };
         const field = map[column];
         if (!field) return;
         if (sortBy === field) {
@@ -151,7 +149,7 @@
         const active =
             sortBy === 'title' ? header.querySelector('.name') :
                 sortBy === 'creator' ? header.querySelector('.creator') :
-                    sortBy === 'class' ? header.querySelector('.cls') : null;
+                    sortBy === 'session' ? header.querySelector('.session') : null;
         if (active) active.setAttribute('data-sort', sortAsc ? 'asc' : 'desc');
     }
 
@@ -201,7 +199,7 @@
             cap.className = 'caption';
             // Creator with optional link
             let creatorHtml;
-            if (item.creatorLink !== undefined && item.creatorLink !== null && String(item.creatorLink).trim().length > 0) {
+            if (hasValue(item.creatorLink)) {
                 creatorHtml = `<a href="${escapeHtml(item.creatorLink)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.creator)}</a>`;
             } else {
                 creatorHtml = escapeHtml(item.creator);
@@ -269,7 +267,7 @@
             const creator = document.createElement('span');
             creator.className = 'creator';
             // If creatorLink exists and is non-empty, make creator a link
-            if (item.creatorLink !== undefined && item.creatorLink !== null && String(item.creatorLink).trim().length > 0) {
+            if (hasValue(item.creatorLink)) {
                 const creatorA = document.createElement('a');
                 creatorA.href = item.creatorLink;
                 creatorA.target = '_blank';
@@ -280,13 +278,13 @@
                 creator.textContent = item.creator || '';
             }
 
-            const cls = document.createElement('span');
-            cls.className = 'cls';
-            cls.textContent = item.class || '';
+            const session = document.createElement('span');
+            session.className = 'session';
+            session.textContent = item.session || '';
 
             li.appendChild(name);
             li.appendChild(creator);
-            li.appendChild(cls);
+            li.appendChild(session);
             listUl.appendChild(li);
         });
     }
@@ -414,36 +412,17 @@
 
     /* VIEW TOGGLE */
 
-    function setView(mode) {
-        currentView = mode;
-        const desktopSec = byId('desktop');
-
-        if (mode === 'list') {
-            if (listOverlay) listOverlay.hidden = false;
-            if (desktopSec) desktopSec.hidden = false; // keep desktop visible underneath
-            if (listUl) listUl.focus();
-        } else { // desktop
-            if (listOverlay) listOverlay.hidden = true;
-            if (desktopSec) desktopSec.hidden = false;
-        }
-
-        updateControlsVisibility();
-        if (mode !== 'list' && projectOverlay && !projectOverlay.hidden) {
-            closeProject();
-        }
-    }
-
     function updateControlsVisibility() {
         const aboutOpen = !!(aboutOverlay && !aboutOverlay.hidden);
-        const listOpen = currentView === 'list';
+        const listOpen = !!(listOverlay && !listOverlay.hidden);
         const projectOpen = !!(projectOverlay && !projectOverlay.hidden);
         if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
         if (listViewLink) listViewLink.classList.toggle('active', listOpen);
-        if (randomizeBtn) randomizeBtn.hidden = !(currentView === 'desktop' && !aboutOpen && !projectOpen);
+        if (randomizeBtn) randomizeBtn.hidden = (aboutOpen || listOpen || projectOpen);
     }
     /* INITIALIZATION */
 
-    setView('desktop');
+    // Ensure listOverlay is hidden at start
     listOverlay && (listOverlay.hidden = true);
     updateControlsVisibility();
 
@@ -471,11 +450,14 @@
     });
     listViewLink && listViewLink.addEventListener('click', (e) => {
         e.preventDefault();
-        setView('list');
+        if (listOverlay) listOverlay.hidden = false;
+        if (listUl) listUl.focus();
         if (projectOverlay && !projectOverlay.hidden) closeProject();
+        updateControlsVisibility();
     });
     randomizeBtn && (randomizeBtn.onclick = () => {
-        if (currentView === 'list') {
+        const listOpen = !!(listOverlay && !listOverlay.hidden);
+        if (listOpen) {
             shuffleList();
         } else {
             randomizePositions();
@@ -521,16 +503,19 @@
 
     // Attach controls to overlays
     attachWindowControls(aboutOverlay, closeAbout);
-    attachWindowControls(listOverlay, () => setView('desktop'));
+    attachWindowControls(listOverlay, () => {
+        if (listOverlay) listOverlay.hidden = true;
+        updateControlsVisibility();
+    });
     attachWindowControls(projectOverlay, closeProject);
 
     // Sorting headers
     const hdrName = document.querySelector('#list .list-header .name');
     const hdrCreator = document.querySelector('#list .list-header .creator');
-    const hdrCls = document.querySelector('#list .list-header .cls');
+    const hdrSession = document.querySelector('#list .list-header .session');
     hdrName && hdrName.addEventListener('click', () => setSort('name'));
     hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
-    hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
+    hdrSession && hdrSession.addEventListener('click', () => setSort('session'));
 
     // Desktop
     if (desktop) {
@@ -557,7 +542,6 @@
             }
         });
         listUl.addEventListener('keydown', (ev) => {
-            if (currentView !== 'list') return;
             const rows = Array.from(listUl.children);
             const idx = selectedRow ? rows.indexOf(selectedRow) : -1;
             if (ev.key === 'ArrowDown') {
