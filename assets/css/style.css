@@ -83,7 +83,7 @@ a:visited {
     padding: 0;
 }
 
-.canvas {
+.desktop {
     position: absolute;
     inset: 0;
     overflow: hidden;

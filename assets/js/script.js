@@ -1,6 +1,6 @@
 (function () {
     const byId = (id) => document.getElementById(id);
-    const canvas = byId('canvas');
+    const desktop = byId('desktop');
     const listUl = byId('listUl');
     const randomizeBtn = byId('randomizeBtn');
     const listViewLink = byId('listViewLink');
@@ -31,7 +31,7 @@
     let allItems = [];
     let sortBy = 'title';
     let sortAsc = true;
-    let currentView = 'canvas';
+    let currentView = 'desktop';
     let isMaximized = false;
     let listMaximized = false;
     let aboutMaximized = false;
@@ -157,8 +157,8 @@
 
     /* RENDERING */
 
-    function renderCanvas(items) {
-        canvas.innerHTML = '';
+    function renderDesktop(items) {
+        desktop.innerHTML = '';
         const nextPlaceholder = createPlaceholderSequence();
         items.forEach((item, idx) => {
             const node = document.createElement('figure');
@@ -205,7 +205,7 @@
             a.appendChild(img);
             node.appendChild(a);
             node.appendChild(cap);
-            canvas.appendChild(node);
+            desktop.appendChild(node);
 
             node.addEventListener('click', (ev) => {
                 ev.stopPropagation();
@@ -287,8 +287,8 @@
     }
 
     function randomizePositions() {
-        const nodes = Array.from(canvas.querySelectorAll('.node'));
-        const { width: cw, height: ch } = canvas.getBoundingClientRect();
+        const nodes = Array.from(desktop.querySelectorAll('.node'));
+        const { width: cw, height: ch } = desktop.getBoundingClientRect();
         let z = 1;
         nodes.forEach(node => {
             const rect = node.getBoundingClientRect();
@@ -328,7 +328,7 @@
             if (!active) return;
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
-            const { width: cw, height: ch } = canvas.getBoundingClientRect();
+            const { width: cw, height: ch } = desktop.getBoundingClientRect();
             const rect = active.getBoundingClientRect();
             let nx = origX + dx;
             let ny = origY + dy;
@@ -347,11 +347,11 @@
             active = null;
         };
 
-        canvas.addEventListener('pointerdown', onPointerDown);
+        desktop.addEventListener('pointerdown', onPointerDown);
         window.addEventListener('pointermove', onPointerMove);
         window.addEventListener('pointerup', onPointerUp);
 
-        canvas.addEventListener('dragstart', (e) => e.preventDefault());
+        desktop.addEventListener('dragstart', (e) => e.preventDefault());
     }
 
     function setPos(el, x, y) {
@@ -399,15 +399,15 @@
 
     function setView(mode) {
         currentView = mode;
-        const canvasSec = byId('canvas');
+        const desktopSec = byId('desktop');
 
         if (mode === 'list') {
             if (listOverlay) listOverlay.hidden = false;
-            if (canvasSec) canvasSec.hidden = false; // keep canvas visible underneath
+            if (desktopSec) desktopSec.hidden = false; // keep desktop visible underneath
             if (listUl) listUl.focus();
-        } else { // canvas
+        } else { // desktop
             if (listOverlay) listOverlay.hidden = true;
-            if (canvasSec) canvasSec.hidden = false;
+            if (desktopSec) desktopSec.hidden = false;
         }
 
         updateControlsVisibility();
@@ -422,11 +422,11 @@
         const projectOpen = !!(projectOverlay && !projectOverlay.hidden);
         if (aboutBtn) aboutBtn.classList.toggle('active', aboutOpen);
         if (listViewLink) listViewLink.classList.toggle('active', listOpen);
-        if (randomizeBtn) randomizeBtn.hidden = !(currentView === 'canvas' && !aboutOpen && !projectOpen);
+        if (randomizeBtn) randomizeBtn.hidden = !(currentView === 'desktop' && !aboutOpen && !projectOpen);
     }
     /* INITIALIZATION */
 
-    setView('canvas');
+    setView('desktop');
     listOverlay && (listOverlay.hidden = true);
     updateControlsVisibility();
 
@@ -436,7 +436,7 @@
         .then(items => {
             allItems = items;
 
-            renderCanvas(allItems);
+            renderDesktop(allItems);
             renderList(getSortedItems());
             updateSortIndicators();
             randomizePositions();
@@ -444,7 +444,7 @@
         })
         .catch(err => {
             console.error('Failed to load data/projects.json', err);
-            canvas.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
+            desktop.innerHTML = '<p style="padding:1rem">Could not load projects.json</p>';
         });
 
     // Nav bar
@@ -515,9 +515,9 @@
     hdrCreator && hdrCreator.addEventListener('click', () => setSort('creator'));
     hdrCls && hdrCls.addEventListener('click', () => setSort('cls'));
 
-    // Canvas
-    if (canvas) {
-        canvas.addEventListener('click', () => selectNode(null));
+    // Desktop
+    if (desktop) {
+        desktop.addEventListener('click', () => selectNode(null));
     }
 
     // List
