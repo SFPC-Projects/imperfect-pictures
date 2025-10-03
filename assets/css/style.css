@@ -198,8 +198,13 @@ a:visited {
 
 .list {
     margin: 0;
-    padding: var(--space-md);
+    padding: 0;
     height: 100%;
+}
+
+.overlay>section {
+    padding: 0;
+    margin: 0;
 }
 
 .list .window-viewport {
