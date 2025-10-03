@@ -301,6 +301,16 @@
             cap.innerHTML = `<div class="creator">${creatorHtml}</div>
                        <div class="title">${escapeHtml(item.title)}</div>`;
 
+            const creatorLinkEl = cap.querySelector('.creator a');
+            if (creatorLinkEl) {
+                creatorLinkEl.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                });
+                creatorLinkEl.addEventListener('pointerdown', (ev) => {
+                    ev.stopPropagation();
+                });
+            }
+
             a.appendChild(img);
             node.appendChild(a);
             node.appendChild(cap);
@@ -311,6 +321,7 @@
                 selectNode(node);
             });
             node.addEventListener('dblclick', (e) => {
+                if (e.target.closest('a')) return; // let links handle themselves
                 e.preventDefault();
                 a.click();
             });
@@ -425,6 +436,10 @@
         let zTop = 1000;
 
         const onPointerDown = (e) => {
+            if (e.pointerType === 'mouse' && e.button !== 0) return;
+            const interactive = e.target.closest('a, button, input, textarea, select, [role="button"]');
+            if (interactive) return;
+
             const node = e.target.closest('.node');
             if (!node) return;
 
