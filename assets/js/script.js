@@ -121,7 +121,6 @@
 
         titleSpan.textContent = titleText || '';
 
-        // Add ARIA title id and aria-labelledby to panel
         const titleId = `${kind}-window-title`;
         titleSpan.id = titleId;
         if (panel) panel.setAttribute('aria-labelledby', titleId);
@@ -311,7 +310,6 @@
                 selectNode(node);
             });
             node.addEventListener('dblclick', (e) => {
-                // Only trigger if not on a link (allow default dblclick on links)
                 if (e.target.closest('a')) return;
                 e.preventDefault();
                 a.click();
@@ -324,9 +322,6 @@
                 }
             });
             node.tabIndex = 0;
-
-            // --- removed special-case creator link pointerdown/click suppression ---
-            // (no longer needed with improved drag logic)
         });
     }
 
@@ -458,7 +453,6 @@
                 }
             }
 
-            // Dragging
             const { width: cw, height: ch } = desktop.getBoundingClientRect();
             const rect = active.getBoundingClientRect();
             let nx = origX + dx;
