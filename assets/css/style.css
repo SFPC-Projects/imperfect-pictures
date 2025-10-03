@@ -123,10 +123,8 @@ a:visited {
 
 .window-panel.floating.maximized {
     position: static;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
+    width: 100dvw;
+    height: 100dvh;
     margin: 0;
     box-shadow: none;
 }
