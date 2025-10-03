@@ -357,6 +357,30 @@ ul.details li>* {
     color: var(--muted)
 }
 
+.node .creator a {
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid transparent;
+    padding: 0 2px;
+}
+
+.node .creator a:hover,
+.node .creator a:focus-visible {
+    background: var(--hover-blue);
+    text-decoration: underline;
+    box-shadow:
+        inset 1px 1px 0 var(--border-light),
+        inset -1px -1px 0 var(--border-dark);
+    outline: none;
+}
+
+.node .creator a:active {
+    background: var(--chrome);
+    box-shadow:
+        inset -1px -1px 0 var(--border-light),
+        inset 1px 1px 0 var(--border-dark);
+}
+
 .node .title {
     font-weight: 600
 }
