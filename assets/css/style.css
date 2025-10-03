@@ -118,12 +118,17 @@ a:visited {
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-float);
+    margin: 0;
 }
 
 .window-panel.floating.maximized {
-    width: 100% !important;
-    height: 100% !important;
-    max-height: 100% !important;
+    position: absolute;
+    inset: 0;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0;
+    box-shadow: none;
 }
 
 
@@ -209,6 +214,7 @@ a:visited {
     align-items: center;
     justify-content: center;
     height: 100%;
+    position: relative;
 }
 
 .list .window-viewport {
