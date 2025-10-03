@@ -1,7 +1,7 @@
 :root {
     --ink: #111;
     --muted: #666;
-    --bg-app: #ccc;
+    --bg-app: #ddd;
     --link: var(--ink);
     --link-visited: var(--link);
     --ui-blue: #000080;
