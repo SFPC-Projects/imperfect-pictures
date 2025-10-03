@@ -364,7 +364,7 @@ ul.details li>* {
 
 .node .creator a {
     text-decoration: none;
-    color: blue;
+    color: var(--link);
     border: 1px solid transparent;
     padding: 0 2px;
 }
