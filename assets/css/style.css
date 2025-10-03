@@ -317,6 +317,11 @@ ul.details li>* {
     outline: none;
     width: var(--thumbnail);
     height: var(--thumbnail);
+    cursor: grab;
+}
+
+.node a.thumb:active {
+    cursor: grabbing;
 }
 
 .node img {
