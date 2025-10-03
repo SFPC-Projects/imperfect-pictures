@@ -370,7 +370,6 @@ ul.details li>* {
     text-decoration: none;
     color: var(--link);
     border: 1px solid transparent;
-    padding: 0 2px;
 }
 
 .node .creator a:hover,
