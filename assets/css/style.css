@@ -2,7 +2,7 @@
     --ink: #111;
     --muted: #666;
     --bg-app: #ddd;
-    --link: var(--ink);
+    --link: #00f;
     --link-visited: var(--link);
     --ui-blue: #000080;
     --ui-blue-light: #3a6ea5;
@@ -68,7 +68,7 @@ body {
 
 
 a {
-    color: var(--link);
+    color: var(--ink);
 }
 
 a:visited {
@@ -364,7 +364,7 @@ ul.details li>* {
 
 .node .creator a {
     text-decoration: none;
-    color: inherit;
+    color: blue;
     border: 1px solid transparent;
     padding: 0 2px;
 }
