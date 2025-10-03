@@ -42,7 +42,7 @@
     --button-height: 28px;
     --titlebar-close-size: 18px;
 
-    --z-overlay: 4000;
+    --z-overlay: 2000;
     --z-nav: 3000;
 
     --shadow-float: 0 10px 30px rgba(0, 0, 0, 0.25);
@@ -112,8 +112,9 @@ a:visited {
 }
 
 .window-panel.floating {
-    width: min(720px, 90vw);
-    max-height: 80vh;
+    width: min(720px, 90dvw);
+    height: 75dvh;
+    max-height: 75dvh;
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-float);
@@ -125,10 +126,6 @@ a:visited {
     max-height: 100% !important;
 }
 
-.project .window-panel.floating {
-    height: 75%;
-    max-height: 75%;
-}
 
 .window-panel.floating .window-viewport {
     overflow: auto;
@@ -446,8 +443,9 @@ ul.details li>* {
     }
 
     .window-panel.floating {
-        width: 96vw;
-        max-height: 85dvh;
+        width: 96dvw;
+        height: 75dvh;
+        max-height: 75dvh;
     }
 
     .window-panel.floating .window-viewport {
@@ -482,7 +480,7 @@ ul.details li>* {
     }
 
     .project-frame {
-        height: 60dvh;
+        height: 100%;
     }
 
     .nav-bar {
