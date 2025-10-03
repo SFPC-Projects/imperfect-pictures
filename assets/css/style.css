@@ -114,7 +114,6 @@ a:visited {
 .window-panel.floating {
     width: min(720px, 90dvw);
     height: 75dvh;
-    max-height: 75dvh;
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-float);
