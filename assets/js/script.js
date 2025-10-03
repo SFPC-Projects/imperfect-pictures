@@ -301,16 +301,6 @@
             cap.innerHTML = `<div class="creator">${creatorHtml}</div>
                        <div class="title">${escapeHtml(item.title)}</div>`;
 
-            const creatorLinkEl = cap.querySelector('.creator a');
-            if (creatorLinkEl) {
-                creatorLinkEl.addEventListener('click', (ev) => {
-                    ev.stopPropagation();
-                });
-                creatorLinkEl.addEventListener('pointerdown', (ev) => {
-                    ev.stopPropagation();
-                });
-            }
-
             a.appendChild(img);
             node.appendChild(a);
             node.appendChild(cap);
@@ -321,7 +311,8 @@
                 selectNode(node);
             });
             node.addEventListener('dblclick', (e) => {
-                if (e.target.closest('a')) return; // let links handle themselves
+                // Only trigger if not on a link (allow default dblclick on links)
+                if (e.target.closest('a')) return;
                 e.preventDefault();
                 a.click();
             });
@@ -333,6 +324,9 @@
                 }
             });
             node.tabIndex = 0;
+
+            // --- removed special-case creator link pointerdown/click suppression ---
+            // (no longer needed with improved drag logic)
         });
     }
 
@@ -429,62 +423,73 @@
 
     function enableDrag() {
         let active = null;
-        let startX = 0,
-            startY = 0,
-            origX = 0,
-            origY = 0;
+        let startX = 0, startY = 0, origX = 0, origY = 0;
         let zTop = 1000;
+        let isDragging = false;
+        let suppressClick = false;
+        const DRAG_THRESHOLD = 5;
 
         const onPointerDown = (e) => {
             if (e.pointerType === 'mouse' && e.button !== 0) return;
-            const interactive = e.target.closest('a, button, input, textarea, select, [role="button"]');
-            if (interactive) return;
-
             const node = e.target.closest('.node');
             if (!node) return;
 
             active = node;
+            isDragging = false;
             selectNode(node);
-            node.setPointerCapture(e.pointerId);
-            node.style.zIndex = String(++zTop);
             const p = getNodePosition(node);
-            origX = p.x;
-            origY = p.y;
-            startX = e.clientX;
-            startY = e.clientY;
-            e.preventDefault();
+            origX = p.x; origY = p.y;
+            startX = e.clientX; startY = e.clientY;
         };
 
         const onPointerMove = (e) => {
             if (!active) return;
             const dx = e.clientX - startX;
             const dy = e.clientY - startY;
-            const {
-                width: cw,
-                height: ch
-            } = desktop.getBoundingClientRect();
+
+            if (!isDragging) {
+                if (Math.abs(dx) >= DRAG_THRESHOLD || Math.abs(dy) >= DRAG_THRESHOLD) {
+                    isDragging = true;
+                    suppressClick = true;
+                    active.setPointerCapture(e.pointerId);
+                    active.style.zIndex = String(++zTop);
+                } else {
+                    return;
+                }
+            }
+
+            // Dragging
+            const { width: cw, height: ch } = desktop.getBoundingClientRect();
             const rect = active.getBoundingClientRect();
             let nx = origX + dx;
             let ny = origY + dy;
-
-            const w = rect.width,
-                h = rect.height;
+            const w = rect.width, h = rect.height;
             nx = clamp(nx, 0, cw - w);
             ny = clamp(ny, 0, ch - h);
-
             setNodePosition(active, nx, ny);
+            e.preventDefault();
         };
 
         const onPointerUp = (e) => {
             if (active) {
-                active.releasePointerCapture(e.pointerId);
+                try { active.releasePointerCapture(e.pointerId); } catch { }
             }
             active = null;
+            isDragging = false;
+        };
+
+        const onClickCapture = (e) => {
+            if (suppressClick) {
+                e.stopPropagation();
+                e.preventDefault();
+                suppressClick = false;
+            }
         };
 
         desktop.addEventListener('pointerdown', onPointerDown);
         window.addEventListener('pointermove', onPointerMove);
         window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('click', onClickCapture, true);
 
         desktop.addEventListener('dragstart', (e) => e.preventDefault());
     }
