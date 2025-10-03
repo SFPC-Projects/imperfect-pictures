@@ -573,16 +573,22 @@
     aboutBtn && aboutBtn.addEventListener('click', (e) => {
         e.preventDefault();
         const w = ensureAbout();
-        w && openOverlay(w.overlay);
+        if (!w) return;
+        if (w.overlay.hidden) {
+            openOverlay(w.overlay);
+        } else {
+            closeOverlay(w.overlay);
+        }
     });
 
     listBtn && listBtn.addEventListener('click', (e) => {
         e.preventDefault();
         const w = ensureList();
         if (!w) return;
-        openOverlay(w.overlay, () => listContainer && listContainer.focus());
-        if (windows.project && !windows.project.overlay.hidden) {
-            closeOverlay(windows.project.overlay, () => projectFrame && projectFrame.removeAttribute('src'));
+        if (w.overlay.hidden) {
+            openOverlay(w.overlay, () => listContainer && listContainer.focus());
+        } else {
+            closeOverlay(w.overlay);
         }
     });
     if (shuffleBtn) {
