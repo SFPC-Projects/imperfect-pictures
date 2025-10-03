@@ -122,11 +122,11 @@ a:visited {
 }
 
 .window-panel.floating.maximized {
-    position: absolute;
-    inset: 0;
-    width: auto !important;
-    height: auto !important;
-    max-height: none !important;
+    position: static;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
     margin: 0;
     box-shadow: none;
 }
