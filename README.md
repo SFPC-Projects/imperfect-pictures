@@ -10,7 +10,7 @@ An open, draggable desktop of student projects for **Imperfect Pictures** at the
 
 ## Site Overview
 
-- **desktop view** (default): draggable “icons” spread across the viewport. Positions are **randomized on each load** for a fresh layout.
+- **Desktop view** (default): draggable “icons” spread across the viewport. Positions are **randomized on each load** for a fresh layout.
 - **List view**: an overlay window that opens above the desktop and lists projects in a sortable table (by **Name / Creator / Class**). Click column headers to sort ascending/descending. Close the window to return to the desktop.
 
 The bottom **nav bar** contains buttons for **About**, **List**, and **Shuffle**. Buttons use simple ASCII glyphs; **Shuffle** is visible only when no window is open (i.e., in desktop mode).
