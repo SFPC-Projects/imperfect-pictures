@@ -375,6 +375,7 @@
 
             node.addEventListener('click', (e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 selectNode(node);
 
                 document.querySelectorAll('.node-menu').forEach(m => m.remove());
