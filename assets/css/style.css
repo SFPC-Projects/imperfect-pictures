@@ -505,6 +505,14 @@ ul.details li>* {
         padding: var(--space-md) var(--space-lg);
     }
 
+    .window-panel.floating.maximized {
+        width: 100dvw !important;
+        height: calc(100dvh - var(--nav-height)) !important;
+        max-height: calc(100dvh - var(--nav-height)) !important;
+        margin: 0;
+        box-shadow: none;
+    }
+
     .list .window-viewport {
         --cols: 1fr;
     }
