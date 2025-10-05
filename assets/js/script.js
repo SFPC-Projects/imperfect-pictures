@@ -505,6 +505,16 @@
 
     function openOverlay(overlay, onOpen) {
         if (!overlay) return;
+        const panel = overlay.querySelector('.window-panel');
+        if (panel) {
+            panel.classList.remove('maximized');
+            const maxBtn = panel.querySelector('.titlebar-btn.maximize');
+            if (maxBtn) {
+                const kind = panel.closest('section')?.classList[0] || 'overlay';
+                maxBtn.textContent = '□';
+                maxBtn.setAttribute('aria-label', `Maximize ${kind} window`);
+            }
+        }
         overlay.hidden = false;
         if (onOpen) onOpen();
         updateToolbarState();
@@ -608,19 +618,23 @@
         if (!windowPanel) return;
         const maxBtn = windowPanel.querySelector('.titlebar-btn.maximize');
         const closeBtn = windowPanel.querySelector('.titlebar-close');
-        let maximized = false;
-        if (maxBtn) {
-            const getKind = () => windowPanel.closest('section')?.classList[0] || 'overlay';
-            const setMaxAria = () => {
-                const kind = getKind();
-                maxBtn.setAttribute('aria-label', maximized ? `Restore ${kind} window` : `Maximize ${kind} window`);
-            };
-            setMaxAria();
-            maxBtn.addEventListener('click', () => {
-                maximized = !maximized;
-                windowPanel.classList.toggle('maximized', maximized);
+
+        const getKind = () => windowPanel.closest('section')?.classList[0] || 'overlay';
+        const syncMaxButton = () => {
+            const maximized = windowPanel.classList.contains('maximized');
+            const kind = getKind();
+            if (maxBtn) {
                 maxBtn.textContent = maximized ? '❐' : '□';
-                setMaxAria();
+                maxBtn.setAttribute('aria-label', maximized ? `Restore ${kind} window` : `Maximize ${kind} window`);
+            }
+        };
+
+        syncMaxButton();
+
+        if (maxBtn) {
+            maxBtn.addEventListener('click', () => {
+                windowPanel.classList.toggle('maximized');
+                syncMaxButton();
             });
         }
         if (closeBtn) {
