@@ -329,6 +329,10 @@ ul.details li .name a:hover {
     cursor: grab;
     margin: 0;
     width: var(--node);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
 }
 
 .node:active {
