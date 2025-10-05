@@ -546,8 +546,24 @@ ul.details li>* {
 }
 
 .description-window .description-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-weight: bold;
     margin-bottom: var(--space-sm);
+}
+
+.description-window .description-close {
+    border: none;
+    background: transparent;
+    color: var(--ink);
+    font-size: var(--font-lg);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.description-window .description-close:hover {
+    background: var(--hover-overlay);
 }
 
 .description-window .description-body {

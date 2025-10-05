@@ -694,26 +694,27 @@
         const header = document.createElement('div');
         header.className = 'description-header';
 
+        const titleLink = document.createElement('a');
+        titleLink.href = item.link;
+        titleLink.textContent = item.title;
         if (isInternalNavigable(item)) {
-            const a = document.createElement('a');
-            a.href = item.link;
-            a.textContent = item.title;
-            a.addEventListener('click', (e) => {
+            titleLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 openProject(item.link, item.title);
                 box.remove();
             });
-            header.appendChild(a);
-        } else {
-            const a = document.createElement('a');
-            a.href = item.link;
-            a.textContent = item.title;
-            if (isExternalLink(item.link)) {
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-            }
-            header.appendChild(a);
+        } else if (isExternalLink(item.link)) {
+            titleLink.target = '_blank';
+            titleLink.rel = 'noopener noreferrer';
         }
+        header.appendChild(titleLink);
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'description-close';
+        closeBtn.setAttribute('aria-label', 'Close description');
+        closeBtn.textContent = '×';
+        closeBtn.addEventListener('click', () => box.remove());
+        header.appendChild(closeBtn);
 
         const body = document.createElement('div');
         body.className = 'description-body';
