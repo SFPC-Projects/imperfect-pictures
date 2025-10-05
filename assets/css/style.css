@@ -34,7 +34,7 @@
     --radius-md: 4px;
     --radius-lg: 8px;
 
-    --thumbnail: 150px;
+    --thumbnail: 70px;
     --icon: 20px;
     --icon-btn: 36px;
     --nav-height: 38px;
@@ -363,6 +363,7 @@ ul.details li>* {
     white-space: normal;
     overflow-wrap: anywhere;
     word-break: break-word;
+    font-size: var(--font-sm);
 }
 
 .node.selected .caption {
