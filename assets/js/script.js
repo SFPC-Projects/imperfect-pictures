@@ -839,12 +839,11 @@
         if (hasDownload) {
             const a = document.createElement('a');
             a.href = link;
-            a.download = typeof item.download === 'string' ? item.download : '';
-            a.target = '_self';
-            a.rel = '';
+            a.setAttribute('download', typeof item.download === 'string' ? item.download : '');
+            a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
+            a.remove();
             return;
         }
 
