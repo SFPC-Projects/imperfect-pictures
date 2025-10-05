@@ -740,6 +740,8 @@
         if (!listContainer) return;
         listContainer.tabIndex = 0;
         listContainer.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') return;
+
             const li = e.target.closest('li');
             if (li && listContainer.contains(li)) {
                 e.stopPropagation();
