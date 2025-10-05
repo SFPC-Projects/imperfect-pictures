@@ -825,19 +825,6 @@
         const isExternal = item?.external === true;
         const isMedia = /\.(gif|png|jpe?g|mp4|webm)$/i.test(link);
 
-        const hasDownload = !!item?.download;
-        if (hasDownload) {
-            const a = document.createElement('a');
-            a.href = link;
-            if (typeof item.download === 'string') a.setAttribute('download', item.download);
-            else a.setAttribute('download', '');
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            return;
-        }
-
         if (isExternal) {
             window.open(link, '_blank', 'noopener,noreferrer');
             return;
