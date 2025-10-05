@@ -839,9 +839,9 @@
         if (hasDownload) {
             const a = document.createElement('a');
             a.href = link;
-            if (typeof item.download === 'string') a.download = item.download;
-            else a.download = '';
-            a.style.display = 'none';
+            a.download = typeof item.download === 'string' ? item.download : '';
+            a.target = '_self';
+            a.rel = '';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -890,7 +890,7 @@
                 return;
             }
 
-            projectFrame.srcdoc = '';
+            projectFrame.removeAttribute('srcdoc');
             projectFrame.src = link;
         });
     }
