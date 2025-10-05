@@ -263,6 +263,7 @@ ul.details li {
     font-size: var(--font-base);
     cursor: default;
     user-select: none;
+    padding: inherit;
 }
 
 .list-header .col {
@@ -621,7 +622,7 @@ ul.details li>* {
     ul.details li {
         grid-template-columns: 1fr;
         align-items: start;
-        padding: var(--space-md) var(--space-sm);
+        padding: inherit;
         gap: var(--space-xxs);
     }
 
