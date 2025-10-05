@@ -295,11 +295,6 @@ ul.details li .name a:hover {
     text-decoration: underline;
 }
 
-.list-header .col,
-ul.details li>* {
-    padding: var(--space-xs) var(--space-md);
-}
-
 .about-content p {
     margin: .5rem 0 1rem;
 }
