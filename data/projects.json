@@ -11,7 +11,8 @@
                 "label": "Portfolio",
                 "url": "https://example.com/portfolio"
             }
-        ]
+        ],
+        "description": "This is a sample project entry with a download link. Click the project to download the project files."
     },
     {
         "creator": "Example Student",
@@ -24,7 +25,8 @@
                 "label": "Portfolio",
                 "url": "https://example.com/portfolio"
             }
-        ]
+        ],
+        "description": "This is a sample project entry with an internal page link. Click the project to view the project from within the site."
     },
     {
         "creator": "Kevin Cunanan Chappelle",
