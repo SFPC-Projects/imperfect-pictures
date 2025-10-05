@@ -346,9 +346,46 @@
                         document.addEventListener('click', closeMenu);
                     });
                 });
-            } else if (Array.isArray(item.creatorLinks) && item.creatorLinks.length === 1) {
-                const l = item.creatorLinks[0];
-                creatorHtml = `<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.creator)}</a>`;
+            } else if (Array.isArray(item.creatorLinks) && item.creatorLinks.length >= 1) {
+                const creatorId = `creator-${idx}`;
+                creatorHtml = `<a href="#" class="creator-link" data-id="${creatorId}">${escapeHtml(item.creator)}</a>`;
+
+                setTimeout(() => {
+                    const el = document.querySelector(`a[data-id="${creatorId}"]`);
+                    if (!el) return;
+
+                    el.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+
+                        const menu = document.createElement('div');
+                        menu.className = 'creator-menu';
+                        menu.style.position = 'absolute';
+                        menu.style.left = `${e.pageX}px`;
+                        menu.style.top = `${e.pageY}px`;
+
+                        item.creatorLinks.forEach(linkObj => {
+                            const a = document.createElement('a');
+                            a.href = linkObj.url;
+                            a.target = '_blank';
+                            a.rel = 'noopener noreferrer';
+                            a.textContent = linkObj.label;
+                            menu.appendChild(a);
+                        });
+
+                        document.body.appendChild(menu);
+
+                        const closeMenu = (ev) => {
+                            if (!menu.contains(ev.target)) {
+                                menu.remove();
+                                document.removeEventListener('click', closeMenu);
+                            }
+                        };
+                        document.addEventListener('click', closeMenu);
+                    });
+                });
             } else if (hasValue(item.creatorLink)) {
                 creatorHtml = `<a href="${escapeHtml(item.creatorLink)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.creator)}</a>`;
             } else {
