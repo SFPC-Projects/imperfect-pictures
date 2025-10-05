@@ -350,8 +350,8 @@ ul.details li .name a:hover {
 
 .node img {
     display: block;
-    max-width: 100%;
-    max-height: 100%;
+    min-width: 70px;
+    min-height: 70px;
     width: auto;
     height: auto;
     object-fit: contain;
