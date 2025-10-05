@@ -310,7 +310,7 @@
                     e.preventDefault();
                     e.stopPropagation();
 
-                    document.querySelectorAll('.node-menu').forEach(m => m.remove());
+                    document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
                     const hasDesc = hasValue(item.description);
                     const menu = document.createElement('div');
                     menu.className = 'node-menu';
@@ -375,7 +375,7 @@
                         e.preventDefault();
                         e.stopPropagation();
 
-                        document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+                        document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
 
                         const menu = document.createElement('div');
                         menu.className = 'creator-menu';
@@ -421,7 +421,7 @@
                 e.preventDefault();
                 selectNode(node);
 
-                document.querySelectorAll('.node-menu').forEach(m => m.remove());
+                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
 
                 const hasDesc = hasValue(item.description);
                 if (hasDesc) {
@@ -517,8 +517,7 @@
                     e.preventDefault();
                     e.stopPropagation();
 
-                    document.querySelectorAll('.node-menu').forEach(m => m.remove());
-                    document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+                    document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
 
                     const menu = document.createElement('div');
                     menu.className = 'node-menu';
@@ -574,7 +573,7 @@
                     e.preventDefault();
                     e.stopPropagation();
 
-                    document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+                    document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
 
                     const menu = document.createElement('div');
                     menu.className = 'creator-menu';
@@ -1056,8 +1055,7 @@
             if (titleAnchor) {
                 e.preventDefault();
                 e.stopPropagation();
-                document.querySelectorAll('.node-menu').forEach(m => m.remove());
-                document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
 
                 const item = allItems.find(it => it.link === li.dataset.link);
                 if (!item) return;
@@ -1114,8 +1112,7 @@
             if (creatorAnchor) {
                 e.preventDefault();
                 e.stopPropagation();
-                document.querySelectorAll('.node-menu').forEach(m => m.remove());
-                document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
                 const item = allItems.find(it => it.link === li.dataset.link);
                 if (!item) return;
                 if (Array.isArray(item.creatorLinks) && item.creatorLinks.length > 0) {
@@ -1148,8 +1145,7 @@
 
             e.stopPropagation();
             selectRow(li);
-            document.querySelectorAll('.node-menu').forEach(m => m.remove());
-            document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+            document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
             const item = allItems.find(it => it.link === li.dataset.link);
             if (!item) return;
             const menu = document.createElement('div');
