@@ -258,7 +258,6 @@ ul.details {
 ul.details li {
     display: grid;
     grid-template-columns: var(--cols);
-    padding: 0;
     border-bottom: 1px solid var(--gray-light);
     align-items: center;
     font-size: var(--font-base);
