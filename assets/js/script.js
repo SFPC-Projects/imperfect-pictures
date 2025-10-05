@@ -1091,8 +1091,8 @@
             const li = e.target.closest('li');
             if (!li || !listContainer.contains(li)) return;
 
-            const titleAnchor = e.target.closest('.name > a');
-            if (titleAnchor) {
+            const nameSpan = e.target.closest('.name');
+            if (nameSpan) {
                 e.preventDefault();
                 e.stopPropagation();
                 document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
@@ -1148,8 +1148,8 @@
                 return;
             }
 
-            const creatorAnchor = e.target.closest('.creator > a');
-            if (creatorAnchor) {
+            const creatorSpan = e.target.closest('.creator');
+            if (creatorSpan) {
                 e.preventDefault();
                 e.stopPropagation();
                 document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
