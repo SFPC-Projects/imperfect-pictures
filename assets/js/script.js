@@ -322,7 +322,16 @@
                     viewProj.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         menu.remove();
-                        openProject(item.link, item.title);
+                        if (item.download) {
+                            const a = document.createElement('a');
+                            a.href = item.link;
+                            a.download = typeof item.download === 'string' ? item.download : '';
+                            document.body.appendChild(a);
+                            a.click();
+                            a.remove();
+                        } else {
+                            openProject(item.link, item.title);
+                        }
                     });
                     menu.appendChild(viewProj);
 
@@ -1210,13 +1219,15 @@
             viewProj.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 menu.remove();
-                if (isInternalNavigable(item)) {
-                    openProject(item.link, item.title);
+                if (item.download) {
+                    const a = document.createElement('a');
+                    a.href = item.link;
+                    a.download = typeof item.download === 'string' ? item.download : '';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
                 } else {
-                    const external = isExternalLink(item.link);
-                    const target = external ? '_blank' : '_self';
-                    const features = external ? 'noopener' : '';
-                    window.open(item.link, target, features);
+                    openProject(item.link, item.title);
                 }
             });
             menu.appendChild(viewProj);
