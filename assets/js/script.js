@@ -510,7 +510,50 @@
             if (isInternalNavigable(item)) {
                 anchor.addEventListener('click', (e) => {
                     e.preventDefault();
-                    openProject(item.link, item.title);
+                    e.stopPropagation();
+
+                    document.querySelectorAll('.node-menu').forEach(m => m.remove());
+                    document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+
+                    const menu = document.createElement('div');
+                    menu.className = 'node-menu';
+                    menu.style.left = `${e.pageX}px`;
+                    menu.style.top = `${e.pageY}px`;
+
+                    const viewProj = document.createElement('button');
+                    viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
+                    viewProj.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        menu.remove();
+                        openProject(item.link, item.title);
+                    });
+                    menu.appendChild(viewProj);
+
+                    if (item.description) {
+                        const viewDesc = document.createElement('button');
+                        const existingDesc = li.nextElementSibling?.classList.contains('list-description');
+                        viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
+                        viewDesc.addEventListener('click', (ev) => {
+                            ev.stopPropagation();
+                            menu.remove();
+                            if (existingDesc) {
+                                li.nextElementSibling.remove();
+                            } else {
+                                listContainer.querySelectorAll('.list-description').forEach(el => el.remove());
+                                showListDescription(li, item.description);
+                            }
+                        });
+                        menu.appendChild(viewDesc);
+                    }
+
+                    document.body.appendChild(menu);
+                    const closeMenu = (ev) => {
+                        if (!menu.contains(ev.target)) {
+                            menu.remove();
+                            document.removeEventListener('click', closeMenu);
+                        }
+                    };
+                    document.addEventListener('click', closeMenu);
                 });
             }
             name.appendChild(anchor);
