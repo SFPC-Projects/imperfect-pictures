@@ -35,6 +35,7 @@
     --radius-lg: 8px;
 
     --thumbnail: 70px;
+    --caption: 140px;
     --icon: 20px;
     --icon-btn: 36px;
     --nav-height: 38px;
@@ -364,6 +365,7 @@ ul.details li .name a:hover {
     text-shadow: 1px 1px 0 var(--border-light);
     display: block;
     max-width: 100%;
+    width: var(--caption);
     white-space: normal;
     overflow-wrap: anywhere;
     word-break: break-word;
