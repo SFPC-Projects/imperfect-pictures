@@ -22,7 +22,9 @@
         const n = parseInt(v, 10);
         return Number.isFinite(n) ? n : 2000;
     })();
+
     let overlayZ = overlayZBase;
+
     function bringToFront(overlay) {
         if (!overlay) return;
         overlay.style.zIndex = String(++overlayZ);
