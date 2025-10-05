@@ -6,7 +6,12 @@
         "link": "projects/sample-download-project/sample-download.png",
         "download": "Sample-Project.png",
         "image": "projects/sample-download-project/sample-download-project.png",
-        "creatorLink": "https://example.com/portfolio"
+        "creatorLinks": [
+            {
+                "label": "Portfolio",
+                "url": "https://example.com/portfolio"
+            }
+        ]
     },
     {
         "creator": "Example Student",
@@ -14,7 +19,12 @@
         "session": "Summer 2025",
         "link": "projects/sample-internal-page-project/index.html",
         "image": "projects/sample-internal-page-project/sample-internal-page-project.png",
-        "creatorLink": "https://example.com/portfolio"
+        "creatorLinks": [
+            {
+                "label": "Portfolio",
+                "url": "https://example.com/portfolio"
+            }
+        ]
     },
     {
         "creator": "Kevin Cunanan Chappelle",
