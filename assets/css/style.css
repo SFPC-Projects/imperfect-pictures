@@ -614,7 +614,21 @@ ul.details li .name a:hover {
     }
 
     .list .window-viewport {
-        --cols: 1fr;
+        --cols: 2fr 1fr 1fr;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .list-header {
+        display: none;
+        flex-shrink: 0;
+    }
+
+    #list-container {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .list-header {
