@@ -749,13 +749,6 @@
                 selectRow(null);
             }
         });
-        listContainer.addEventListener('dblclick', (e) => {
-            const li = e.target.closest('li');
-            if (li && listContainer.contains(li)) {
-                e.preventDefault();
-                openListRow(li);
-            }
-        });
         listContainer.addEventListener('keydown', (e) => {
             const rows = Array.from(listContainer.children);
             const idx = selectedRow ? rows.indexOf(selectedRow) : -1;
