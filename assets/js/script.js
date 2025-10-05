@@ -17,6 +17,17 @@
         project: null
     };
 
+    const overlayZBase = (() => {
+        const v = getComputedStyle(document.documentElement).getPropertyValue('--z-overlay');
+        const n = parseInt(v, 10);
+        return Number.isFinite(n) ? n : 2000;
+    })();
+    let overlayZ = overlayZBase;
+    function bringToFront(overlay) {
+        if (!overlay) return;
+        overlay.style.zIndex = String(++overlayZ);
+    }
+
     let projectFrame = null;
 
     const PLACEHOLDER_PATH = 'assets/img/placeholders/placeholder_{NN}.png';
@@ -505,6 +516,7 @@
 
     function openOverlay(overlay, onOpen) {
         if (!overlay) return;
+        bringToFront(overlay);
         const panel = overlay.querySelector('.window-panel');
         if (panel) {
             panel.classList.remove('maximized');
@@ -618,6 +630,8 @@
         if (!windowPanel) return;
         const maxBtn = windowPanel.querySelector('.titlebar-btn.maximize');
         const closeBtn = windowPanel.querySelector('.titlebar-close');
+
+        windowPanel.addEventListener('mousedown', () => bringToFront(overlay));
 
         const getKind = () => windowPanel.closest('section')?.classList[0] || 'overlay';
         const syncMaxButton = () => {
