@@ -145,17 +145,14 @@
 
         document.getElementById('app').appendChild(frag);
         const appended = document.getElementById(`${kind}-overlay`);
-        // Center the window panel vertically and horizontally (default, unless maximized)
         setTimeout(() => {
             const windowPanel = appended.querySelector('.window-panel.floating');
             if (windowPanel && !windowPanel.classList.contains('maximized')) {
-                // Center the window by adjusting its margin-top (flex centering also applied via .overlay)
                 windowPanel.style.marginTop = '';
                 windowPanel.style.marginLeft = '';
                 windowPanel.style.top = '';
                 windowPanel.style.left = '';
                 windowPanel.style.transform = '';
-                // No-op: overlay .overlay uses flexbox to center
             }
         }, 0);
         attachWindowControls(appended, () => (onClose ? onClose() : closeOverlay(appended)));
