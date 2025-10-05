@@ -305,9 +305,50 @@
 
             if (isInternalNavigable(item)) {
                 a.addEventListener('click', (e) => {
-                    if (e.defaultPrevented) return; // skip if context menu was shown
                     e.preventDefault();
-                    openProject(item.link, item.title);
+                    e.stopPropagation();
+
+                    document.querySelectorAll('.node-menu').forEach(m => m.remove());
+                    const hasDesc = hasValue(item.description);
+                    const menu = document.createElement('div');
+                    menu.className = 'node-menu';
+                    menu.style.left = `${e.pageX}px`;
+                    menu.style.top = `${e.pageY}px`;
+
+                    const viewProj = document.createElement('button');
+                    viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
+                    viewProj.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        menu.remove();
+                        openProject(item.link, item.title);
+                    });
+                    menu.appendChild(viewProj);
+
+                    if (hasDesc) {
+                        const viewDesc = document.createElement('button');
+                        const descOpen = !!document.querySelector('.description-window');
+                        viewDesc.textContent = descOpen ? 'Hide Description' : 'View Description';
+                        viewDesc.addEventListener('click', (ev) => {
+                            ev.stopPropagation();
+                            menu.remove();
+                            if (descOpen) {
+                                document.querySelectorAll('.description-window').forEach(el => el.remove());
+                            } else {
+                                showDescriptionWindow(item);
+                            }
+                        });
+                        menu.appendChild(viewDesc);
+                    }
+
+                    document.body.appendChild(menu);
+
+                    const closeMenu = (ev) => {
+                        if (!menu.contains(ev.target)) {
+                            menu.remove();
+                            document.removeEventListener('click', closeMenu);
+                        }
+                    };
+                    document.addEventListener('click', closeMenu);
                 });
             }
 
