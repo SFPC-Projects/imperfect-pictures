@@ -826,7 +826,6 @@
         const isMedia = /\.(gif|png|jpe?g|mp4|webm)$/i.test(link);
 
         if (isExternal) {
-            // External projects open in a new tab
             window.open(link, '_blank', 'noopener,noreferrer');
             return;
         }
@@ -866,7 +865,6 @@
                     }
                 `;
             } else {
-                // Regular internal HTML project
                 projectFrame.srcdoc = '';
                 projectFrame.src = link;
             }
