@@ -509,6 +509,52 @@ ul.details li>* {
     background: var(--hover-blue);
 }
 
+.node-menu {
+    position: absolute;
+    background: var(--chrome);
+    border: 1px solid var(--border-dark);
+    box-shadow: var(--shadow-float);
+    z-index: calc(var(--z-overlay) + 20);
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+}
+
+.node-menu button {
+    background: transparent;
+    border: none;
+    padding: var(--space-xs) var(--space-md);
+    text-align: left;
+    color: var(--ink);
+    font-size: var(--font-sm);
+    cursor: pointer;
+}
+
+.node-menu button:hover {
+    background: var(--hover-blue);
+}
+
+.description-window {
+    position: fixed;
+    background: var(--panel);
+    border: 2px solid var(--border-dark);
+    box-shadow: var(--shadow-float);
+    padding: var(--space-lg);
+    max-width: 320px;
+    z-index: calc(var(--z-overlay) + 30);
+    color: var(--ink);
+}
+
+.description-window .description-header {
+    font-weight: bold;
+    margin-bottom: var(--space-sm);
+}
+
+.description-window .description-body {
+    font-size: var(--font-sm);
+    line-height: 1.4;
+}
+
 @media (max-width: 640px) {
     :root {
         --thumbnail: 90px;

@@ -365,6 +365,53 @@
             node.addEventListener('click', (e) => {
                 e.stopPropagation();
                 selectNode(node);
+
+                document.querySelectorAll('.node-menu').forEach(m => m.remove());
+
+                const hasDesc = hasValue(item.description);
+                if (hasDesc) {
+                    e.preventDefault();
+
+                    const menu = document.createElement('div');
+                    menu.className = 'node-menu';
+                    menu.style.left = `${e.pageX}px`;
+                    menu.style.top = `${e.pageY}px`;
+
+                    const viewProj = document.createElement('button');
+                    viewProj.textContent = 'View Project';
+                    viewProj.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        menu.remove();
+                        if (isInternalNavigable(item)) {
+                            openProject(item.link, item.title);
+                        } else {
+                            const external = isExternalLink(item.link);
+                            const target = external ? '_blank' : '_self';
+                            const features = external ? 'noopener' : '';
+                            window.open(item.link, target, features);
+                        }
+                    });
+                    menu.appendChild(viewProj);
+
+                    const viewDesc = document.createElement('button');
+                    viewDesc.textContent = 'View Description';
+                    viewDesc.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        menu.remove();
+                        showDescriptionWindow(item);
+                    });
+                    menu.appendChild(viewDesc);
+
+                    document.body.appendChild(menu);
+
+                    const closeMenu = (ev) => {
+                        if (!menu.contains(ev.target)) {
+                            menu.remove();
+                            document.removeEventListener('click', closeMenu);
+                        }
+                    };
+                    document.addEventListener('click', closeMenu);
+                }
             });
             node.addEventListener('dblclick', (e) => {
                 if (e.target.closest('a')) return;
@@ -636,6 +683,31 @@
                 section.setAttribute('aria-label', titleText ? `${base} — ${titleText}` : base);
             }
         });
+    }
+
+    function showDescriptionWindow(item) {
+        document.querySelectorAll('.description-window').forEach(el => el.remove());
+
+        const box = document.createElement('div');
+        box.className = 'description-window';
+        box.innerHTML = `
+        <div class="description-header">${escapeHtml(item.title)}</div>
+        <div class="description-body">${escapeHtml(item.description)}</div>
+    `;
+        document.body.appendChild(box);
+
+        const { innerWidth, innerHeight } = window;
+        const rect = box.getBoundingClientRect();
+        box.style.left = `${(innerWidth - rect.width) / 2}px`;
+        box.style.top = `${(innerHeight - rect.height) / 2.5}px`;
+
+        const closeWin = (e) => {
+            if (!box.contains(e.target)) {
+                box.remove();
+                document.removeEventListener('click', closeWin);
+            }
+        };
+        document.addEventListener('click', closeWin);
     }
 
     function updateToolbarState() {
