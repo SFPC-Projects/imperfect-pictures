@@ -1091,14 +1091,16 @@
             const li = e.target.closest('li');
             if (!li || !listContainer.contains(li)) return;
 
-            const titleAnchor = e.target.closest('.name > a');
-            if (titleAnchor) {
+            const nameSpan = e.target.closest('.name');
+            if (nameSpan) {
                 e.preventDefault();
                 e.stopPropagation();
                 document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
 
+                const li = nameSpan.closest('li');
                 const item = allItems.find(it => it.link === li.dataset.link);
                 if (!item) return;
+
                 const menu = document.createElement('div');
                 menu.className = 'node-menu';
                 menu.style.left = `${e.pageX}px`;
