@@ -690,10 +690,37 @@
 
         const box = document.createElement('div');
         box.className = 'description-window';
-        box.innerHTML = `
-        <div class="description-header">${escapeHtml(item.title)}</div>
-        <div class="description-body">${escapeHtml(item.description)}</div>
-    `;
+
+        const header = document.createElement('div');
+        header.className = 'description-header';
+
+        if (isInternalNavigable(item)) {
+            const a = document.createElement('a');
+            a.href = item.link;
+            a.textContent = item.title;
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                openProject(item.link, item.title);
+                box.remove();
+            });
+            header.appendChild(a);
+        } else {
+            const a = document.createElement('a');
+            a.href = item.link;
+            a.textContent = item.title;
+            if (isExternalLink(item.link)) {
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+            }
+            header.appendChild(a);
+        }
+
+        const body = document.createElement('div');
+        body.className = 'description-body';
+        body.textContent = item.description || '';
+
+        box.appendChild(header);
+        box.appendChild(body);
         document.body.appendChild(box);
 
         const { innerWidth, innerHeight } = window;
