@@ -22,7 +22,12 @@
         "session": "Summer 2025",
         "link": "https://newart.city/show/specter/",
         "image": "projects/specter/specter.png",
-        "creatorLink": "https://kvnchpl.com"
+        "creatorLinks": [
+            {
+                "label": "Website",
+                "url": "https://kvnchpl.com"
+            }
+        ]
     },
     {
         "creator": "Cece Wettemann",
@@ -93,11 +98,11 @@
         "creatorLinks": [
             {
                 "label": "Website",
-                "url": "https://jackieis.online/"
+                "url": "https://jackieis.online"
             },
             {
                 "label": "Instagram",
-                "url": "https://www.instagram.com/jackieis.online/"
+                "url": "https://www.instagram.com/jackieis.online"
             }
         ]
     },
