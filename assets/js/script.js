@@ -886,19 +886,25 @@
         if (!listContainer) return;
         listContainer.tabIndex = 0;
         listContainer.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li || !listContainer.contains(li)) return;
+
             if (e.target.tagName === 'A') return;
 
-            const li = e.target.closest('li');
-            if (li && listContainer.contains(li)) {
-                e.stopPropagation();
-                selectRow(li);
-                openListRow(li);
-                const item = allItems.find(it => it.link === li.dataset.link);
-                if (item && item.description) {
-                    showListDescription(li, item.description);
-                }
-            } else {
-                selectRow(null);
+            e.stopPropagation();
+            selectRow(li);
+
+            const item = allItems.find(it => it.link === li.dataset.link);
+            const existingDesc = li.nextElementSibling?.classList.contains('list-description');
+
+            if (existingDesc) {
+                li.nextElementSibling.remove();
+                return;
+            }
+
+            listContainer.querySelectorAll('.list-description').forEach(el => el.remove());
+            if (item && item.description) {
+                showListDescription(li, item.description);
             }
         });
         listContainer.addEventListener('keydown', (e) => {
