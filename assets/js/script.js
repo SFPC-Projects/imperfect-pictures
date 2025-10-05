@@ -1,6 +1,7 @@
 (function () {
     const byId = (id) => document.getElementById(id);
     const desktop = byId('desktop');
+    const overlayBackdrop = byId('overlay-backdrop');
     let listContainer = null;
     const shuffleBtn = byId('shuffle-button');
     const listBtn = byId('list-button');
@@ -559,6 +560,8 @@
         const aboutOpen = !!(windows.about && !windows.about.overlay.hidden);
         const listOpen = !!(windows.list && !windows.list.overlay.hidden);
         const projectOpen = !!(windows.project && !windows.project.overlay.hidden);
+        const anyOpen = aboutOpen || listOpen || projectOpen;
+        if (overlayBackdrop) overlayBackdrop.hidden = !anyOpen;
         if (aboutBtn) {
             aboutBtn.classList.toggle('active', aboutOpen);
             aboutBtn.setAttribute('aria-pressed', String(aboutOpen));

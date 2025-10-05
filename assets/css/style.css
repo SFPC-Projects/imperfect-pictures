@@ -93,11 +93,22 @@ a:visited {
 .overlay {
     position: absolute;
     inset: 0;
-    background: var(--overlay-dim);
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: var(--z-overlay);
+}
+
+.overlay-backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-dim);
+    z-index: var(--z-overlay);
+}
+
+.overlay-backdrop[hidden] {
+    display: none !important;
 }
 
 .overlay[hidden] {
