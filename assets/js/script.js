@@ -461,7 +461,45 @@
 
             const creator = document.createElement('span');
             creator.className = 'creator';
-            if (hasValue(item.creatorLink)) {
+
+            if (Array.isArray(item.creatorLinks) && item.creatorLinks.length > 0) {
+                const creatorA = document.createElement('a');
+                creatorA.href = '#';
+                creatorA.textContent = item.creator || '';
+                creatorA.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+
+                    const menu = document.createElement('div');
+                    menu.className = 'creator-menu';
+                    menu.style.position = 'absolute';
+                    menu.style.left = `${e.pageX}px`;
+                    menu.style.top = `${e.pageY}px`;
+
+                    item.creatorLinks.forEach(linkObj => {
+                        const a = document.createElement('a');
+                        a.href = linkObj.url;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+                        a.textContent = linkObj.label;
+                        menu.appendChild(a);
+                    });
+
+                    document.body.appendChild(menu);
+
+                    const closeMenu = (ev) => {
+                        if (!menu.contains(ev.target)) {
+                            menu.remove();
+                            document.removeEventListener('click', closeMenu);
+                        }
+                    };
+                    document.addEventListener('click', closeMenu);
+                });
+
+                creator.appendChild(creatorA);
+            } else if (hasValue(item.creatorLink)) {
                 const creatorA = document.createElement('a');
                 creatorA.href = item.creatorLink;
                 creatorA.target = '_blank';
