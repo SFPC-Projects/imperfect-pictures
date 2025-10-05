@@ -631,10 +631,6 @@ ul.details li .name a:hover {
         overflow-x: hidden;
     }
 
-    .list-header {
-        display: none;
-    }
-
     .list-description {
         grid-column: 1 / -1;
         background: var(--gray-bg);
