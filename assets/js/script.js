@@ -831,14 +831,16 @@
         if (!w) return;
 
         const item = allItems.find(it => it.link === link);
-        const isExternal = item?.external === true;
-        const isMedia = /\.(gif|png|jpe?g|mp4|webm)$/i.test(link);
+        const isExternal = item?.external === true || isExternalLink(link);
         const hasDownload = !!item?.download;
+        const isMedia = /\.(gif|png|jpe?g|mp4|webm)$/i.test(link);
+        const isHtml = /\.html?$/i.test(link);
+
         if (hasDownload) {
             const a = document.createElement('a');
             a.href = link;
-            if (typeof item.download === 'string') a.setAttribute('download', item.download);
-            else a.setAttribute('download', '');
+            if (typeof item.download === 'string') a.download = item.download;
+            else a.download = '';
             a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
@@ -885,10 +887,11 @@
                         : `<img src="${link}" alt="${titleText || 'Project'}">`
                     }
                 `;
-            } else {
-                projectFrame.srcdoc = '';
-                projectFrame.src = link;
+                return;
             }
+
+            projectFrame.srcdoc = '';
+            projectFrame.src = link;
         });
     }
 
