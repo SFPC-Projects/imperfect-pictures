@@ -1091,12 +1091,14 @@
                     }
                 }
                 const appRect = document.getElementById('app').getBoundingClientRect();
+                const footer = document.querySelector('.nav-bar');
+                const footerHeight = footer ? footer.offsetHeight : 0;
                 const panelRect = windowPanel.getBoundingClientRect();
                 let nx = origX + dx;
                 let ny = origY + dy;
                 const w = panelRect.width, h = panelRect.height;
                 const maxX = appRect.width - w;
-                const maxY = appRect.height - h;
+                const maxY = appRect.height - h - footerHeight;
                 nx = clamp(nx, 0, maxX);
                 ny = clamp(ny, 0, maxY);
                 setWindowPanelPosition(windowPanel, nx, ny);
