@@ -525,11 +525,12 @@
         };
 
         const onClickCapture = (e) => {
-            if (suppressClick) {
+            if (!suppressClick) return;
+            if (desktop && desktop.contains(e.target)) {
                 e.stopPropagation();
                 e.preventDefault();
-                suppressClick = false;
             }
+            suppressClick = false;
         };
 
         desktop.addEventListener('pointerdown', onPointerDown);
