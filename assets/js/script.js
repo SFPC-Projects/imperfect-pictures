@@ -404,11 +404,16 @@
                     menu.appendChild(viewProj);
 
                     const viewDesc = document.createElement('button');
-                    viewDesc.textContent = 'View Description';
+                    const descOpen = !!document.querySelector('.description-window');
+                    viewDesc.textContent = descOpen ? 'Hide Description' : 'View Description';
                     viewDesc.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         menu.remove();
-                        showDescriptionWindow(item);
+                        if (descOpen) {
+                            document.querySelectorAll('.description-window').forEach(el => el.remove());
+                        } else {
+                            showDescriptionWindow(item);
+                        }
                     });
                     menu.appendChild(viewDesc);
 
@@ -997,11 +1002,11 @@
 
                 if (item.description) {
                     const viewDesc = document.createElement('button');
-                    viewDesc.textContent = 'View Description';
+                    const existingDesc = li.nextElementSibling?.classList.contains('list-description');
+                    viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
                     viewDesc.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         menu.remove();
-                        const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                         if (existingDesc) {
                             li.nextElementSibling.remove();
                         } else {
@@ -1088,11 +1093,11 @@
 
             if (item.description) {
                 const viewDesc = document.createElement('button');
-                viewDesc.textContent = 'View Description';
+                const existingDesc = li.nextElementSibling?.classList.contains('list-description');
+                viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
                 viewDesc.addEventListener('click', (ev) => {
                     ev.stopPropagation();
                     menu.remove();
-                    const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                     if (existingDesc) {
                         li.nextElementSibling.remove();
                     } else {
