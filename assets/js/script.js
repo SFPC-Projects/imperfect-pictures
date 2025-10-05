@@ -1150,6 +1150,7 @@
                     viewDesc.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         menu.remove();
+                        selectRow(li);
                         if (existingDesc) {
                             li.nextElementSibling.remove();
                         } else {
