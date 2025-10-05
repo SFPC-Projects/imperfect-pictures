@@ -305,6 +305,7 @@
 
             if (isInternalNavigable(item)) {
                 a.addEventListener('click', (e) => {
+                    if (e.defaultPrevented) return;
                     e.preventDefault();
                     openProject(item.link, item.title);
                 });
