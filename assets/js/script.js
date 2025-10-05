@@ -630,6 +630,12 @@
             updateSortIndicators();
             shuffleNodes();
             enableDrag();
+            if (window.matchMedia("(max-width: 640px)").matches) {
+                const w = ensureList();
+                if (w && w.overlay.hidden) {
+                    openOverlay(w.overlay, () => listContainer && listContainer.focus());
+                }
+            }
         })
         .catch(err => {
             console.error('Failed to load data/projects.json', err);
