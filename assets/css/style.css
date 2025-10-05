@@ -286,6 +286,14 @@ ul.details li.selected {
     color: var(--white);
 }
 
+ul.details li.selected a {
+    color: var(--white);
+}
+
+ul.details li.selected a:hover {
+    text-decoration: underline;
+}
+
 ul.details li .name a {
     color: inherit;
     text-decoration: none;
