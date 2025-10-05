@@ -979,7 +979,6 @@
                 menu.style.left = `${e.pageX}px`;
                 menu.style.top = `${e.pageY}px`;
 
-                // View Project
                 const viewProj = document.createElement('button');
                 viewProj.textContent = 'View Project';
                 viewProj.addEventListener('click', (ev) => {
@@ -1002,7 +1001,6 @@
                     viewDesc.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         menu.remove();
-                        // Only show description inline from the button, not from row click
                         const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                         if (existingDesc) {
                             li.nextElementSibling.remove();
