@@ -820,13 +820,55 @@
     function openProject(link, titleText) {
         const w = ensureProject();
         if (!w) return;
+
+        const item = allItems.find(it => it.link === link);
+        const isExternal = item?.external === true;
+        const isMedia = /\.(gif|png|jpe?g|mp4|webm)$/i.test(link);
+
+        if (isExternal) {
+            // External projects open in a new tab
+            window.open(link, '_blank', 'noopener,noreferrer');
+            return;
+        }
+
         openOverlay(w.overlay, () => {
             w.titleSpan.textContent = titleText || 'Project';
-            if (projectFrame) projectFrame.src = link;
             const section = w.overlay.querySelector('section');
             if (section) {
                 const base = 'Project window';
                 section.setAttribute('aria-label', titleText ? `${base} — ${titleText}` : base);
+            }
+
+            if (!projectFrame) return;
+
+            if (isMedia) {
+                const isVideo = /\.(mp4|webm)$/i.test(link);
+                projectFrame.removeAttribute('src');
+                projectFrame.srcdoc = `
+                    <style>
+                        body {
+                            margin: 0;
+                            background: #000;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                        }
+                        img, video {
+                            max-width: 100%;
+                            max-height: 100%;
+                            object-fit: contain;
+                        }
+                    </style>
+                    ${isVideo
+                        ? `<video src="${link}" autoplay loop muted playsinline></video>`
+                        : `<img src="${link}" alt="${titleText || 'Project'}">`
+                    }
+                `;
+            } else {
+                // Regular internal HTML project
+                projectFrame.srcdoc = '';
+                projectFrame.src = link;
             }
         });
     }
