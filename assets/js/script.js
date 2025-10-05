@@ -319,8 +319,8 @@
 
                     const viewProj = document.createElement('button');
                     viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-                    viewProj.addEventListener('click', (ev) => {
-                        ev.stopPropagation();
+                    viewProj.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         menu.remove();
                         openProject(item.link, item.title);
                     });
@@ -330,8 +330,8 @@
                         const viewDesc = document.createElement('button');
                         const descOpen = !!document.querySelector('.description-window');
                         viewDesc.textContent = descOpen ? 'Hide Description' : 'View Description';
-                        viewDesc.addEventListener('click', (ev) => {
-                            ev.stopPropagation();
+                        viewDesc.addEventListener('click', (e) => {
+                            e.stopPropagation();
                             menu.remove();
                             if (descOpen) {
                                 document.querySelectorAll('.description-window').forEach(el => el.remove());
@@ -344,8 +344,8 @@
 
                     document.body.appendChild(menu);
 
-                    const closeMenu = (ev) => {
-                        if (!menu.contains(ev.target)) {
+                    const closeMenu = (e) => {
+                        if (!menu.contains(e.target)) {
                             menu.remove();
                             document.removeEventListener('click', closeMenu);
                         }
@@ -394,8 +394,8 @@
 
                         document.body.appendChild(menu);
 
-                        const closeMenu = (ev) => {
-                            if (!menu.contains(ev.target)) {
+                        const closeMenu = (e) => {
+                            if (!menu.contains(e.target)) {
                                 menu.remove();
                                 document.removeEventListener('click', closeMenu);
                             }
@@ -432,8 +432,8 @@
 
                     const viewProj = document.createElement('button');
                     viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-                    viewProj.addEventListener('click', (ev) => {
-                        ev.stopPropagation();
+                    viewProj.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         menu.remove();
                         if (isInternalNavigable(item)) {
                             openProject(item.link, item.title);
@@ -449,8 +449,8 @@
                     const viewDesc = document.createElement('button');
                     const descOpen = !!document.querySelector('.description-window');
                     viewDesc.textContent = descOpen ? 'Hide Description' : 'View Description';
-                    viewDesc.addEventListener('click', (ev) => {
-                        ev.stopPropagation();
+                    viewDesc.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         menu.remove();
                         if (descOpen) {
                             document.querySelectorAll('.description-window').forEach(el => el.remove());
@@ -462,8 +462,8 @@
 
                     document.body.appendChild(menu);
 
-                    const closeMenu = (ev) => {
-                        if (!menu.contains(ev.target)) {
+                    const closeMenu = (e) => {
+                        if (!menu.contains(e.target)) {
                             menu.remove();
                             document.removeEventListener('click', closeMenu);
                         }
@@ -526,8 +526,8 @@
 
                     const viewProj = document.createElement('button');
                     viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-                    viewProj.addEventListener('click', (ev) => {
-                        ev.stopPropagation();
+                    viewProj.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         menu.remove();
                         openProject(item.link, item.title);
                     });
@@ -537,8 +537,8 @@
                         const viewDesc = document.createElement('button');
                         const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                         viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                        viewDesc.addEventListener('click', (ev) => {
-                            ev.stopPropagation();
+                        viewDesc.addEventListener('click', (e) => {
+                            e.stopPropagation();
                             menu.remove();
                             if (existingDesc) {
                                 li.nextElementSibling.remove();
@@ -551,8 +551,8 @@
                     }
 
                     document.body.appendChild(menu);
-                    const closeMenu = (ev) => {
-                        if (!menu.contains(ev.target)) {
+                    const closeMenu = (e) => {
+                        if (!menu.contains(e.target)) {
                             menu.remove();
                             document.removeEventListener('click', closeMenu);
                         }
@@ -592,8 +592,8 @@
 
                     document.body.appendChild(menu);
 
-                    const closeMenu = (ev) => {
-                        if (!menu.contains(ev.target)) {
+                    const closeMenu = (e) => {
+                        if (!menu.contains(e.target)) {
                             menu.remove();
                             document.removeEventListener('click', closeMenu);
                         }
@@ -1108,8 +1108,8 @@
 
                 const viewProj = document.createElement('button');
                 viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-                viewProj.addEventListener('click', (ev) => {
-                    ev.stopPropagation();
+                viewProj.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     menu.remove();
                     if (isInternalNavigable(item)) {
                         openProject(item.link, item.title);
@@ -1126,8 +1126,8 @@
                     const viewDesc = document.createElement('button');
                     const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                     viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                    viewDesc.addEventListener('click', (ev) => {
-                        ev.stopPropagation();
+                    viewDesc.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         menu.remove();
                         if (existingDesc) {
                             li.nextElementSibling.remove();
@@ -1140,8 +1140,8 @@
                 }
 
                 document.body.appendChild(menu);
-                const closeMenu = (ev) => {
-                    if (!menu.contains(ev.target)) {
+                const closeMenu = (e) => {
+                    if (!menu.contains(e.target)) {
                         menu.remove();
                         document.removeEventListener('click', closeMenu);
                     }
@@ -1172,8 +1172,8 @@
                         menu.appendChild(a);
                     });
                     document.body.appendChild(menu);
-                    const closeMenu = (ev) => {
-                        if (!menu.contains(ev.target)) {
+                    const closeMenu = (e) => {
+                        if (!menu.contains(e.target)) {
                             menu.remove();
                             document.removeEventListener('click', closeMenu);
                         }
@@ -1197,8 +1197,8 @@
 
             const viewProj = document.createElement('button');
             viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-            viewProj.addEventListener('click', (ev) => {
-                ev.stopPropagation();
+            viewProj.addEventListener('click', (e) => {
+                e.stopPropagation();
                 menu.remove();
                 if (isInternalNavigable(item)) {
                     openProject(item.link, item.title);
@@ -1215,8 +1215,8 @@
                 const viewDesc = document.createElement('button');
                 const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                 viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                viewDesc.addEventListener('click', (ev) => {
-                    ev.stopPropagation();
+                viewDesc.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     menu.remove();
                     if (existingDesc) {
                         li.nextElementSibling.remove();
@@ -1229,8 +1229,8 @@
             }
 
             document.body.appendChild(menu);
-            const closeMenu = (ev) => {
-                if (!menu.contains(ev.target)) {
+            const closeMenu = (e) => {
+                if (!menu.contains(e.target)) {
                     menu.remove();
                     document.removeEventListener('click', closeMenu);
                 }
@@ -1250,7 +1250,7 @@
             } else if (e.key === 'ArrowUp') {
                 const prev = rows[Math.max(idx - 1, 0)] || rows[0];
                 selectRow(prev);
-                prev && prev.scrollIntoView({
+                prev && pre.scrollIntoView({
                     block: 'nearest'
                 });
                 e.preventDefault();
