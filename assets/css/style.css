@@ -235,9 +235,10 @@ a:visited {
 .list-header {
     position: sticky;
     top: 0;
-    z-index: 1;
     display: grid;
     grid-template-columns: var(--cols);
+    padding: var(--space-md);
+    align-items: center;
     gap: 0;
     background: var(--chrome);
     color: var(--ink);
@@ -246,6 +247,7 @@ a:visited {
         inset -1px -1px 0 var(--border-dark),
         inset 1px 1px 0 var(--border-light);
     font-size: var(--font-sm);
+    z-index: 2;
 }
 
 ul.details {
@@ -262,7 +264,7 @@ ul.details li {
     font-size: var(--font-base);
     cursor: default;
     user-select: none;
-    padding: inherit;
+    padding: var(--space-md);
 }
 
 .list-header .col {
