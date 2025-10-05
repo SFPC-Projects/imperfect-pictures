@@ -744,6 +744,7 @@
             if (li && listContainer.contains(li)) {
                 e.stopPropagation();
                 selectRow(li);
+                openListRow(li);
             } else {
                 selectRow(null);
             }
