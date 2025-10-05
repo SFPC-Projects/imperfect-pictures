@@ -89,7 +89,17 @@
         "title": "diary2glitter",
         "session": "Summer 2025",
         "link": "https://jackieis.online/diary2glitter/",
-        "image": "projects/diary-2-glitter/diary-2-glitter.gif"
+        "image": "projects/diary-2-glitter/diary-2-glitter.gif",
+        "creatorLinks": [
+            {
+                "label": "Website",
+                "url": "https://jackieis.online/"
+            },
+            {
+                "label": "Instagram",
+                "url": "https://www.instagram.com/jackieis.online/"
+            }
+        ]
     },
     {
         "creator": "Aurora D'Errico",

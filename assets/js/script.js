@@ -306,7 +306,50 @@
             const cap = document.createElement('figcaption');
             cap.className = 'caption';
             let creatorHtml;
-            if (hasValue(item.creatorLink)) {
+            if (Array.isArray(item.creatorLinks) && item.creatorLinks.length > 1) {
+                const creatorId = `creator-${idx}`;
+                creatorHtml = `<a href="#" class="creator-link" data-id="${creatorId}">${escapeHtml(item.creator)}</a>`;
+
+                setTimeout(() => {
+                    const el = document.querySelector(`a[data-id="${creatorId}"]`);
+                    if (!el) return;
+
+                    el.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        document.querySelectorAll('.creator-menu').forEach(m => m.remove());
+
+                        const menu = document.createElement('div');
+                        menu.className = 'creator-menu';
+                        menu.style.position = 'absolute';
+                        menu.style.left = `${e.pageX}px`;
+                        menu.style.top = `${e.pageY}px`;
+
+                        item.creatorLinks.forEach(linkObj => {
+                            const a = document.createElement('a');
+                            a.href = linkObj.url;
+                            a.target = '_blank';
+                            a.rel = 'noopener noreferrer';
+                            a.textContent = linkObj.label;
+                            menu.appendChild(a);
+                        });
+
+                        document.body.appendChild(menu);
+
+                        const closeMenu = (ev) => {
+                            if (!menu.contains(ev.target)) {
+                                menu.remove();
+                                document.removeEventListener('click', closeMenu);
+                            }
+                        };
+                        document.addEventListener('click', closeMenu);
+                    });
+                });
+            } else if (Array.isArray(item.creatorLinks) && item.creatorLinks.length === 1) {
+                const l = item.creatorLinks[0];
+                creatorHtml = `<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.creator)}</a>`;
+            } else if (hasValue(item.creatorLink)) {
                 creatorHtml = `<a href="${escapeHtml(item.creatorLink)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.creator)}</a>`;
             } else {
                 creatorHtml = escapeHtml(item.creator);
@@ -721,8 +764,6 @@
         });
     }
 
-
-
     function bindSortingHeaders(root) {
         const sortHeaderName = root.querySelector('.list-header .name');
         const sortHeaderCreator = root.querySelector('.list-header .creator');
@@ -736,6 +777,14 @@
         desktop.addEventListener('click', () => selectNode(null));
     }
 
+    function showListDescription(row, text) {
+        listContainer.querySelectorAll('.list-description').forEach(el => el.remove());
+        const desc = document.createElement('li');
+        desc.className = 'list-description';
+        desc.textContent = text;
+        listContainer.insertBefore(desc, row.nextSibling);
+    }
+
     function bindListInteractions() {
         if (!listContainer) return;
         listContainer.tabIndex = 0;
@@ -747,6 +796,10 @@
                 e.stopPropagation();
                 selectRow(li);
                 openListRow(li);
+                const item = allItems.find(it => it.link === li.dataset.link);
+                if (item && item.description) {
+                    showListDescription(li, item.description);
+                }
             } else {
                 selectRow(null);
             }

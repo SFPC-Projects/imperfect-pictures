@@ -486,6 +486,29 @@ ul.details li>* {
     white-space: nowrap;
 }
 
+.creator-menu {
+    position: absolute;
+    background: var(--chrome);
+    border: 1px solid var(--border-dark);
+    box-shadow: var(--shadow-float);
+    z-index: calc(var(--z-overlay) + 10);
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+    font-size: var(--font-sm);
+}
+
+.creator-menu a {
+    padding: var(--space-xs) var(--space-md);
+    text-decoration: none;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+.creator-menu a:hover {
+    background: var(--hover-blue);
+}
+
 @media (max-width: 640px) {
     :root {
         --thumbnail: 90px;
@@ -519,6 +542,16 @@ ul.details li>* {
 
     .list-header {
         display: none;
+    }
+
+    .list-description {
+        grid-column: 1 / -1;
+        background: var(--gray-bg);
+        color: var(--muted);
+        padding: var(--space-md);
+        font-size: var(--font-sm);
+        border-bottom: 1px solid var(--border-light);
+        line-height: 1.4;
     }
 
     ul.details li {
