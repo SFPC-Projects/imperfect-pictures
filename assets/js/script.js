@@ -145,7 +145,6 @@
 
         document.getElementById('app').appendChild(frag);
         const appended = document.getElementById(`${kind}-overlay`);
-        // Ensure default centering and height for all overlays
         setTimeout(() => {
             const windowPanel = appended.querySelector('.window-panel.floating');
             if (windowPanel) {
@@ -180,7 +179,13 @@
 
     function ensureList() {
         if (windows.list) return windows.list;
-        const w = createWindow('list', 'Projects', tplList, () => closeOverlay(w.overlay));
+        const w = createWindow('list', 'Projects', tplList, () => {
+            closeOverlay(w.overlay);
+            if (selectedRow) {
+                selectedRow.classList.remove('selected');
+                selectedRow = null;
+            }
+        });
         if (!w) return null;
         listContainer = w.viewport.querySelector('#list-container');
         bindSortingHeaders(w.overlay);
