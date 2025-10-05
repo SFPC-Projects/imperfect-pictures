@@ -305,7 +305,7 @@
 
             if (isInternalNavigable(item)) {
                 a.addEventListener('click', (e) => {
-                    if (e.defaultPrevented) return;
+                    if (e.defaultPrevented) return; // skip if context menu was shown
                     e.preventDefault();
                     openProject(item.link, item.title);
                 });
@@ -382,8 +382,6 @@
 
                 const hasDesc = hasValue(item.description);
                 if (hasDesc) {
-                    e.preventDefault();
-
                     const menu = document.createElement('div');
                     menu.className = 'node-menu';
                     menu.style.left = `${e.pageX}px`;
