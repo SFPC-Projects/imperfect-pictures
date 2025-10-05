@@ -388,7 +388,7 @@
                     menu.style.top = `${e.pageY}px`;
 
                     const viewProj = document.createElement('button');
-                    viewProj.textContent = 'View Project';
+                    viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
                     viewProj.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         menu.remove();
@@ -985,7 +985,7 @@
                 menu.style.top = `${e.pageY}px`;
 
                 const viewProj = document.createElement('button');
-                viewProj.textContent = 'View Project';
+                viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
                 viewProj.addEventListener('click', (ev) => {
                     ev.stopPropagation();
                     menu.remove();
@@ -1076,7 +1076,7 @@
             menu.style.top = `${e.pageY}px`;
 
             const viewProj = document.createElement('button');
-            viewProj.textContent = 'View Project';
+            viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
             viewProj.addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 menu.remove();
