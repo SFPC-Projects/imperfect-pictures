@@ -3,9 +3,9 @@
     const desktop = byId('desktop');
     const overlayBackdrop = byId('overlay-backdrop');
     let listContainer = null;
-    const shuffleBtn = byId('shuffle-button');
-    const listBtn = byId('list-button');
-    const aboutBtn = byId('about-button');
+    const shuffleButton = byId('shuffle-button');
+    const listButton = byId('list-button');
+    const aboutButton = byId('about-button');
 
     const tplOverlay = byId('overlay-template');
     const tplAbout = byId('about-content-template');
@@ -145,9 +145,14 @@
 
         document.getElementById('app').appendChild(frag);
         const appended = document.getElementById(`${kind}-overlay`);
+        // Ensure default centering and height for all overlays
         setTimeout(() => {
             const windowPanel = appended.querySelector('.window-panel.floating');
-            if (windowPanel && !windowPanel.classList.contains('maximized')) {
+            if (windowPanel) {
+                windowPanel.classList.remove('maximized');
+                windowPanel.style.width = '';
+                windowPanel.style.height = '';
+                windowPanel.style.maxHeight = '75dvh';
                 windowPanel.style.marginTop = '';
                 windowPanel.style.marginLeft = '';
                 windowPanel.style.top = '';
@@ -786,23 +791,20 @@
         const panel = overlay.querySelector('.window-panel');
         if (panel) {
             panel.classList.remove('maximized');
+            panel.style.width = '';
+            panel.style.height = '';
+            panel.style.maxHeight = '75dvh';
+            panel.style.marginTop = '';
+            panel.style.marginLeft = '';
+            panel.style.top = '';
+            panel.style.left = '';
+            panel.style.transform = '';
             const maxBtn = panel.querySelector('.titlebar-btn.maximize');
             if (maxBtn) {
                 const kind = panel.closest('section')?.classList[0] || 'overlay';
                 maxBtn.textContent = '□';
                 maxBtn.setAttribute('aria-label', `Maximize ${kind} window`);
             }
-            // Ensure default centering for all overlays (About, List, Project)
-            setTimeout(() => {
-                if (!panel.classList.contains('maximized')) {
-                    panel.style.marginTop = '';
-                    panel.style.marginLeft = '';
-                    panel.style.top = '';
-                    panel.style.left = '';
-                    panel.style.transform = '';
-                    // No-op: overlay uses flex centering
-                }
-            }, 0);
         }
         overlay.hidden = false;
         if (onOpen) onOpen();
@@ -889,15 +891,17 @@
         const projectOpen = !!(windows.project && !windows.project.overlay.hidden);
         const anyOpen = aboutOpen || listOpen || projectOpen;
         if (overlayBackdrop) overlayBackdrop.hidden = !anyOpen;
-        if (aboutBtn) {
-            aboutBtn.classList.toggle('active', aboutOpen);
-            aboutBtn.setAttribute('aria-pressed', String(aboutOpen));
+        if (aboutButton) {
+            aboutButton.classList.toggle('active', aboutOpen);
+            aboutButton.setAttribute('aria-pressed', String(aboutOpen));
+            aboutButton.setAttribute('aria-label', aboutOpen ? 'About window open' : 'About');
         }
-        if (listBtn) {
-            listBtn.classList.toggle('active', listOpen);
-            listBtn.setAttribute('aria-pressed', String(listOpen));
+        if (listButton) {
+            listButton.classList.toggle('active', listOpen);
+            listButton.setAttribute('aria-pressed', String(listOpen));
+            listButton.setAttribute('aria-label', listOpen ? 'Project list window open' : 'Switch to list view');
         }
-        if (shuffleBtn) shuffleBtn.hidden = (aboutOpen || listOpen || projectOpen);
+        if (shuffleButton) shuffleButton.hidden = (aboutOpen || listOpen || projectOpen);
     }
 
     /* INITIALIZATION */
@@ -930,29 +934,34 @@
             desktop.innerHTML = '<p style="padding:1rem">Error loading projects, please try refreshing.</p>';
         });
 
-    aboutBtn && aboutBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const w = ensureAbout();
-        if (!w) return;
-        if (w.overlay.hidden) {
-            openOverlay(w.overlay);
-        } else {
-            closeOverlay(w.overlay);
-        }
-    });
+    if (aboutButton) {
+        aboutButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const w = ensureAbout();
+            if (!w) return;
+            if (w.overlay.hidden) {
+                openOverlay(w.overlay);
+            } else {
+                closeOverlay(w.overlay);
+            }
+        });
+    }
 
-    listBtn && listBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const w = ensureList();
-        if (!w) return;
-        if (w.overlay.hidden) {
-            openOverlay(w.overlay, () => listContainer && listContainer.focus());
-        } else {
-            closeOverlay(w.overlay);
-        }
-    });
-    if (shuffleBtn) {
-        shuffleBtn.addEventListener('click', () => {
+    if (listButton) {
+        listButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const w = ensureList();
+            if (!w) return;
+            if (w.overlay.hidden) {
+                openOverlay(w.overlay, () => listContainer && listContainer.focus());
+            } else {
+                closeOverlay(w.overlay);
+            }
+        });
+    }
+
+    if (shuffleButton) {
+        shuffleButton.addEventListener('click', () => {
             const listOpen = !!(windows.list && !windows.list.overlay.hidden);
             if (listOpen) {
                 shuffleList();
@@ -980,19 +989,11 @@
                 maxBtn.setAttribute('aria-label', maximized ? `Restore ${kind} window` : `Maximize ${kind} window`);
             }
 
-            if (maximized) {
-                windowPanel.style.marginTop = '';
-                windowPanel.style.marginLeft = '';
-                windowPanel.style.top = '';
-                windowPanel.style.left = '';
-                windowPanel.style.transform = '';
-            } else {
-                windowPanel.style.marginTop = '';
-                windowPanel.style.marginLeft = '';
-                windowPanel.style.top = '';
-                windowPanel.style.left = '';
-                windowPanel.style.transform = '';
-            }
+            windowPanel.style.marginTop = '';
+            windowPanel.style.marginLeft = '';
+            windowPanel.style.top = '';
+            windowPanel.style.left = '';
+            windowPanel.style.transform = '';
         };
 
         syncMaxButton();
