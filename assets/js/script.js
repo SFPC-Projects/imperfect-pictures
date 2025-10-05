@@ -1090,13 +1090,16 @@
                         return;
                     }
                 }
-                const appRect = document.getElementById('app').getBoundingClientRect();
+
                 const panelRect = windowPanel.getBoundingClientRect();
+                const navHeight = getCssNumber('--nav-height', 38);
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight - navHeight;
                 let nx = origX + dx;
                 let ny = origY + dy;
                 const w = panelRect.width, h = panelRect.height;
-                const maxX = appRect.width - w;
-                const maxY = appRect.height - h;
+                const maxX = viewportWidth - w;
+                const maxY = viewportHeight - h;
                 nx = clamp(nx, 0, maxX);
                 ny = clamp(ny, 0, maxY);
                 setWindowPanelPosition(windowPanel, nx, ny);
