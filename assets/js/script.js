@@ -145,6 +145,19 @@
 
         document.getElementById('app').appendChild(frag);
         const appended = document.getElementById(`${kind}-overlay`);
+        // Center the window panel vertically and horizontally (default, unless maximized)
+        setTimeout(() => {
+            const windowPanel = appended.querySelector('.window-panel.floating');
+            if (windowPanel && !windowPanel.classList.contains('maximized')) {
+                // Center the window by adjusting its margin-top (flex centering also applied via .overlay)
+                windowPanel.style.marginTop = '';
+                windowPanel.style.marginLeft = '';
+                windowPanel.style.top = '';
+                windowPanel.style.left = '';
+                windowPanel.style.transform = '';
+                // No-op: overlay .overlay uses flexbox to center
+            }
+        }, 0);
         attachWindowControls(appended, () => (onClose ? onClose() : closeOverlay(appended)));
         return {
             overlay: appended,
@@ -693,6 +706,17 @@
                 maxBtn.textContent = '□';
                 maxBtn.setAttribute('aria-label', `Maximize ${kind} window`);
             }
+            // Ensure default centering for all overlays (About, List, Project)
+            setTimeout(() => {
+                if (!panel.classList.contains('maximized')) {
+                    panel.style.marginTop = '';
+                    panel.style.marginLeft = '';
+                    panel.style.top = '';
+                    panel.style.left = '';
+                    panel.style.transform = '';
+                    // No-op: overlay uses flex centering
+                }
+            }, 0);
         }
         overlay.hidden = false;
         if (onOpen) onOpen();
@@ -868,6 +892,20 @@
             if (maxBtn) {
                 maxBtn.textContent = maximized ? '❐' : '□';
                 maxBtn.setAttribute('aria-label', maximized ? `Restore ${kind} window` : `Maximize ${kind} window`);
+            }
+
+            if (maximized) {
+                windowPanel.style.marginTop = '';
+                windowPanel.style.marginLeft = '';
+                windowPanel.style.top = '';
+                windowPanel.style.left = '';
+                windowPanel.style.transform = '';
+            } else {
+                windowPanel.style.marginTop = '';
+                windowPanel.style.marginLeft = '';
+                windowPanel.style.top = '';
+                windowPanel.style.left = '';
+                windowPanel.style.transform = '';
             }
         };
 
