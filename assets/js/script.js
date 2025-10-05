@@ -396,6 +396,53 @@
         });
     }
 
+    function getCssNumber(varName, fallback) {
+        const v = getComputedStyle(document.documentElement).getPropertyValue(varName);
+        const n = parseFloat(v);
+        return Number.isFinite(n) ? n : fallback;
+    }
+
+    function rectsOverlap(a, b, pad) {
+        return !(a.x + a.w + pad <= b.x ||
+            b.x + b.w + pad <= a.x ||
+            a.y + a.h + pad <= b.y ||
+            b.y + b.h + pad <= a.y);
+    }
+
+    function findNonOverlappingPosition(w, h, cw, ch, placed, pad, maxAttempts) {
+        const maxX = Math.max(0, cw - w);
+        const maxY = Math.max(0, ch - h);
+        let attempts = 0;
+        while (attempts < maxAttempts) {
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+            const candidate = { x, y, w, h };
+            let collides = false;
+            for (let i = 0; i < placed.length; i++) {
+                if (rectsOverlap(candidate, placed[i], pad)) { collides = true; break; }
+            }
+            if (!collides) return { x, y };
+            attempts++;
+        }
+        if (pad > 0) return findNonOverlappingPosition(w, h, cw, ch, placed, 0, Math.floor(maxAttempts / 2));
+        return { x: Math.random() * maxX, y: Math.random() * maxY };
+    }
+
+    function layoutNodesNonOverlapping(nodes) {
+        const { width: cw, height: ch } = desktop.getBoundingClientRect();
+        const pad = getCssNumber('--space-md', 8);
+        const placed = [];
+        const maxAttempts = 200;
+        nodes.forEach((node) => {
+            const rect = node.getBoundingClientRect();
+            const w = rect.width || node.offsetWidth || 220;
+            const h = rect.height || node.offsetHeight || 180;
+            const pos = findNonOverlappingPosition(w, h, cw, ch, placed, pad, maxAttempts);
+            setNodePosition(node, pos.x, pos.y);
+            placed.push({ x: pos.x, y: pos.y, w, h });
+        });
+    }
+
     /* SHUFFLING */
 
     function shuffleList() {
@@ -410,22 +457,13 @@
 
     function shuffleNodes() {
         const nodes = Array.from(desktop.querySelectorAll('.node'));
-        const {
-            width: cw,
-            height: ch
-        } = desktop.getBoundingClientRect();
+        for (let i = nodes.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [nodes[i], nodes[j]] = [nodes[j], nodes[i]];
+        }
+        layoutNodesNonOverlapping(nodes);
         let z = 1;
-        nodes.forEach(node => {
-            const rect = node.getBoundingClientRect();
-            const w = rect.width || 220;
-            const h = rect.height || 180;
-            const maxX = Math.max(0, cw - w);
-            const maxY = Math.max(0, ch - h);
-            const x = clamp(Math.random() * maxX, 0, maxX);
-            const y = clamp(Math.random() * maxY, 0, maxY);
-            setNodePosition(node, x, y);
-            node.style.zIndex = String(z++);
-        });
+        nodes.forEach(n => n.style.zIndex = String(z++));
     }
 
     /* DRAGGING */
