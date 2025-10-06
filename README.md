@@ -10,8 +10,8 @@ An interactive, draggable archive of student projects for **Imperfect Pictures**
 
 ## Site Overview
 
-- **Desktop view** (default): draggable project "nodes" (thumbnails) are randomly arranged across the viewport on each load. Thumbnails scale proportionally (smallest dimension = 70px), and captions are twice as wide as thumbnails. Nodes are draggable around the desktop; their z-order updates as you interact.
-- **List view**: Opens as an overlay window above the desktop, listing all projects in a sortable table (by **Name / Creator / Session**). Click column headers to sort ascending/descending. Clicking a project name opens a context menu with options to view the project or toggle its description. Closing the list window unselects all rows.
+- **Desktop view** (default): draggable project "nodes" (thumbnails) are randomly arranged across the viewport on each load.
+- **List view**: Opens as an overlay window above the desktop, listing all projects in a sortable table (by **Name / Creator / Session**).
 - **Project windows**: Clicking a project (in desktop or list view) will:
     - Open an internal page in an overlay window (for `.html` projects)
     - Trigger a file download (for downloadable projects)
