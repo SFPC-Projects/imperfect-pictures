@@ -76,10 +76,20 @@
         return u.origin !== window.location.origin;
     }
 
+    function isItemExternal(item) {
+        if (item && item.external === true) return true;
+        return !!(item && item.link && isExternalLink(item.link));
+    }
+
+    function isItemDownload(item) {
+        return !!(item && item.download);
+    }
+
     function isInternalNavigable(item) {
         if (!item || !item.link) return false;
-        if (item.download) return false;
-        return !isExternalLink(item.link);
+        if (isItemDownload(item)) return false;
+        if (isItemExternal(item)) return false;
+        return true;
     }
 
     function makeKey(item, idx) {
@@ -296,77 +306,88 @@
             a.className = 'thumb';
             a.href = item.link;
 
-            const hasDownload = !!item.download;
+            const hasDownload = isItemDownload(item);
+            const isExternal = isItemExternal(item);
+
             if (hasDownload) {
                 if (typeof item.download === 'string') a.setAttribute('download', item.download);
                 else a.setAttribute('download', '');
                 a.target = '_self';
                 a.rel = '';
+            } else if (isExternal) {
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
             } else {
-                const external = isExternalLink(item.link);
-                a.target = external ? '_blank' : '_self';
-                a.rel = external ? 'noopener noreferrer' : '';
+                a.target = '_self';
+                a.rel = '';
             }
 
             a.tabIndex = 0;
 
-            if (isInternalNavigable(item)) {
-                a.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
+                const hasDesc = hasValue(item.description);
+                const menu = document.createElement('div');
+                menu.className = 'node-menu';
+                menu.style.left = `${e.pageX}px`;
+                menu.style.top = `${e.pageY}px`;
 
-                    document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
-                    const hasDesc = hasValue(item.description);
-                    const menu = document.createElement('div');
-                    menu.className = 'node-menu';
-                    menu.style.left = `${e.pageX}px`;
-                    menu.style.top = `${e.pageY}px`;
+                const viewProj = document.createElement('button');
+                if (hasDownload) {
+                    viewProj.textContent = typeof item.download === 'string' ? 'Download Project' : 'Download Project';
+                } else if (isExternal) {
+                    viewProj.textContent = 'Open Project (External)';
+                } else {
+                    viewProj.textContent = 'View Project';
+                }
+                viewProj.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    menu.remove();
+                    if (hasDownload) {
+                        const a = document.createElement('a');
+                        a.href = item.link;
+                        if (typeof item.download === 'string') a.setAttribute('download', item.download);
+                        else a.setAttribute('download', '');
+                        a.style.display = 'none';
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    } else if (isExternal) {
+                        window.open(item.link, '_blank', 'noopener,noreferrer');
+                    } else {
+                        openProject(item.link, item.title);
+                    }
+                });
+                menu.appendChild(viewProj);
 
-                    const viewProj = document.createElement('button');
-                    viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-                    viewProj.addEventListener('click', (ev) => {
+                if (hasDesc) {
+                    const viewDesc = document.createElement('button');
+                    const descOpen = !!document.querySelector('.description-window');
+                    viewDesc.textContent = descOpen ? 'Hide Description' : 'View Description';
+                    viewDesc.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         menu.remove();
-                        if (item.download) {
-                            const a = document.createElement('a');
-                            a.href = item.link;
-                            a.download = typeof item.download === 'string' ? item.download : '';
-                            document.body.appendChild(a);
-                            a.click();
-                            a.remove();
+                        if (descOpen) {
+                            document.querySelectorAll('.description-window').forEach(el => el.remove());
                         } else {
-                            openProject(item.link, item.title);
+                            showDescriptionWindow(item);
                         }
                     });
-                    menu.appendChild(viewProj);
+                    menu.appendChild(viewDesc);
+                }
 
-                    if (hasDesc) {
-                        const viewDesc = document.createElement('button');
-                        const descOpen = !!document.querySelector('.description-window');
-                        viewDesc.textContent = descOpen ? 'Hide Description' : 'View Description';
-                        viewDesc.addEventListener('click', (ev) => {
-                            ev.stopPropagation();
-                            menu.remove();
-                            if (descOpen) {
-                                document.querySelectorAll('.description-window').forEach(el => el.remove());
-                            } else {
-                                showDescriptionWindow(item);
-                            }
-                        });
-                        menu.appendChild(viewDesc);
+                document.body.appendChild(menu);
+
+                const closeMenu = (ev) => {
+                    if (!menu.contains(ev.target)) {
+                        menu.remove();
+                        document.removeEventListener('click', closeMenu);
                     }
-
-                    document.body.appendChild(menu);
-
-                    const closeMenu = (ev) => {
-                        if (!menu.contains(ev.target)) {
-                            menu.remove();
-                            document.removeEventListener('click', closeMenu);
-                        }
-                    };
-                    document.addEventListener('click', closeMenu);
-                });
-            }
+                };
+                document.addEventListener('click', closeMenu);
+            });
 
             const img = document.createElement('img');
             img.alt = `${item.title} — ${item.creator}`;
@@ -434,56 +455,7 @@
                 e.stopPropagation();
                 e.preventDefault();
                 selectNode(node);
-
-                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
-
-                const hasDesc = hasValue(item.description);
-                if (hasDesc) {
-                    const menu = document.createElement('div');
-                    menu.className = 'node-menu';
-                    menu.style.left = `${e.pageX}px`;
-                    menu.style.top = `${e.pageY}px`;
-
-                    const viewProj = document.createElement('button');
-                    viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-                    viewProj.addEventListener('click', (ev) => {
-                        ev.stopPropagation();
-                        menu.remove();
-                        if (isInternalNavigable(item)) {
-                            openProject(item.link, item.title);
-                        } else {
-                            const external = isExternalLink(item.link);
-                            const target = external ? '_blank' : '_self';
-                            const features = external ? 'noopener' : '';
-                            window.open(item.link, target, features);
-                        }
-                    });
-                    menu.appendChild(viewProj);
-
-                    const viewDesc = document.createElement('button');
-                    const descOpen = !!document.querySelector('.description-window');
-                    viewDesc.textContent = descOpen ? 'Hide Description' : 'View Description';
-                    viewDesc.addEventListener('click', (ev) => {
-                        ev.stopPropagation();
-                        menu.remove();
-                        if (descOpen) {
-                            document.querySelectorAll('.description-window').forEach(el => el.remove());
-                        } else {
-                            showDescriptionWindow(item);
-                        }
-                    });
-                    menu.appendChild(viewDesc);
-
-                    document.body.appendChild(menu);
-
-                    const closeMenu = (ev) => {
-                        if (!menu.contains(ev.target)) {
-                            menu.remove();
-                            document.removeEventListener('click', closeMenu);
-                        }
-                    };
-                    document.addEventListener('click', closeMenu);
-                }
+                a.click();
             });
             node.addEventListener('dblclick', (e) => {
                 if (e.target.closest('a')) return;
@@ -508,72 +480,90 @@
             li.setAttribute('role', 'option');
             li.dataset.link = item.link;
 
-            const external = isExternalLink(item.link);
+            const hasDownload = isItemDownload(item);
+            const isExternal = isItemExternal(item);
             const name = document.createElement('span');
             name.className = 'name';
 
             const anchor = document.createElement('a');
             anchor.href = item.link;
-
-            const hasDownload = !!item.download;
             if (hasDownload) {
                 if (typeof item.download === 'string') anchor.setAttribute('download', item.download);
                 else anchor.setAttribute('download', '');
                 anchor.target = '_self';
+                anchor.rel = '';
+            } else if (isExternal) {
+                anchor.target = '_blank';
+                anchor.rel = 'noopener noreferrer';
             } else {
-                anchor.target = external ? '_blank' : '_self';
-                if (external) anchor.rel = 'noopener noreferrer';
+                anchor.target = '_self';
+                anchor.rel = '';
             }
 
             anchor.textContent = item.title || '';
-            if (isInternalNavigable(item)) {
-                anchor.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+            anchor.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
+                const menu = document.createElement('div');
+                menu.className = 'node-menu';
+                menu.style.left = `${e.pageX}px`;
+                menu.style.top = `${e.pageY}px`;
 
-                    document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
+                const viewProj = document.createElement('button');
+                if (hasDownload) {
+                    viewProj.textContent = typeof item.download === 'string' ? 'Download Project' : 'Download Project';
+                } else if (isExternal) {
+                    viewProj.textContent = 'Open Project (External)';
+                } else {
+                    viewProj.textContent = 'View Project';
+                }
+                viewProj.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    menu.remove();
+                    if (hasDownload) {
+                        const a = document.createElement('a');
+                        a.href = item.link;
+                        if (typeof item.download === 'string') a.setAttribute('download', item.download);
+                        else a.setAttribute('download', '');
+                        a.style.display = 'none';
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    } else if (isExternal) {
+                        window.open(item.link, '_blank', 'noopener,noreferrer');
+                    } else {
+                        openProject(item.link, item.title);
+                    }
+                });
+                menu.appendChild(viewProj);
 
-                    const menu = document.createElement('div');
-                    menu.className = 'node-menu';
-                    menu.style.left = `${e.pageX}px`;
-                    menu.style.top = `${e.pageY}px`;
-
-                    const viewProj = document.createElement('button');
-                    viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-                    viewProj.addEventListener('click', (ev) => {
+                if (item.description) {
+                    const viewDesc = document.createElement('button');
+                    const existingDesc = li.nextElementSibling?.classList.contains('list-description');
+                    viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
+                    viewDesc.addEventListener('click', (ev) => {
                         ev.stopPropagation();
                         menu.remove();
-                        openProject(item.link, item.title);
-                    });
-                    menu.appendChild(viewProj);
-
-                    if (item.description) {
-                        const viewDesc = document.createElement('button');
-                        const existingDesc = li.nextElementSibling?.classList.contains('list-description');
-                        viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                        viewDesc.addEventListener('click', (ev) => {
-                            ev.stopPropagation();
-                            menu.remove();
-                            if (existingDesc) {
-                                li.nextElementSibling.remove();
-                            } else {
-                                listContainer.querySelectorAll('.list-description').forEach(el => el.remove());
-                                showListDescription(li, item.description);
-                            }
-                        });
-                        menu.appendChild(viewDesc);
-                    }
-
-                    document.body.appendChild(menu);
-                    const closeMenu = (ev) => {
-                        if (!menu.contains(ev.target)) {
-                            menu.remove();
-                            document.removeEventListener('click', closeMenu);
+                        if (existingDesc) {
+                            li.nextElementSibling.remove();
+                        } else {
+                            listContainer.querySelectorAll('.list-description').forEach(el => el.remove());
+                            showListDescription(li, item.description);
                         }
-                    };
-                    document.addEventListener('click', closeMenu);
-                });
-            }
+                    });
+                    menu.appendChild(viewDesc);
+                }
+
+                document.body.appendChild(menu);
+                const closeMenu = (ev) => {
+                    if (!menu.contains(ev.target)) {
+                        menu.remove();
+                        document.removeEventListener('click', closeMenu);
+                    }
+                };
+                document.addEventListener('click', closeMenu);
+            });
             name.appendChild(anchor);
 
             const creator = document.createElement('span');
@@ -835,16 +825,17 @@
         const w = ensureProject();
         if (!w) return;
 
-        const item = allItems.find(it => it.link === link);
-        const isExternal = item?.external === true || isExternalLink(link);
-        const hasDownload = !!item?.download;
+        const item = allItems.find(it => it.link === link) || {};
+        const hasDownload = isItemDownload(item);
+        const isExternal = isItemExternal(item);
         const isMedia = /\.(gif|png|jpe?g|mp4|webm)$/i.test(link);
         const isHtml = /\.html?$/i.test(link);
 
         if (hasDownload) {
             const a = document.createElement('a');
             a.href = link;
-            a.setAttribute('download', typeof item.download === 'string' ? item.download : '');
+            if (typeof item.download === 'string') a.setAttribute('download', item.download);
+            else a.setAttribute('download', '');
             a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
