@@ -36,7 +36,8 @@ Edit `data/projects.json` and add a new object to the array. Example:
   "session": "Summer 2025",
   "link": "projects/example/index.html",
   "image": "projects/example/example.png",
-  "download": "example.zip",
+  "external": false,
+  "download": false,
   "creatorLinks": [
     { "label": "Portfolio", "url": "https://example.com" }
   ],
@@ -54,7 +55,8 @@ Edit `data/projects.json` and add a new object to the array. Example:
     - a **downloadable file** (e.g. `projects/name/project.zip`)
     - the special value `wip.html` for work-in-progress placeholders
 - `image` (optional string): Project thumbnail. If omitted, a placeholder image is used.
-- `download` (optional boolean or string): If present, clicking the project will download the file at `link` instead of navigating. If a string, it sets the saved filename.
+- `external` (optional boolean): Set to `true` if the link should always open externally (in a new tab), even if it appears to be an internal link. Defaults to `false`.
+- `download` (optional boolean or string): Set to `true` to trigger download of the file at `link` when clicked. If a string, it sets the saved filename. If `false` or omitted, clicking navigates normally.
 - `creatorLinks` (optional array): List of objects like `{ "label": "Portfolio", "url": "https://..." }` for multiple labeled links (e.g. website, Instagram, etc).
 - `description` (optional string): Description shown in the context menu or on hover in list/desktop views.
 
