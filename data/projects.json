@@ -4,6 +4,7 @@
         "title": "Sample Download Project",
         "session": "Summer 2025",
         "link": "projects/sample-download-project/sample-download.zip",
+        "external": false,
         "download": "Sample-Project.png",
         "image": "projects/sample-download-project/sample-download-project.png",
         "creatorLinks": [
@@ -19,6 +20,7 @@
         "title": "Sample Internal Page Project",
         "session": "Summer 2025",
         "link": "projects/sample-internal-page-project/index.html",
+        "external": false,
         "image": "projects/sample-internal-page-project/sample-internal-page-project.png",
         "creatorLinks": [
             {
@@ -33,6 +35,7 @@
         "title": "SPECTER",
         "session": "Summer 2025",
         "link": "https://newart.city/show/specter/",
+        "external": true,
         "image": "projects/specter/specter.png",
         "creatorLinks": [
             {
@@ -46,67 +49,78 @@
         "creator": "Cece Wettemann",
         "title": "Real Home Video",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Stef Lai",
         "title": "The Price of Participation / Are We Free Yet?",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Jules Park",
         "title": "TBC",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Geanna Gwinn",
         "title": "Build-A-Family Tree",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Manuel Jin",
         "title": "TBC",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Meg Wilson",
         "title": "Digital Compost Heap",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Kay Zeng",
         "title": "Apartment Tour",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Anahita Bahri",
         "title": "Sanpaku",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Melly Davidson",
         "title": "TBC",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Maria Agra",
         "title": "Distorted Landscapes Zine",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Jackie Liu",
         "title": "diary2glitter",
         "session": "Summer 2025",
         "link": "https://jackieis.online/diary2glitter/",
+        "external": true,
         "image": "projects/diary-2-glitter/diary-2-glitter.gif",
         "creatorLinks": [
             {
@@ -124,30 +138,35 @@
         "creator": "Aurora D'Errico",
         "title": "Collage pieces of saved posts",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Brittany Orlando",
         "title": "TBC",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Luci DiNonno",
         "title": "Disimage archive",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Anoushka Carroll",
         "title": "Digital Garden",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     },
     {
         "creator": "Sarah Alvarez",
         "title": "Undocumented Places Google Street View",
         "session": "Summer 2025",
-        "link": "wip.html"
+        "link": "wip.html",
+        "external": false
     }
 ]
