@@ -627,6 +627,20 @@ ul.details li.selected .name .is-wip {
     line-height: 1.4;
 }
 
+.description-window .description-title {
+    font-weight: 700;
+    margin-bottom: var(--space-xxs);
+}
+
+.description-window .description-creator {
+    color: var(--muted);
+    margin-bottom: var(--space-xs);
+}
+
+.description-window .description-text {
+    margin: 0;
+}
+
 @media (max-width: 640px) {
     :root {
         --thumbnail: 90px;

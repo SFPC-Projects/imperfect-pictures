@@ -934,7 +934,21 @@
 
         const body = document.createElement('div');
         body.className = 'description-body';
-        body.textContent = item.description || '';
+        const titleBlock = document.createElement('div');
+        titleBlock.className = 'description-title';
+        titleBlock.textContent = item.title || '';
+
+        const creatorBlock = document.createElement('div');
+        creatorBlock.className = 'description-creator';
+        creatorBlock.textContent = item.creator || '';
+
+        const textBlock = document.createElement('p');
+        textBlock.className = 'description-text';
+        textBlock.textContent = item.description || '';
+
+        body.appendChild(titleBlock);
+        body.appendChild(creatorBlock);
+        body.appendChild(textBlock);
 
         box.appendChild(header);
         box.appendChild(body);
