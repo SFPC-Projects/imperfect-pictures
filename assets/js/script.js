@@ -934,10 +934,6 @@
 
         const body = document.createElement('div');
         body.className = 'description-body';
-        const titleBlock = document.createElement('div');
-        titleBlock.className = 'description-title';
-        titleBlock.textContent = item.title || '';
-
         const creatorBlock = document.createElement('div');
         creatorBlock.className = 'description-creator';
         creatorBlock.textContent = item.creator || '';
@@ -946,7 +942,6 @@
         textBlock.className = 'description-text';
         textBlock.textContent = item.description || '';
 
-        body.appendChild(titleBlock);
         body.appendChild(creatorBlock);
         body.appendChild(textBlock);
 
