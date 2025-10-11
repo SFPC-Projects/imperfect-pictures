@@ -52,16 +52,6 @@
         return v != null && String(v).trim().length > 0;
     }
 
-    function escapeHtml(str) {
-        return String(str).replace(/[&<>"']/g, s => ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#39;'
-        }[s]));
-    }
-
     function toURL(link) {
         try {
             return new URL(link, window.location.href);
@@ -90,6 +80,76 @@
         if (isItemDownload(item)) return false;
         if (isItemExternal(item)) return false;
         return true;
+    }
+
+    function closeContextMenus() {
+        document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
+    }
+
+    function mountContextMenu(menu) {
+        if (!menu) return null;
+        document.body.appendChild(menu);
+        const closeMenu = (e) => {
+            if (!menu.contains(e.target)) {
+                menu.remove();
+                document.removeEventListener('click', closeMenu);
+            }
+        };
+        setTimeout(() => document.addEventListener('click', closeMenu), 0);
+        return menu;
+    }
+
+    function configureAnchorForItem(anchor, item) {
+        if (!anchor || !item) return;
+        anchor.href = item.link || '#';
+        anchor.removeAttribute('download');
+        anchor.target = '_self';
+        anchor.rel = '';
+        if (isItemDownload(item)) {
+            const name = typeof item.download === 'string' ? item.download : '';
+            if (name) anchor.setAttribute('download', name);
+            else anchor.setAttribute('download', '');
+        } else if (isItemExternal(item)) {
+            anchor.target = '_blank';
+            anchor.rel = 'noopener noreferrer';
+        }
+    }
+
+    function triggerItemAction(item) {
+        if (!item || !item.link) return;
+        if (isItemDownload(item)) {
+            const tmp = document.createElement('a');
+            tmp.href = item.link;
+            if (typeof item.download === 'string') tmp.setAttribute('download', item.download);
+            else tmp.setAttribute('download', '');
+            tmp.hidden = true;
+            document.body.appendChild(tmp);
+            tmp.click();
+            tmp.remove();
+            return;
+        }
+        if (isItemExternal(item)) {
+            window.open(item.link, '_blank', 'noopener,noreferrer');
+            return;
+        }
+        openProject(item.link, item.title);
+    }
+
+    function showCreatorLinksMenu(x, y, links) {
+        if (!Array.isArray(links) || links.length === 0) return;
+        const menu = document.createElement('div');
+        menu.className = 'creator-menu';
+        menu.style.left = `${x}px`;
+        menu.style.top = `${y}px`;
+        links.forEach(linkObj => {
+            const a = document.createElement('a');
+            a.href = linkObj.url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.textContent = linkObj.label || linkObj.url;
+            menu.appendChild(a);
+        });
+        mountContextMenu(menu);
     }
 
     function makeKey(item, idx) {
@@ -227,13 +287,13 @@
         if (!link) return;
 
         const item = allItems.find(it => it.link === link);
-        if (item && isInternalNavigable(item)) {
-            openProject(item.link, item.title);
+        if (item) {
+            triggerItemAction(item);
             return;
         }
         const external = isExternalLink(link);
         const target = external ? '_blank' : '_self';
-        const features = external ? 'noopener' : '';
+        const features = external ? 'noopener,noreferrer' : '';
         window.open(link, target, features);
     }
 
@@ -294,72 +354,46 @@
             node.className = 'node';
             node.dataset.key = makeKey(item, idx);
 
-            const a = document.createElement('a');
-            a.className = 'thumb';
-            a.href = item.link;
+            const anchor = document.createElement('a');
+            anchor.className = 'thumb';
+            configureAnchorForItem(anchor, item);
+            anchor.tabIndex = 0;
 
             const hasDownload = isItemDownload(item);
             const isExternal = isItemExternal(item);
 
-            if (hasDownload) {
-                if (typeof item.download === 'string') a.setAttribute('download', item.download);
-                else a.setAttribute('download', '');
-                a.target = '_self';
-                a.rel = '';
-            } else if (isExternal) {
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-            } else {
-                a.target = '_self';
-                a.rel = '';
-            }
-
-            a.tabIndex = 0;
-
-            a.addEventListener('click', (e) => {
+            anchor.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
-                const hasDesc = hasValue(item.description);
+                closeContextMenus();
+
                 const menu = document.createElement('div');
                 menu.className = 'node-menu';
-                menu.style.left = `${e.pageX}px`;
-                menu.style.top = `${e.pageY}px`;
+                const rect = anchor.getBoundingClientRect();
+                const left = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
+                const top = e.pageY || (rect.bottom + window.scrollY);
+                menu.style.left = `${left}px`;
+                menu.style.top = `${top}px`;
 
                 const viewProj = document.createElement('button');
-                if (hasDownload) {
-                    viewProj.textContent = typeof item.download === 'string' ? 'Download Project' : 'Download Project';
-                } else if (isExternal) {
-                    viewProj.textContent = 'View Project (External)';
-                } else {
-                    viewProj.textContent = 'View Project';
-                }
-                viewProj.addEventListener('click', (e) => {
-                    e.stopPropagation();
+                viewProj.textContent = hasDownload
+                    ? 'Download Project'
+                    : isExternal
+                        ? 'View Project (External)'
+                        : 'View Project';
+                viewProj.addEventListener('click', (evt) => {
+                    evt.stopPropagation();
                     menu.remove();
-                    if (hasDownload) {
-                        const a = document.createElement('a');
-                        a.href = item.link;
-                        if (typeof item.download === 'string') a.setAttribute('download', item.download);
-                        else a.setAttribute('download', '');
-                        a.hidden = true;
-                        document.body.appendChild(a);
-                        a.click();
-                        a.remove();
-                    } else if (isExternal) {
-                        window.open(item.link, '_blank', 'noopener,noreferrer');
-                    } else {
-                        openProject(item.link, item.title);
-                    }
+                    triggerItemAction(item);
                 });
                 menu.appendChild(viewProj);
 
-                if (hasDesc) {
-                    const viewDesc = document.createElement('button');
+                if (hasValue(item.description)) {
+                    const descBtn = document.createElement('button');
                     const descOpen = !!document.querySelector('.description-window');
-                    viewDesc.textContent = descOpen ? 'Hide Description' : 'View Description';
-                    viewDesc.addEventListener('click', (e) => {
-                        e.stopPropagation();
+                    descBtn.textContent = descOpen ? 'Hide Description' : 'View Description';
+                    descBtn.addEventListener('click', (evt) => {
+                        evt.stopPropagation();
                         menu.remove();
                         if (descOpen) {
                             document.querySelectorAll('.description-window').forEach(el => el.remove());
@@ -367,18 +401,10 @@
                             showDescriptionWindow(item);
                         }
                     });
-                    menu.appendChild(viewDesc);
+                    menu.appendChild(descBtn);
                 }
 
-                document.body.appendChild(menu);
-
-                const closeMenu = (e) => {
-                    if (!menu.contains(e.target)) {
-                        menu.remove();
-                        document.removeEventListener('click', closeMenu);
-                    }
-                };
-                document.addEventListener('click', closeMenu);
+                mountContextMenu(menu);
             });
 
             const img = document.createElement('img');
@@ -386,77 +412,65 @@
             const hasImage = item.image && String(item.image).trim().length > 0;
             img.src = hasImage ? item.image : nextPlaceholder();
             img.draggable = false;
+            anchor.appendChild(img);
 
-            const cap = document.createElement('figcaption');
-            cap.className = 'caption';
-            let creatorHtml;
-            if (Array.isArray(item.creatorLinks) && item.creatorLinks.length >= 1) {
-                const creatorId = `creator-${idx}`;
-                creatorHtml = `<a href="#" class="creator-link" data-id="${creatorId}">${escapeHtml(item.creator)}</a>`;
+            const caption = document.createElement('figcaption');
+            caption.className = 'caption';
 
-                setTimeout(() => {
-                    const el = document.querySelector(`a[data-id="${creatorId}"]`);
-                    if (!el) return;
-
-                    el.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-
-                        document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
-
-                        const menu = document.createElement('div');
-                        menu.className = 'creator-menu';
-                        menu.style.left = `${e.pageX}px`;
-                        menu.style.top = `${e.pageY}px`;
-
-                        item.creatorLinks.forEach(linkObj => {
-                            const a = document.createElement('a');
-                            a.href = linkObj.url;
-                            a.target = '_blank';
-                            a.rel = 'noopener noreferrer';
-                            a.textContent = linkObj.label;
-                            menu.appendChild(a);
-                        });
-
-                        document.body.appendChild(menu);
-
-                        const closeMenu = (e) => {
-                            if (!menu.contains(e.target)) {
-                                menu.remove();
-                                document.removeEventListener('click', closeMenu);
-                            }
-                        };
-                        document.addEventListener('click', closeMenu);
-                    });
+            const creatorWrap = document.createElement('div');
+            creatorWrap.className = 'creator';
+            if (Array.isArray(item.creatorLinks) && item.creatorLinks.length > 0) {
+                const creatorLink = document.createElement('a');
+                creatorLink.href = '#';
+                creatorLink.className = 'creator-link';
+                creatorLink.textContent = item.creator || '';
+                creatorLink.addEventListener('click', (evt) => {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    closeContextMenus();
+                    const rect = creatorLink.getBoundingClientRect();
+                    const x = evt.pageX || (rect.left + rect.width / 2 + window.scrollX);
+                    const y = evt.pageY || (rect.bottom + window.scrollY);
+                    showCreatorLinksMenu(x, y, item.creatorLinks);
                 });
+                creatorWrap.appendChild(creatorLink);
             } else if (hasValue(item.creatorLink)) {
-                creatorHtml = `<a href="${escapeHtml(item.creatorLink)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.creator)}</a>`;
+                const creatorLink = document.createElement('a');
+                creatorLink.href = item.creatorLink;
+                creatorLink.target = '_blank';
+                creatorLink.rel = 'noopener noreferrer';
+                creatorLink.textContent = item.creator || '';
+                creatorWrap.appendChild(creatorLink);
             } else {
-                creatorHtml = escapeHtml(item.creator);
+                creatorWrap.textContent = item.creator || '';
             }
-            cap.innerHTML = `<div class="creator">${creatorHtml}</div>
-                       <div class="title">${escapeHtml(item.title)}</div>`;
 
-            a.appendChild(img);
-            node.appendChild(a);
-            node.appendChild(cap);
+            const titleWrap = document.createElement('div');
+            titleWrap.className = 'title';
+            titleWrap.textContent = item.title || '';
+
+            caption.appendChild(creatorWrap);
+            caption.appendChild(titleWrap);
+
+            node.appendChild(anchor);
+            node.appendChild(caption);
             desktop.appendChild(node);
 
             node.addEventListener('click', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 selectNode(node);
-                a.click();
+                anchor.click();
             });
             node.addEventListener('dblclick', (e) => {
                 if (e.target.closest('a')) return;
                 e.preventDefault();
-                a.click();
+                anchor.click();
             });
 
             node.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                    a.click();
+                    anchor.click();
                     e.preventDefault();
                 }
             });
@@ -466,76 +480,55 @@
 
     function renderList(items) {
         listContainer.innerHTML = '';
-        items.forEach((item, idx) => {
+        items.forEach((item) => {
             const li = document.createElement('li');
             li.setAttribute('role', 'option');
             li.dataset.link = item.link;
 
-            const hasDownload = isItemDownload(item);
+            const isDownload = isItemDownload(item);
             const isExternal = isItemExternal(item);
+
             const name = document.createElement('span');
             name.className = 'name';
 
             const anchor = document.createElement('a');
-            anchor.href = item.link;
-            if (hasDownload) {
-                if (typeof item.download === 'string') anchor.setAttribute('download', item.download);
-                else anchor.setAttribute('download', '');
-                anchor.target = '_self';
-                anchor.rel = '';
-            } else if (isExternal) {
-                anchor.target = '_blank';
-                anchor.rel = 'noopener noreferrer';
-            } else {
-                anchor.target = '_self';
-                anchor.rel = '';
-            }
-
+            configureAnchorForItem(anchor, item);
             anchor.textContent = item.title || '';
             anchor.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
+                closeContextMenus();
+                selectRow(li);
+
                 const menu = document.createElement('div');
                 menu.className = 'node-menu';
-                menu.style.left = `${e.pageX}px`;
-                menu.style.top = `${e.pageY}px`;
+                const rect = anchor.getBoundingClientRect();
+                const left = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
+                const top = e.pageY || (rect.bottom + window.scrollY);
+                menu.style.left = `${left}px`;
+                menu.style.top = `${top}px`;
 
                 const viewProj = document.createElement('button');
-                if (hasDownload) {
-                    viewProj.textContent = 'Download Project';
-                } else if (isExternal) {
-                    viewProj.textContent = 'View Project (External)';
-                } else {
-                    viewProj.textContent = 'View Project';
-                }
-                viewProj.addEventListener('click', (e) => {
-                    e.stopPropagation();
+                viewProj.textContent = isDownload
+                    ? 'Download Project'
+                    : isExternal
+                        ? 'View Project (External)'
+                        : 'View Project';
+                viewProj.addEventListener('click', (evt) => {
+                    evt.stopPropagation();
                     menu.remove();
-                    if (hasDownload) {
-                        const a = document.createElement('a');
-                        a.href = item.link;
-                        if (typeof item.download === 'string') a.setAttribute('download', item.download);
-                        else a.setAttribute('download', '');
-                        a.hidden = true;
-                        document.body.appendChild(a);
-                        a.click();
-                        a.remove();
-                    } else if (isExternal) {
-                        window.open(item.link, '_blank', 'noopener,noreferrer');
-                    } else {
-                        openProject(item.link, item.title);
-                    }
+                    triggerItemAction(item);
                 });
                 menu.appendChild(viewProj);
 
-                if (item.description) {
-                    const viewDesc = document.createElement('button');
+                if (hasValue(item.description)) {
+                    const descBtn = document.createElement('button');
                     const existingDesc = li.nextElementSibling?.classList.contains('list-description');
-                    viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                    viewDesc.addEventListener('click', (e) => {
-                        e.stopPropagation();
+                    descBtn.textContent = existingDesc ? 'Hide Description' : 'View Description';
+                    descBtn.addEventListener('click', (evt) => {
+                        evt.stopPropagation();
                         menu.remove();
+                        selectRow(li);
                         if (existingDesc) {
                             li.nextElementSibling.remove();
                         } else {
@@ -543,17 +536,10 @@
                             showListDescription(li, item.description);
                         }
                     });
-                    menu.appendChild(viewDesc);
+                    menu.appendChild(descBtn);
                 }
 
-                document.body.appendChild(menu);
-                const closeMenu = (e) => {
-                    if (!menu.contains(e.target)) {
-                        menu.remove();
-                        document.removeEventListener('click', closeMenu);
-                    }
-                };
-                document.addEventListener('click', closeMenu);
+                mountContextMenu(menu);
             });
             name.appendChild(anchor);
 
@@ -561,48 +547,26 @@
             creator.className = 'creator';
 
             if (Array.isArray(item.creatorLinks) && item.creatorLinks.length > 0) {
-                const creatorA = document.createElement('a');
-                creatorA.href = '#';
-                creatorA.textContent = item.creator || '';
-                creatorA.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
-
-                    const menu = document.createElement('div');
-                    menu.className = 'creator-menu';
-                    menu.style.left = `${e.pageX}px`;
-                    menu.style.top = `${e.pageY}px`;
-
-                    item.creatorLinks.forEach(linkObj => {
-                        const a = document.createElement('a');
-                        a.href = linkObj.url;
-                        a.target = '_blank';
-                        a.rel = 'noopener noreferrer';
-                        a.textContent = linkObj.label;
-                        menu.appendChild(a);
-                    });
-
-                    document.body.appendChild(menu);
-
-                    const closeMenu = (e) => {
-                        if (!menu.contains(e.target)) {
-                            menu.remove();
-                            document.removeEventListener('click', closeMenu);
-                        }
-                    };
-                    document.addEventListener('click', closeMenu);
+                const creatorLink = document.createElement('a');
+                creatorLink.href = '#';
+                creatorLink.textContent = item.creator || '';
+                creatorLink.addEventListener('click', (evt) => {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    closeContextMenus();
+                    const rect = creatorLink.getBoundingClientRect();
+                    const x = evt.pageX || (rect.left + rect.width / 2 + window.scrollX);
+                    const y = evt.pageY || (rect.bottom + window.scrollY);
+                    showCreatorLinksMenu(x, y, item.creatorLinks);
                 });
-
-                creator.appendChild(creatorA);
+                creator.appendChild(creatorLink);
             } else if (hasValue(item.creatorLink)) {
-                const creatorA = document.createElement('a');
-                creatorA.href = item.creatorLink;
-                creatorA.target = '_blank';
-                creatorA.rel = 'noopener noreferrer';
-                creatorA.textContent = item.creator || '';
-                creator.appendChild(creatorA);
+                const creatorLink = document.createElement('a');
+                creatorLink.href = item.creatorLink;
+                creatorLink.target = '_blank';
+                creatorLink.rel = 'noopener noreferrer';
+                creatorLink.textContent = item.creator || '';
+                creator.appendChild(creatorLink);
             } else {
                 creator.textContent = item.creator || '';
             }
@@ -811,7 +775,6 @@
         const hasDownload = isItemDownload(item);
         const isExternal = isItemExternal(item);
         const isMedia = /\.(gif|png|jpe?g|mp4|webm)$/i.test(link);
-        const isHtml = /\.html?$/i.test(link);
 
         if (hasDownload) {
             const a = document.createElement('a');
@@ -1080,42 +1043,44 @@
         listContainer.addEventListener('click', (e) => {
             const li = e.target.closest('li');
             if (!li || !listContainer.contains(li)) return;
+            const item = allItems.find(it => it.link === li.dataset.link);
+            if (!item) return;
+            const isDownload = isItemDownload(item);
+            const isExternal = isItemExternal(item);
 
             const nameSpan = e.target.closest('.name');
             if (nameSpan) {
                 e.preventDefault();
                 e.stopPropagation();
-                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
-
-                const item = allItems.find(it => it.link === li.dataset.link);
-                if (!item) return;
+                closeContextMenus();
+                selectRow(li);
                 const menu = document.createElement('div');
                 menu.className = 'node-menu';
-                menu.style.left = `${e.pageX}px`;
-                menu.style.top = `${e.pageY}px`;
+                const rect = nameSpan.getBoundingClientRect();
+                const left = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
+                const top = e.pageY || (rect.bottom + window.scrollY);
+                menu.style.left = `${left}px`;
+                menu.style.top = `${top}px`;
 
                 const viewProj = document.createElement('button');
-                viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-                viewProj.addEventListener('click', (e) => {
-                    e.stopPropagation();
+                viewProj.textContent = isDownload
+                    ? 'Download Project'
+                    : isExternal
+                        ? 'View Project (External)'
+                        : 'View Project';
+                viewProj.addEventListener('click', (evt) => {
+                    evt.stopPropagation();
                     menu.remove();
-                    if (isInternalNavigable(item)) {
-                        openProject(item.link, item.title);
-                    } else {
-                        const external = isExternalLink(item.link);
-                        const target = external ? '_blank' : '_self';
-                        const features = external ? 'noopener' : '';
-                        window.open(item.link, target, features);
-                    }
+                    triggerItemAction(item);
                 });
                 menu.appendChild(viewProj);
 
-                if (item.description) {
+                if (hasValue(item.description)) {
                     const viewDesc = document.createElement('button');
                     const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                     viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                    viewDesc.addEventListener('click', (e) => {
-                        e.stopPropagation();
+                    viewDesc.addEventListener('click', (evt) => {
+                        evt.stopPropagation();
                         menu.remove();
                         selectRow(li);
                         if (existingDesc) {
@@ -1128,14 +1093,7 @@
                     menu.appendChild(viewDesc);
                 }
 
-                document.body.appendChild(menu);
-                const closeMenu = (e) => {
-                    if (!menu.contains(e.target)) {
-                        menu.remove();
-                        document.removeEventListener('click', closeMenu);
-                    }
-                };
-                document.addEventListener('click', closeMenu);
+                mountContextMenu(menu);
                 return;
             }
 
@@ -1143,30 +1101,12 @@
             if (creatorSpan) {
                 e.preventDefault();
                 e.stopPropagation();
-                document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
-                const item = allItems.find(it => it.link === li.dataset.link);
-                if (!item) return;
+                closeContextMenus();
                 if (Array.isArray(item.creatorLinks) && item.creatorLinks.length > 0) {
-                    const menu = document.createElement('div');
-                    menu.className = 'creator-menu';
-                    menu.style.left = `${e.pageX}px`;
-                    menu.style.top = `${e.pageY}px`;
-                    item.creatorLinks.forEach(linkObj => {
-                        const a = document.createElement('a');
-                        a.href = linkObj.url;
-                        a.target = '_blank';
-                        a.rel = 'noopener noreferrer';
-                        a.textContent = linkObj.label;
-                        menu.appendChild(a);
-                    });
-                    document.body.appendChild(menu);
-                    const closeMenu = (e) => {
-                        if (!menu.contains(e.target)) {
-                            menu.remove();
-                            document.removeEventListener('click', closeMenu);
-                        }
-                    };
-                    document.addEventListener('click', closeMenu);
+                    const rect = creatorSpan.getBoundingClientRect();
+                    const x = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
+                    const y = e.pageY || (rect.bottom + window.scrollY);
+                    showCreatorLinksMenu(x, y, item.creatorLinks);
                 } else if (item.creatorLink) {
                     window.open(item.creatorLink, '_blank', 'noopener');
                 }
@@ -1175,38 +1115,34 @@
 
             e.stopPropagation();
             selectRow(li);
-            document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
-            const item = allItems.find(it => it.link === li.dataset.link);
-            if (!item) return;
+            closeContextMenus();
             const menu = document.createElement('div');
             menu.className = 'node-menu';
-            menu.style.left = `${e.pageX}px`;
-            menu.style.top = `${e.pageY}px`;
+            const rect = li.getBoundingClientRect();
+            const left = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
+            const top = e.pageY || (rect.bottom + window.scrollY);
+            menu.style.left = `${left}px`;
+            menu.style.top = `${top}px`;
 
             const viewProj = document.createElement('button');
-            viewProj.textContent = item.download ? 'View Project (Download)' : 'View Project';
-            viewProj.addEventListener('click', (e) => {
-                e.stopPropagation();
+            viewProj.textContent = isDownload
+                ? 'Download Project'
+                : isExternal
+                    ? 'View Project (External)'
+                    : 'View Project';
+            viewProj.addEventListener('click', (evt) => {
+                evt.stopPropagation();
                 menu.remove();
-                if (item.download) {
-                    const a = document.createElement('a');
-                    a.href = item.link;
-                    a.download = typeof item.download === 'string' ? item.download : '';
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                } else {
-                    openProject(item.link, item.title);
-                }
+                triggerItemAction(item);
             });
             menu.appendChild(viewProj);
 
-            if (item.description) {
+            if (hasValue(item.description)) {
                 const viewDesc = document.createElement('button');
                 const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                 viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                viewDesc.addEventListener('click', (e) => {
-                    e.stopPropagation();
+                viewDesc.addEventListener('click', (evt) => {
+                    evt.stopPropagation();
                     menu.remove();
                     if (existingDesc) {
                         li.nextElementSibling.remove();
@@ -1218,14 +1154,7 @@
                 menu.appendChild(viewDesc);
             }
 
-            document.body.appendChild(menu);
-            const closeMenu = (e) => {
-                if (!menu.contains(e.target)) {
-                    menu.remove();
-                    document.removeEventListener('click', closeMenu);
-                }
-            };
-            document.addEventListener('click', closeMenu);
+            mountContextMenu(menu);
         });
         listContainer.addEventListener('keydown', (e) => {
             const rows = Array.from(listContainer.children);
