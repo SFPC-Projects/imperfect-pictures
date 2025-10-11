@@ -503,7 +503,7 @@
 
                 const viewProj = document.createElement('button');
                 if (hasDownload) {
-                    viewProj.textContent = typeof item.download === 'string' ? 'Download Project' : 'Download Project';
+                    viewProj.textContent = 'Download Project';
                 } else if (isExternal) {
                     viewProj.textContent = 'View Project (External)';
                 } else {
