@@ -381,8 +381,8 @@
                     : isExternal
                         ? 'View Project (External)'
                         : 'View Project';
-                viewProj.addEventListener('click', (evt) => {
-                    evt.stopPropagation();
+                viewProj.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     menu.remove();
                     triggerItemAction(item);
                 });
@@ -392,8 +392,8 @@
                     const descBtn = document.createElement('button');
                     const descOpen = !!document.querySelector('.description-window');
                     descBtn.textContent = descOpen ? 'Hide Description' : 'View Description';
-                    descBtn.addEventListener('click', (evt) => {
-                        evt.stopPropagation();
+                    descBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         menu.remove();
                         if (descOpen) {
                             document.querySelectorAll('.description-window').forEach(el => el.remove());
@@ -424,13 +424,13 @@
                 creatorLink.href = '#';
                 creatorLink.className = 'creator-link';
                 creatorLink.textContent = item.creator || '';
-                creatorLink.addEventListener('click', (evt) => {
-                    evt.preventDefault();
-                    evt.stopPropagation();
+                creatorLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     closeContextMenus();
                     const rect = creatorLink.getBoundingClientRect();
-                    const x = evt.pageX || (rect.left + rect.width / 2 + window.scrollX);
-                    const y = evt.pageY || (rect.bottom + window.scrollY);
+                    const x = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
+                    const y = e.pageY || (rect.bottom + window.scrollY);
                     showCreatorLinksMenu(x, y, item.creatorLinks);
                 });
                 creatorWrap.appendChild(creatorLink);
@@ -514,8 +514,8 @@
                     : isExternal
                         ? 'View Project (External)'
                         : 'View Project';
-                viewProj.addEventListener('click', (evt) => {
-                    evt.stopPropagation();
+                viewProj.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     menu.remove();
                     triggerItemAction(item);
                 });
@@ -525,8 +525,8 @@
                     const descBtn = document.createElement('button');
                     const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                     descBtn.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                    descBtn.addEventListener('click', (evt) => {
-                        evt.stopPropagation();
+                    descBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         menu.remove();
                         selectRow(li);
                         if (existingDesc) {
@@ -550,13 +550,13 @@
                 const creatorLink = document.createElement('a');
                 creatorLink.href = '#';
                 creatorLink.textContent = item.creator || '';
-                creatorLink.addEventListener('click', (evt) => {
-                    evt.preventDefault();
-                    evt.stopPropagation();
+                creatorLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     closeContextMenus();
                     const rect = creatorLink.getBoundingClientRect();
-                    const x = evt.pageX || (rect.left + rect.width / 2 + window.scrollX);
-                    const y = evt.pageY || (rect.bottom + window.scrollY);
+                    const x = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
+                    const y = e.pageY || (rect.bottom + window.scrollY);
                     showCreatorLinksMenu(x, y, item.creatorLinks);
                 });
                 creator.appendChild(creatorLink);
@@ -1068,8 +1068,8 @@
                     : isExternal
                         ? 'View Project (External)'
                         : 'View Project';
-                viewProj.addEventListener('click', (evt) => {
-                    evt.stopPropagation();
+                viewProj.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     menu.remove();
                     triggerItemAction(item);
                 });
@@ -1079,8 +1079,8 @@
                     const viewDesc = document.createElement('button');
                     const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                     viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                    viewDesc.addEventListener('click', (evt) => {
-                        evt.stopPropagation();
+                    viewDesc.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         menu.remove();
                         selectRow(li);
                         if (existingDesc) {
@@ -1130,8 +1130,8 @@
                 : isExternal
                     ? 'View Project (External)'
                     : 'View Project';
-            viewProj.addEventListener('click', (evt) => {
-                evt.stopPropagation();
+            viewProj.addEventListener('click', (e) => {
+                e.stopPropagation();
                 menu.remove();
                 triggerItemAction(item);
             });
@@ -1141,8 +1141,8 @@
                 const viewDesc = document.createElement('button');
                 const existingDesc = li.nextElementSibling?.classList.contains('list-description');
                 viewDesc.textContent = existingDesc ? 'Hide Description' : 'View Description';
-                viewDesc.addEventListener('click', (evt) => {
-                    evt.stopPropagation();
+                viewDesc.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     menu.remove();
                     if (existingDesc) {
                         li.nextElementSibling.remove();
