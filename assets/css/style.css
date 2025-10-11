@@ -644,6 +644,12 @@ ul.details li.selected .name .is-wip {
     margin-bottom: var(--space-xs);
 }
 
+.description-window .description-session {
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: var(--space-xs);
+}
+
 .description-window .description-text {
     margin: 0;
 }

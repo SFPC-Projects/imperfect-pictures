@@ -938,6 +938,13 @@
         creatorBlock.className = 'description-creator';
         creatorBlock.textContent = item.creator || '';
 
+        if (hasValue(item.session)) {
+            const sessionBlock = document.createElement('div');
+            sessionBlock.className = 'description-session';
+            sessionBlock.textContent = item.session;
+            body.appendChild(sessionBlock);
+        }
+
         const textBlock = document.createElement('p');
         textBlock.className = 'description-text';
         textBlock.textContent = item.description || '';
