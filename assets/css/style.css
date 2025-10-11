@@ -610,6 +610,17 @@ ul.details li.selected .name .is-wip {
     margin-bottom: var(--space-sm);
 }
 
+.description-window .description-header a {
+    color: var(--link);
+    text-decoration: none;
+}
+
+.description-window .description-header a:hover,
+.description-window .description-header a:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
 .description-window .description-close {
     border: none;
     background: transparent;
