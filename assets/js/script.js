@@ -938,18 +938,22 @@
         creatorBlock.className = 'description-creator';
         creatorBlock.textContent = item.creator || '';
 
+        const subtitle = document.createElement('div');
+        subtitle.className = 'description-subtitle';
+        subtitle.appendChild(creatorBlock);
+
         if (hasValue(item.session)) {
             const sessionBlock = document.createElement('div');
             sessionBlock.className = 'description-session';
             sessionBlock.textContent = item.session;
-            body.appendChild(sessionBlock);
+            subtitle.appendChild(sessionBlock);
         }
 
         const textBlock = document.createElement('p');
         textBlock.className = 'description-text';
         textBlock.textContent = item.description || '';
 
-        body.appendChild(creatorBlock);
+        body.appendChild(subtitle);
         body.appendChild(textBlock);
 
         box.appendChild(header);
