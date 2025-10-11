@@ -42,6 +42,29 @@
     let sortBy = 'title';
     let sortAsc = true;
 
+    let descriptionKey = null;
+    let descriptionCloseHandler = null;
+
+    function getDescriptionKey(item) {
+        if (!item) return '';
+        const key = item.link || item.title || '';
+        return String(key).trim();
+    }
+
+    function isDescriptionOpenFor(item) {
+        const key = getDescriptionKey(item);
+        return !!key && key === descriptionKey;
+    }
+
+    function closeDescriptionWindow() {
+        if (descriptionCloseHandler) {
+            document.removeEventListener('click', descriptionCloseHandler);
+            descriptionCloseHandler = null;
+        }
+        document.querySelectorAll('.description-window').forEach(el => el.remove());
+        descriptionKey = null;
+    }
+
     /* UTILITIES */
 
     function clamp(v, min, max) {
@@ -408,13 +431,13 @@
 
                 if (hasValue(item.description)) {
                     const descBtn = document.createElement('button');
-                    const descOpen = !!document.querySelector('.description-window');
+                    const descOpen = isDescriptionOpenFor(item);
                     descBtn.textContent = descOpen ? 'Hide Description' : 'View Description';
                     descBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         menu.remove();
-                        if (descOpen) {
-                            document.querySelectorAll('.description-window').forEach(el => el.remove());
+                        if (isDescriptionOpenFor(item)) {
+                            closeDescriptionWindow();
                         } else {
                             showDescriptionWindow(item);
                         }
@@ -902,7 +925,7 @@
     }
 
     function showDescriptionWindow(item) {
-        document.querySelectorAll('.description-window').forEach(el => el.remove());
+        closeDescriptionWindow();
 
         const box = document.createElement('div');
         box.className = 'description-window';
@@ -917,7 +940,7 @@
             titleLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 openProject(item.link, item.title);
-                box.remove();
+                closeDescriptionWindow();
             });
         } else if (isExternalLink(item.link)) {
             titleLink.target = '_blank';
@@ -929,7 +952,10 @@
         closeBtn.className = 'description-close';
         closeBtn.setAttribute('aria-label', 'Close description');
         closeBtn.textContent = '×';
-        closeBtn.addEventListener('click', () => box.remove());
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeDescriptionWindow();
+        });
         header.appendChild(closeBtn);
 
         const body = document.createElement('div');
@@ -960,13 +986,15 @@
         box.appendChild(body);
         document.body.appendChild(box);
 
+        descriptionKey = getDescriptionKey(item);
+
         const closeWin = (e) => {
             if (!box.contains(e.target)) {
-                box.remove();
-                document.removeEventListener('click', closeWin);
+                closeDescriptionWindow();
             }
         };
-        document.addEventListener('click', closeWin);
+        descriptionCloseHandler = closeWin;
+        setTimeout(() => document.addEventListener('click', closeWin), 0);
     }
 
     function updateToolbarState() {
