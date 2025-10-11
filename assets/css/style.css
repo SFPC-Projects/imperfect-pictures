@@ -1,6 +1,6 @@
 :root {
     --ink: #111;
-    --muted: #666;
+    --muted: #999;
     --bg-app: #eee;
     --link: #00f;
     --link-visited: var(--link);
