@@ -322,6 +322,28 @@ ul.details li .name a:hover {
     text-decoration: underline;
 }
 
+.node.is-wip .title,
+.node .title.is-wip {
+    color: var(--muted);
+}
+
+.node.selected.is-wip .title,
+.node.selected .title.is-wip {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+ul.details li.is-wip .name,
+ul.details li.is-wip .name a,
+ul.details li .name .is-wip {
+    color: var(--muted);
+}
+
+ul.details li.selected.is-wip .name,
+ul.details li.selected.is-wip .name a,
+ul.details li.selected .name .is-wip {
+    color: rgba(255, 255, 255, 0.8);
+}
+
 .about-content p {
     margin: .5rem 0 1rem;
 }

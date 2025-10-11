@@ -82,6 +82,13 @@
         return true;
     }
 
+    function isWorkInProgress(item) {
+        if (!item) return false;
+        if (item.wip === true) return true;
+        const link = String(item.link || '').trim().toLowerCase();
+        return link === 'wip.html';
+    }
+
     function closeContextMenus() {
         document.querySelectorAll('.node-menu, .creator-menu').forEach(m => m.remove());
     }
@@ -361,6 +368,11 @@
 
             const hasDownload = isItemDownload(item);
             const isExternal = isItemExternal(item);
+            const workInProgress = isWorkInProgress(item);
+
+            if (workInProgress) {
+                node.classList.add('is-wip');
+            }
 
             anchor.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -448,6 +460,9 @@
             const titleWrap = document.createElement('div');
             titleWrap.className = 'title';
             titleWrap.textContent = item.title || '';
+            if (workInProgress) {
+                titleWrap.classList.add('is-wip');
+            }
 
             caption.appendChild(creatorWrap);
             caption.appendChild(titleWrap);
@@ -487,6 +502,11 @@
 
             const isDownload = isItemDownload(item);
             const isExternal = isItemExternal(item);
+            const workInProgress = isWorkInProgress(item);
+
+            if (workInProgress) {
+                li.classList.add('is-wip');
+            }
 
             const name = document.createElement('span');
             name.className = 'name';
@@ -494,6 +514,9 @@
             const anchor = document.createElement('a');
             configureAnchorForItem(anchor, item);
             anchor.textContent = item.title || '';
+            if (workInProgress) {
+                anchor.classList.add('is-wip');
+            }
             anchor.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
