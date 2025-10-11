@@ -649,7 +649,7 @@ ul.details li.selected .name .is-wip {
 
 .description-window .description-session {
     color: var(--muted);
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-lg);
 }
 
 .description-window .description-text {
