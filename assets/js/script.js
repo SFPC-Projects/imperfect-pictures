@@ -388,11 +388,11 @@
                 menu.style.top = `${top}px`;
 
                 const viewProj = document.createElement('button');
-                viewProj.textContent = hasDownload
-                    ? 'Download Project'
-                    : isExternal
-                        ? 'View Project (External)'
-                        : 'View Project';
+                viewProj.textContent = hasDownload ?
+                    'Download Project' :
+                    isExternal ?
+                        'View Project (External)' :
+                        'View Project';
                 viewProj.addEventListener('click', (e) => {
                     e.stopPropagation();
                     menu.remove();
@@ -532,11 +532,11 @@
                 menu.style.top = `${top}px`;
 
                 const viewProj = document.createElement('button');
-                viewProj.textContent = isDownload
-                    ? 'Download Project'
-                    : isExternal
-                        ? 'View Project (External)'
-                        : 'View Project';
+                viewProj.textContent = isDownload ?
+                    'Download Project' :
+                    isExternal ?
+                        'View Project (External)' :
+                        'View Project';
                 viewProj.addEventListener('click', (e) => {
                     e.stopPropagation();
                     menu.remove();
@@ -625,20 +625,37 @@
         while (attempts < maxAttempts) {
             const x = Math.random() * maxX;
             const y = Math.random() * maxY;
-            const candidate = { x, y, w, h };
+            const candidate = {
+                x,
+                y,
+                w,
+                h
+            };
             let collides = false;
             for (let i = 0; i < placed.length; i++) {
-                if (rectsOverlap(candidate, placed[i], pad)) { collides = true; break; }
+                if (rectsOverlap(candidate, placed[i], pad)) {
+                    collides = true;
+                    break;
+                }
             }
-            if (!collides) return { x, y };
+            if (!collides) return {
+                x,
+                y
+            };
             attempts++;
         }
         if (pad > 0) return findNonOverlappingPosition(w, h, cw, ch, placed, 0, Math.floor(maxAttempts / 2));
-        return { x: Math.random() * maxX, y: Math.random() * maxY };
+        return {
+            x: Math.random() * maxX,
+            y: Math.random() * maxY
+        };
     }
 
     function layoutNodesNonOverlapping(nodes) {
-        const { width: cw, height: ch } = desktop.getBoundingClientRect();
+        const {
+            width: cw,
+            height: ch
+        } = desktop.getBoundingClientRect();
         const pad = getCssNumber('--space-md', 8);
         const placed = [];
         const maxAttempts = 200;
@@ -648,7 +665,12 @@
             const h = rect.height || node.offsetHeight || 180;
             const pos = findNonOverlappingPosition(w, h, cw, ch, placed, pad, maxAttempts);
             setNodePosition(node, pos.x, pos.y);
-            placed.push({ x: pos.x, y: pos.y, w, h });
+            placed.push({
+                x: pos.x,
+                y: pos.y,
+                w,
+                h
+            });
         });
     }
 
@@ -679,7 +701,10 @@
 
     function enableDrag() {
         let active = null;
-        let startX = 0, startY = 0, origX = 0, origY = 0;
+        let startX = 0,
+            startY = 0,
+            origX = 0,
+            origY = 0;
         let zTop = 1000;
         let isDragging = false;
         let suppressClick = false;
@@ -694,8 +719,10 @@
             isDragging = false;
             selectNode(node);
             const p = getNodePosition(node);
-            origX = p.x; origY = p.y;
-            startX = e.clientX; startY = e.clientY;
+            origX = p.x;
+            origY = p.y;
+            startX = e.clientX;
+            startY = e.clientY;
         };
 
         const onPointerMove = (e) => {
@@ -714,11 +741,15 @@
                 }
             }
 
-            const { width: cw, height: ch } = desktop.getBoundingClientRect();
+            const {
+                width: cw,
+                height: ch
+            } = desktop.getBoundingClientRect();
             const rect = active.getBoundingClientRect();
             let nx = origX + dx;
             let ny = origY + dy;
-            const w = rect.width, h = rect.height;
+            const w = rect.width,
+                h = rect.height;
             nx = clamp(nx, 0, cw - w);
             ny = clamp(ny, 0, ch - h);
             setNodePosition(active, nx, ny);
@@ -727,7 +758,9 @@
 
         const onPointerUp = (e) => {
             if (active) {
-                try { active.releasePointerCapture(e.pointerId); } catch { }
+                try {
+                    active.releasePointerCapture(e.pointerId);
+                } catch { }
             }
             active = null;
             isDragging = false;
@@ -1086,11 +1119,11 @@
                 menu.style.top = `${top}px`;
 
                 const viewProj = document.createElement('button');
-                viewProj.textContent = isDownload
-                    ? 'Download Project'
-                    : isExternal
-                        ? 'View Project (External)'
-                        : 'View Project';
+                viewProj.textContent = isDownload ?
+                    'Download Project' :
+                    isExternal ?
+                        'View Project (External)' :
+                        'View Project';
                 viewProj.addEventListener('click', (e) => {
                     e.stopPropagation();
                     menu.remove();
@@ -1148,11 +1181,11 @@
             menu.style.top = `${top}px`;
 
             const viewProj = document.createElement('button');
-            viewProj.textContent = isDownload
-                ? 'Download Project'
-                : isExternal
-                    ? 'View Project (External)'
-                    : 'View Project';
+            viewProj.textContent = isDownload ?
+                'Download Project' :
+                isExternal ?
+                    'View Project (External)' :
+                    'View Project';
             viewProj.addEventListener('click', (e) => {
                 e.stopPropagation();
                 menu.remove();
