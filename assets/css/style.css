@@ -1,6 +1,7 @@
 :root {
     --ink: #111;
-    --muted: #999;
+    --muted: #666;
+    --more-muted: #999;
     --bg-app: #eee;
     --link: #00f;
     --link-visited: var(--link);
@@ -324,7 +325,7 @@ ul.details li .name a:hover {
 
 .node.is-wip .title,
 .node .title.is-wip {
-    color: var(--muted);
+    color: var(--more-muted);
 }
 
 .node.selected.is-wip .title,
@@ -335,7 +336,7 @@ ul.details li .name a:hover {
 ul.details li.is-wip .name,
 ul.details li.is-wip .name a,
 ul.details li .name .is-wip {
-    color: var(--muted);
+    color: var(--more-muted);
 }
 
 ul.details li.selected.is-wip .name,
