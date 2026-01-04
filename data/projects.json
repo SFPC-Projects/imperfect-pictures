@@ -89,10 +89,10 @@
     },
     {
         "creator": "Kay Zeng",
-        "title": "Apartment Tour",
+        "title": "Folder Practice",
         "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
+        "link": "https://www.kayzeng.com/folder_practice",
+        "external": true
     },
     {
         "creator": "Anahita Bahri",
