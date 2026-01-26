@@ -127,13 +127,11 @@
                 document.removeEventListener('click', closeMenu);
             }
         };
-        // Defer the global listener so the opening click does not immediately close the menu.
         setTimeout(() => document.addEventListener('click', closeMenu), 0);
         return menu;
     }
 
     function configureAnchorForItem(anchor, item) {
-        // Normalize link attributes so downloads and external targets stay consistent.
         if (!anchor || !item) return;
         anchor.href = item.link || '#';
         anchor.removeAttribute('download');
@@ -150,7 +148,6 @@
     }
 
     function triggerItemAction(item) {
-        // Mirror click behavior when launched from keyboard shortcuts or context menus.
         if (!item || !item.link) return;
         if (isItemDownload(item)) {
             const tmp = document.createElement('a');
@@ -171,7 +168,6 @@
     }
 
     function showCreatorLinksMenu(x, y, links) {
-        // Build a lightweight context menu for creator profile links at the pointer origin.
         if (!Array.isArray(links) || links.length === 0) return;
         const menu = document.createElement('div');
         menu.className = 'creator-menu';
@@ -252,7 +248,6 @@
         document.getElementById('app').appendChild(frag);
         const appended = document.getElementById(`${kind}-overlay`);
         setTimeout(() => {
-            // Allow the overlay to render before stripping the maximized state, avoiding transition glitches.
             const windowPanel = appended.querySelector('.window-panel.floating');
             if (windowPanel) {
                 windowPanel.classList.remove('maximized');
@@ -412,7 +407,6 @@
                 const menu = document.createElement('div');
                 menu.className = 'node-menu';
                 const rect = anchor.getBoundingClientRect();
-                // Fallback to element position when keyboard actions do not provide pageX/Y.
                 const left = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
                 const top = e.pageY || (rect.bottom + window.scrollY);
                 menu.style.left = `${left}px`;
@@ -557,7 +551,6 @@
                 const menu = document.createElement('div');
                 menu.className = 'node-menu';
                 const rect = anchor.getBoundingClientRect();
-                // Anchors activated via keyboard lack page coords; synthesize from geometry.
                 const left = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
                 const top = e.pageY || (rect.bottom + window.scrollY);
                 menu.style.left = `${left}px`;
@@ -733,7 +726,6 @@
     /* DRAGGING */
 
     function enableDrag() {
-        // Pointer-based dragging that suppresses click handlers once movement is detected.
         let active = null;
         let startX = 0,
             startY = 0,
@@ -917,6 +909,55 @@
             }
 
             projectFrame.removeAttribute('srcdoc');
+            let didLoad = false;
+
+            if (projectFrame.parentElement) {
+                const fallbackDiv = projectFrame.parentElement.querySelector('.iframe-fallback');
+                if (fallbackDiv) {
+                    fallbackDiv.remove();
+                }
+            }
+
+            const showIframeFallback = () => {
+                if (didLoad) return;
+                didLoad = true;
+
+                const fallback = document.createElement('div');
+                fallback.className = 'iframe-fallback';
+
+                const msg = document.createElement('p');
+                msg.textContent = 'This project can’t be embedded here.';
+                fallback.appendChild(msg);
+
+                const btn = document.createElement('button');
+                btn.textContent = 'Open in new tab';
+                btn.className = 'task-btn';
+                btn.addEventListener('click', () => {
+                    window.open(link, '_blank', 'noopener,noreferrer');
+                });
+                fallback.appendChild(btn);
+
+                projectFrame.removeAttribute('src');
+                projectFrame.replaceWith(fallback);
+                projectFrame = fallback;
+            };
+
+            function onIframeError() {
+                showIframeFallback();
+            }
+            function onIframeLoad() {
+                try {
+                    if (!projectFrame.contentDocument) throw new Error();
+                    didLoad = true;
+                } catch (e) {
+                    showIframeFallback();
+                }
+            }
+            projectFrame.removeEventListener('error', onIframeError);
+            projectFrame.removeEventListener('load', onIframeLoad);
+            projectFrame.addEventListener('error', onIframeError);
+            projectFrame.addEventListener('load', onIframeLoad);
+
             projectFrame.src = link;
         });
     }
