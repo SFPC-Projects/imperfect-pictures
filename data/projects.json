@@ -165,7 +165,7 @@
         "title": "nintendo image archive",
         "session": "Summer 2025",
         "link": "https://luvaldi.hotglue.me/?nintendoarchive",
-        "external": true,
+        "external": false,
         "creatorLinks": [
             {
                 "label": "Instagram (@boyf.oe)",
