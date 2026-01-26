@@ -90,7 +90,10 @@
     }
 
     function isItemExternal(item) {
-        return !!(item && item.external === true);
+        if (!item) return false;
+        if (item.external === true) return true;
+        if (item.external === false) return false;
+        return !!(item.link && isExternalLink(item.link));
     }
 
     function isItemDownload(item) {
