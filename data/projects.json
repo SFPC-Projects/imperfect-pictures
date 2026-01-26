@@ -137,10 +137,21 @@
     },
     {
         "creator": "Aurora D'Errico",
-        "title": "Collage pieces of saved posts",
+        "title": "Portrait of a lady on the internet",
         "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
+        "link": "https://auroraderrico.com/ladyoninternet/",
+        "external": false,
+        "creatorLinks": [
+            {
+                "label": "Website",
+                "url": "https://auroraderrico.com/"
+            },
+            {
+                "label": "Instagram",
+                "url": "https://www.instagram.com/aurora.derrico/"
+            }
+        ],
+        "description": "A self-portrait assembled from my Twitter bookmarks. Images are cropped into squares and re-arranged into multi-image grids, forming a visual archive of impulses, interests, and recurring aesthetics. Rather than representing the self directly, identity emerges through processes of selection, repetition, and re-formatting. Conceived as a printed publication, the project is now re-circulated online for this final showcase through a scan of the physical work. This work is still in progress."
     },
     {
         "creator": "Brittany Orlando",
@@ -150,11 +161,22 @@
         "external": false
     },
     {
-        "creator": "Luci DiNonno",
-        "title": "Disimage archive",
+        "creator": "luci vd",
+        "title": "nintendo image archive",
         "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
+        "link": "https://luvaldi.hotglue.me/?nintendoarchive",
+        "external": true,
+        "creatorLinks": [
+            {
+                "label": "Instagram (@boyf.oe)",
+                "url": "https://www.instagram.com/boyf.oe/"
+            },
+            {
+                "label": "Instagram (@lucivdinonno)",
+                "url": "https://www.instagram.com/lucivdinonno/"
+            }
+        ],
+        "description": "my project is an archive of imperfect pictures hidden in my Nintendo DSI/3DS between the years of 2008-2012. it is an unfiltered journey into my day-to-day life, and shows an accurate representation of the things that mattered to me - the things i chose as a 10 year old to document for my future self. these images transport me to a time of creating with no care, with no audience, no expectations. i never imagined that the images i was creating would ever leave the realm of my DS to be shown online. i think it is the result of squeezing out my entire being and filtering it 10x over to its purest form."
     },
     {
         "creator": "Anoushka Carroll",
