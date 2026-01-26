@@ -872,6 +872,10 @@
 
         openOverlay(w.overlay, () => {
             w.titleSpan.textContent = titleText || 'Project';
+            w.titleSpan.title = 'Open project in new tab';
+            w.titleSpan.onclick = () => {
+                window.open(link, '_blank', 'noopener,noreferrer');
+            };
             const section = w.overlay.querySelector('section');
             if (section) {
                 const base = 'Project window';
