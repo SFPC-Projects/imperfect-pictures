@@ -416,7 +416,7 @@
                 viewProj.textContent = hasDownload ?
                     'Download Project' :
                     isExternal ?
-                        'View Project (External)' :
+                        'View Project (New Tab)' :
                         'View Project';
                 viewProj.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -560,7 +560,7 @@
                 viewProj.textContent = isDownload ?
                     'Download Project' :
                     isExternal ?
-                        'View Project (External)' :
+                        'View Project (New Tab)' :
                         'View Project';
                 viewProj.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1222,7 +1222,7 @@
                 viewProj.textContent = isDownload ?
                     'Download Project' :
                     isExternal ?
-                        'View Project (External)' :
+                        'View Project (New Tab)' :
                         'View Project';
                 viewProj.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1284,7 +1284,7 @@
             viewProj.textContent = isDownload ?
                 'Download Project' :
                 isExternal ?
-                    'View Project (External)' :
+                    'View Project (New Tab)' :
                     'View Project';
             viewProj.addEventListener('click', (e) => {
                 e.stopPropagation();
