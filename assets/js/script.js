@@ -90,8 +90,7 @@
     }
 
     function isItemExternal(item) {
-        if (item && item.external === true) return true;
-        return !!(item && item.link && isExternalLink(item.link));
+        return !!(item && item.external === true);
     }
 
     function isItemDownload(item) {
@@ -873,11 +872,6 @@
             document.body.appendChild(a);
             a.click();
             a.remove();
-            return;
-        }
-
-        if (isExternal) {
-            window.open(link, '_blank', 'noopener,noreferrer');
             return;
         }
 
