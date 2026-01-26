@@ -140,7 +140,7 @@
         "title": "Portrait of a lady on the internet",
         "session": "Summer 2025",
         "link": "https://auroraderrico.com/ladyoninternet/",
-        "external": false,
+        "external": true,
         "creatorLinks": [
             {
                 "label": "Website",
@@ -165,7 +165,7 @@
         "title": "nintendo image archive",
         "session": "Summer 2025",
         "link": "https://luvaldi.hotglue.me/?nintendoarchive",
-        "external": false,
+        "external": true,
         "image": "projects/nintendo-image-archive/nintendo-image-archive.png",
         "creatorLinks": [
             {
