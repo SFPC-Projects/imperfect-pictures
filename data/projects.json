@@ -1,36 +1,5 @@
 [
     {
-        "creator": "Example Student",
-        "title": "Sample Download Project",
-        "session": "Summer 2025",
-        "link": "projects/sample-download-project/sample-download.zip",
-        "external": false,
-        "download": "Sample-Project.png",
-        "image": "projects/sample-download-project/sample-download-project.png",
-        "creatorLinks": [
-            {
-                "label": "Portfolio",
-                "url": "https://example.com/portfolio"
-            }
-        ],
-        "description": "This is a sample project entry with a download link. Click the project to download the project files."
-    },
-    {
-        "creator": "Example Student",
-        "title": "Sample Internal Page Project",
-        "session": "Summer 2025",
-        "link": "projects/sample-internal-page-project/index.html",
-        "external": false,
-        "image": "projects/sample-internal-page-project/sample-internal-page-project.png",
-        "creatorLinks": [
-            {
-                "label": "Portfolio",
-                "url": "https://example.com/portfolio"
-            }
-        ],
-        "description": "This is a sample project entry with an internal page link. Click the project to view the project from within the site."
-    },
-    {
         "creator": "kevin cunanan chappelle",
         "title": "SPECTER",
         "session": "Summer 2025",
@@ -44,41 +13,6 @@
             }
         ],
         "description": "SPECTER evokes both the vividness and the chaos of the mind's eye. the restless arrangement of images engulfs you: photographs, ai-generated imagery, and glitchy fragments phase into each other and refuse to fully resolve. nothing unfolds in order. you encounter moments the way you might remember them—out of sequence and perhaps half-fiction, yet charged with feeling. between flashes of dread and sudden tenderness, its fractured narrative is told through the images and their metatext as if through a stream of consciousness. this is a space where feeling lingers longer than fact."
-    },
-    {
-        "creator": "Cece Wettemann",
-        "title": "Real Home Video",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
-    },
-    {
-        "creator": "Stef Lai",
-        "title": "The Price of Participation / Are We Free Yet?",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
-    },
-    {
-        "creator": "Jules Park",
-        "title": "TBC",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
-    },
-    {
-        "creator": "Geanna Gwinn",
-        "title": "Build-A-Family Tree",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
-    },
-    {
-        "creator": "Manuel Jin",
-        "title": "TBC",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
     },
     {
         "creator": "Meg Wilson",
@@ -132,20 +66,6 @@
         ]
     },
     {
-        "creator": "Melly Davidson",
-        "title": "TBC",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
-    },
-    {
-        "creator": "Maria Agra",
-        "title": "Distorted Landscapes Zine",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
-    },
-    {
         "creator": "Jackie Liu",
         "title": "diary2glitter",
         "session": "Summer 2025",
@@ -184,13 +104,6 @@
         "description": "A self-portrait assembled from my Twitter bookmarks. Images are cropped into squares and re-arranged into multi-image grids, forming a visual archive of impulses, interests, and recurring aesthetics. Rather than representing the self directly, identity emerges through processes of selection, repetition, and re-formatting. Conceived as a printed publication, the project is now re-circulated online for this final showcase through a scan of the physical work. This work is still in progress."
     },
     {
-        "creator": "Brittany Orlando",
-        "title": "TBC",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
-    },
-    {
         "creator": "luci vd",
         "title": "nintendo image archive",
         "session": "Summer 2025",
@@ -208,20 +121,6 @@
             }
         ],
         "description": "my project is an archive of imperfect pictures hidden in my Nintendo DSI/3DS between the years of 2008-2012. it is an unfiltered journey into my day-to-day life, and shows an accurate representation of the things that mattered to me - the things i chose as a 10 year old to document for my future self. these images transport me to a time of creating with no care, with no audience, no expectations. i never imagined that the images i was creating would ever leave the realm of my DS to be shown online. i think it is the result of squeezing out my entire being and filtering it 10x over to its purest form."
-    },
-    {
-        "creator": "Anoushka Carroll",
-        "title": "Digital Garden",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
-    },
-    {
-        "creator": "Sarah Alvarez",
-        "title": "Undocumented Places Google Street View",
-        "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
     },
     {
         "creator": "Yuemin Huang",
