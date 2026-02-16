@@ -966,12 +966,9 @@
                 showIframeFallback();
             }
             function onIframeLoad() {
-                try {
-                    if (!frame.contentDocument) throw new Error();
-                    didLoad = true;
-                } catch (e) {
-                    showIframeFallback();
-                }
+                // Cross-origin iframes often expose no readable document to this page.
+                // Treat load as success and reserve fallback for real iframe error events.
+                didLoad = true;
             }
             frame.onerror = onIframeError;
             frame.onload = onIframeLoad;
@@ -998,7 +995,7 @@
                 openProject(item.link, item.title);
                 closeDescriptionWindow();
             });
-        } else if (isExternalLink(item.link)) {
+        } else if (isItemExternal(item)) {
             titleLink.target = '_blank';
             titleLink.rel = 'noopener noreferrer';
         }
