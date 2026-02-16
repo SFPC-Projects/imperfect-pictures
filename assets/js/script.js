@@ -838,6 +838,17 @@
         };
     }
 
+    function runAfterInitialLoadAndPaint(cb) {
+        const run = () => {
+            // Wait two frames after load so layout/style calculations are stable.
+            requestAnimationFrame(() => requestAnimationFrame(cb));
+        };
+        if (document.readyState === 'complete') run();
+        else window.addEventListener('load', run, {
+            once: true
+        });
+    }
+
     /* OVERLAY HANDLING */
 
     function openOverlay(overlay, onOpen) {
@@ -1109,14 +1120,17 @@
             ensureList();
             renderList(getSortedItems());
             updateSortIndicators();
-            shuffleNodes();
             enableDrag();
-            if (window.matchMedia("(max-width: 640px)").matches) {
-                const w = ensureList();
-                if (w && w.overlay.hidden) {
-                    openOverlay(w.overlay, () => listContainer && listContainer.focus());
+
+            runAfterInitialLoadAndPaint(() => {
+                shuffleNodes();
+                if (window.matchMedia("(max-width: 640px)").matches) {
+                    const w = ensureList();
+                    if (w && w.overlay.hidden) {
+                        openOverlay(w.overlay, () => listContainer && listContainer.focus());
+                    }
                 }
-            }
+            });
         })
         .catch(err => {
             console.error('Failed to load data/projects.json', err);
