@@ -71,7 +71,7 @@
         "title": "diary2glitter",
         "session": "Summer 2025",
         "link": "https://jackieis.online/diary2glitter/",
-        "external": true,
+        "external": false,
         "image": "projects/diary-2-glitter/diary-2-glitter.gif",
         "creatorLinks": [
             {
@@ -90,7 +90,7 @@
         "title": "Portrait of a lady on the internet",
         "session": "Summer 2025",
         "link": "https://auroraderrico.com/ladyoninternet/",
-        "external": true,
+        "external": false,
         "image": "projects/lady-on-internet/lady-on-internet.png",
         "creatorLinks": [
             {
@@ -109,7 +109,7 @@
         "title": "nintendo image archive",
         "session": "Summer 2025",
         "link": "https://luvaldi.hotglue.me/?nintendoarchive",
-        "external": true,
+        "external": false,
         "image": "projects/nintendo-image-archive/nintendo-image-archive.png",
         "creatorLinks": [
             {
