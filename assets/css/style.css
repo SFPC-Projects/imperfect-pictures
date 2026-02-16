@@ -693,6 +693,7 @@ ul.details li.selected .name .is-wip {
 
 .description-window .description-text {
     margin: 0;
+    white-space: pre-line;
 }
 
 @media (max-width: 640px) {
@@ -748,6 +749,7 @@ ul.details li.selected .name .is-wip {
         font-size: var(--font-sm);
         border-bottom: 1px solid var(--border-light);
         line-height: 1.4;
+        white-space: pre-line;
     }
 
     ul.details li {
