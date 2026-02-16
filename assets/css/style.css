@@ -674,6 +674,18 @@ ul.details li.selected .name .is-wip {
     color: var(--muted);
 }
 
+.description-window .description-creator a {
+    color: var(--link);
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.description-window .description-creator a:hover,
+.description-window .description-creator a:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
 .description-window .description-session {
     color: var(--muted);
     margin-bottom: var(--space-lg);

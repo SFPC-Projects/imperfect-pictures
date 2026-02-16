@@ -1018,7 +1018,31 @@
         body.className = 'description-body';
         const creatorBlock = document.createElement('div');
         creatorBlock.className = 'description-creator';
-        creatorBlock.textContent = item.creator || '';
+        if (Array.isArray(item.creatorLinks) && item.creatorLinks.length > 0) {
+            const creatorLink = document.createElement('a');
+            creatorLink.href = '#';
+            creatorLink.className = 'creator-link';
+            creatorLink.textContent = item.creator || '';
+            creatorLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeContextMenus();
+                const rect = creatorLink.getBoundingClientRect();
+                const x = e.pageX || (rect.left + rect.width / 2 + window.scrollX);
+                const y = e.pageY || (rect.bottom + window.scrollY);
+                showCreatorLinksMenu(x, y, item.creatorLinks);
+            });
+            creatorBlock.appendChild(creatorLink);
+        } else if (hasValue(item.creatorLink)) {
+            const creatorLink = document.createElement('a');
+            creatorLink.href = item.creatorLink;
+            creatorLink.target = '_blank';
+            creatorLink.rel = 'noopener noreferrer';
+            creatorLink.textContent = item.creator || '';
+            creatorBlock.appendChild(creatorLink);
+        } else {
+            creatorBlock.textContent = item.creator || '';
+        }
 
         const subtitle = document.createElement('div');
         subtitle.className = 'description-subtitle';
