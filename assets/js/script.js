@@ -946,7 +946,7 @@
                 fallback.className = 'iframe-fallback';
 
                 const msg = document.createElement('p');
-                msg.textContent = 'This project can’t be embedded here.';
+                msg.textContent = 'Error loading project window. You can try opening it in a new tab:';
                 fallback.appendChild(msg);
 
                 const btn = document.createElement('button');
