@@ -996,6 +996,9 @@
         const header = document.createElement('div');
         header.className = 'description-header';
 
+        const headerMain = document.createElement('div');
+        headerMain.className = 'description-header-main';
+
         const titleLink = document.createElement('a');
         titleLink.href = item.link;
         titleLink.textContent = item.title;
@@ -1009,7 +1012,7 @@
             titleLink.target = '_blank';
             titleLink.rel = 'noopener noreferrer';
         }
-        header.appendChild(titleLink);
+        headerMain.appendChild(titleLink);
 
         const closeBtn = document.createElement('button');
         closeBtn.className = 'description-close';
@@ -1062,11 +1065,13 @@
             subtitle.appendChild(sessionBlock);
         }
 
+        headerMain.appendChild(subtitle);
+        header.appendChild(headerMain);
+
         const textBlock = document.createElement('p');
         textBlock.className = 'description-text';
         textBlock.textContent = item.description || '';
 
-        body.appendChild(subtitle);
         body.appendChild(textBlock);
 
         box.appendChild(header);

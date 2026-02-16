@@ -636,14 +636,22 @@ ul.details li.selected .name .is-wip {
 .description-window .description-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
+    align-items: flex-start;
+    gap: var(--space-sm);
     margin-bottom: var(--space-sm);
+}
+
+.description-window .description-header-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    min-width: 0;
 }
 
 .description-window .description-header a {
     color: var(--link);
     text-decoration: none;
+    font-weight: bold;
 }
 
 .description-window .description-header a:hover,
@@ -676,7 +684,7 @@ ul.details li.selected .name .is-wip {
     display: flex;
     flex-direction: column;
     gap: var(--space-xxs);
-    margin-bottom: var(--space-xs);
+    margin-bottom: 0;
 }
 
 .description-window .description-creator {
@@ -697,7 +705,7 @@ ul.details li.selected .name .is-wip {
 
 .description-window .description-session {
     color: var(--muted);
-    margin-bottom: var(--space-lg);
+    margin-bottom: 0;
 }
 
 .description-window .description-text {
