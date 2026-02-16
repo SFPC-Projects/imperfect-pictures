@@ -977,8 +977,7 @@
                 showIframeFallback();
             }
             function onIframeLoad() {
-                // Cross-origin iframes often expose no readable document to this page.
-                // Treat load as success and reserve fallback for real iframe error events.
+                // Treat cross-origin load as success and reserve fallback for real iframe error events.
                 didLoad = true;
             }
             frame.onerror = onIframeError;
