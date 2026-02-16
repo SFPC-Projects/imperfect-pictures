@@ -667,7 +667,7 @@ ul.details li.selected .name .is-wip {
     font-size: var(--font-lg);
     cursor: pointer;
     line-height: 1;
-    align-self: flex-end;
+    align-self: flex-start;
 }
 
 .description-window .description-close:hover {
