@@ -286,6 +286,10 @@ ul.details li {
     padding: var(--space-md);
 }
 
+.list-description {
+    white-space: pre-line;
+}
+
 .list-header .col {
     cursor: pointer;
     user-select: none;
