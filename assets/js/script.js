@@ -299,6 +299,22 @@
         return w;
     }
 
+    function ensureProjectFrameElement(w) {
+        if (!w || !w.viewport) return null;
+        let frame = w.viewport.querySelector('#project-frame');
+        if (!(frame instanceof HTMLIFrameElement)) {
+            w.viewport.querySelectorAll('.iframe-fallback').forEach(el => el.remove());
+            frame = document.createElement('iframe');
+            frame.id = 'project-frame';
+            frame.className = 'project-frame';
+            frame.title = 'Embedded project';
+            frame.src = 'about:blank';
+            w.viewport.appendChild(frame);
+        }
+        projectFrame = frame;
+        return frame;
+    }
+
     /* SELECTION STATE */
 
     function selectNode(node) {
@@ -882,13 +898,19 @@
                 section.setAttribute('aria-label', titleText ? `${base} — ${titleText}` : base);
             }
 
-            if (!projectFrame) return;
+            const frame = ensureProjectFrameElement(w);
+            if (!frame) return;
+            const parent = frame.parentElement;
+            if (parent) {
+                parent.querySelectorAll('.iframe-fallback').forEach(el => el.remove());
+            }
+            frame.style.removeProperty('display');
 
             if (isMedia) {
                 const isVideo = /\.(mp4|webm)$/i.test(link);
-                projectFrame.removeAttribute('src');
+                frame.removeAttribute('src');
                 // Use srcdoc so media can render without navigating the iframe to a different origin.
-                projectFrame.srcdoc = `
+                frame.srcdoc = `
                     <style>
                         body {
                             margin: 0;
@@ -912,19 +934,13 @@
                 return;
             }
 
-            projectFrame.removeAttribute('srcdoc');
+            frame.removeAttribute('srcdoc');
             let didLoad = false;
-
-            if (projectFrame.parentElement) {
-                const fallbackDiv = projectFrame.parentElement.querySelector('.iframe-fallback');
-                if (fallbackDiv) {
-                    fallbackDiv.remove();
-                }
-            }
 
             const showIframeFallback = () => {
                 if (didLoad) return;
                 didLoad = true;
+                if (!frame.parentElement) return;
 
                 const fallback = document.createElement('div');
                 fallback.className = 'iframe-fallback';
@@ -941,9 +957,9 @@
                 });
                 fallback.appendChild(btn);
 
-                projectFrame.removeAttribute('src');
-                projectFrame.replaceWith(fallback);
-                projectFrame = fallback;
+                frame.removeAttribute('src');
+                frame.style.display = 'none';
+                frame.parentElement.appendChild(fallback);
             };
 
             function onIframeError() {
@@ -951,18 +967,16 @@
             }
             function onIframeLoad() {
                 try {
-                    if (!projectFrame.contentDocument) throw new Error();
+                    if (!frame.contentDocument) throw new Error();
                     didLoad = true;
                 } catch (e) {
                     showIframeFallback();
                 }
             }
-            projectFrame.removeEventListener('error', onIframeError);
-            projectFrame.removeEventListener('load', onIframeLoad);
-            projectFrame.addEventListener('error', onIframeError);
-            projectFrame.addEventListener('load', onIframeLoad);
+            frame.onerror = onIframeError;
+            frame.onload = onIframeLoad;
 
-            projectFrame.src = link;
+            frame.src = link;
         });
     }
 
