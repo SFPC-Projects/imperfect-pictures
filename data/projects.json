@@ -108,11 +108,17 @@
         "image": "projects/folder-practice/folder-practice.png"
     },
     {
-        "creator": "Anahita Bahri",
-        "title": "Sanpaku",
+        "creator": "anahita bahri",
+        "title": "sanpaku",
         "session": "Summer 2025",
-        "link": "wip.html",
-        "external": false
+        "link": "https://anahitabahri.github.io/imperfect-pictures/",
+        "external": false,
+        "creatorLinks": [
+            {
+                "label": "Instagram",
+                "url": "https://www.instagram.com/anahita.js"
+            }
+        ]
     },
     {
         "creator": "Melly Davidson",
