@@ -226,5 +226,13 @@
             }
         ],
         "description": "Play a game. Each block is one pixel. Words = my feeling toward the color of that pixel. This small project was created under the theme Copy Cat. It explores low-resolution imagery, the relationship between text and image, and the tension between imagination and originality. For me, it is an experiment in “writing a novel with images” — where colors become narrative fragments, and words transform pixels into stories. I use AI tools and turned this piece into an interactive game. I invite others to participate and experience this process of generating an “image-novel” together — navigating between coloring and naming, and reconsidering the relationship between image, language, and authorship."
+    },
+    {
+        "creator": "c budnick",
+        "title": "face of her loved one",
+        "session": "Summer 2025",
+        "link": "http://cbudnick.com/exhibition/face-of-her-loved-one",
+        "external": false,
+        "image": "projects/face-of-her-loved-one/face-of-her-loved-one.png"
     }
 ]
