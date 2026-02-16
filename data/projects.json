@@ -101,11 +101,22 @@
     },
     {
         "creator": "Kay Zeng",
-        "title": "A Folder Practice",
+        "title": "an apple for an .zip",
         "session": "Summer 2025",
         "link": "https://www.kayzeng.com/folder_practice",
-        "external": true,
-        "image": "projects/folder-practice/folder-practice.png"
+        "external": false,
+        "image": "projects/folder-practice/folder-practice.png",
+        "creatorLinks": [
+            {
+                "label": "Website",
+                "url": "https://kayzeng.com/"
+            },
+            {
+                "label": "Instagram",
+                "url": "https://www.instagram.com/kayzeng777"
+            }
+        ],
+        "description": "an apple for an  is a small desktop folder using images of an apple i actually consumed, customized folder settings and folder action scripts, to remind myself of the immigrant agriculture labor behind this and other apples/crops and the difficulties they are facing. You can download the folder at kayzeng.com/folder_practice and send it to someone else as a gift for their . Instructions on how to make a circulatable DMG with all the custom settings preserved are documented on my site."
     },
     {
         "creator": "anahita bahri",
