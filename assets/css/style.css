@@ -635,8 +635,8 @@ ul.details li.selected .name .is-wip {
 
 .description-window .description-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
     gap: var(--space-sm);
     margin-bottom: var(--space-sm);
 }
@@ -667,6 +667,7 @@ ul.details li.selected .name .is-wip {
     font-size: var(--font-lg);
     cursor: pointer;
     line-height: 1;
+    align-self: flex-end;
 }
 
 .description-window .description-close:hover {
