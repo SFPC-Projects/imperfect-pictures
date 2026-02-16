@@ -569,7 +569,7 @@ ul.details li.selected .name .is-wip {
     background: var(--chrome);
     border: 1px solid var(--border-dark);
     box-shadow: var(--shadow-float);
-    z-index: calc(var(--z-overlay) + 10);
+    z-index: calc(var(--z-overlay) + 40);
     display: flex;
     flex-direction: column;
     min-width: 160px;
