@@ -211,7 +211,7 @@
         "title": "Copy & Originality",
         "session": "Summer 2025",
         "link": "https://umin1024.github.io/copyDog",
-        "external": true,
+        "external": false,
         "image": "projects/copy-originality/copy-originality.png",
         "creatorLinks": [
             {
