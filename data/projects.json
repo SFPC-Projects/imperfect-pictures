@@ -90,7 +90,7 @@
         "title": "Portrait of a lady on the internet",
         "session": "Summer 2025",
         "link": "https://auroraderrico.com/ladyoninternet/",
-        "external": false,
+        "external": true,
         "image": "projects/lady-on-internet/lady-on-internet.png",
         "creatorLinks": [
             {
