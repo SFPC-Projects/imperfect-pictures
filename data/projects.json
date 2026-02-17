@@ -154,5 +154,62 @@
         "external": false,
         "image": "projects/myspace-2/myspace-2.png",
         "description": "welcome to my space online — a (not-quite) one-to-one replica of my apartment, equal parts here and now, and what could be .𖥔 ݁ ˖ִ🛸༄˖°."
+    },
+    {
+        "creator": "salvarez",
+        "title": "american faces",
+        "session": "Summer 2025",
+        "link": "https://salvarezonline.neocities.org/theonlyamericanfaces",
+        "external": true,
+        "image": "projects/american-faces/american-faces.png",
+        "creatorLinks": [
+            {
+                "label": "Instagram",
+                "url": "https://www.instagram.com/salvarezonline/"
+            },
+            {
+                "label": "Website",
+                "url": "https://salvarez.online/"
+            },
+            {
+                "label": "Neocities",
+                "url": "https://salvarezonline.neocities.org/"
+            }
+        ],
+        "description": "a browser-based experiment staged at mount rushmore. spurred by thoughts about immortalizing yourself in stone, storing yourself in databases, and being woven into the fabric of digital colonialism itself. best viewed on Firefox-based and Chromium-based browsers."
+    },
+    {
+        "creator": "Brittany Orlando",
+        "title": "A Town Called Street",
+        "session": "Summer 2025",
+        "link": "https://brittanyorlando.cargo.site/street",
+        "external": true,
+        "image": "projects/town-called-street/town-called-street.png",
+        "creatorLinks": [
+            {
+                "label": "Instagram",
+                "url": "https://www.instagram.com/winteremains/"
+            }
+        ],
+        "description": "Brittany Orlando is a girl from a town called Street."
+    },
+    {
+        "creator": "RHYSQUAD",
+        "title": "manujin's restored folder",
+        "session": "Summer 2025",
+        "link": "https://rhysquad.hotglue.me/",
+        "external": true,
+        "image": "projects/manujins-restored-folder/manujins-restored-folder.gif",
+        "creatorLinks": [
+            {
+                "label": "Instagram (manujin)",
+                "url": "https://www.instagram.com/manujin/"
+            },
+            {
+                "label": "Instagram (babyp3rson)",
+                "url": "https://www.instagram.com/babyp3rson/"
+            }
+        ],
+        "description": "RHYSQUAD is a digital restoration team focused on files, contemporary art, and discovering niche, esoteric, beautiful artists (rare!). We encountered manujin’s folder after he submitted several restoration requests believing he met our criteria. Through the recovery of his deleted archives, we learned they were produced as part of Molly Soda’s course at SFPC. The files are now available for download. Please visit our shop and take our curatorial survey — you might be next!"
     }
 ]
