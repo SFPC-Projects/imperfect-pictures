@@ -1,0 +1,5 @@
+410,180,8
+
+
+Latitude: 55.7961 N
+Longitude: 49.1064 E

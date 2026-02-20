@@ -213,6 +213,25 @@
         "description": "RHYSQUAD is a digital restoration team focused on files, contemporary art, and discovering niche, esoteric, beautiful artists (rare!). We encountered manujin’s folder after he submitted several restoration requests believing he met our criteria. Through the recovery of his deleted archives, we learned they were produced as part of Molly Soda’s course at SFPC. The files are now available for download. Please visit our shop and take our curatorial survey — you might be next!"
     },
     {
+        "creator": "Julia Almond Moses",
+        "title": "memories of home",
+        "session": "Summer 2025",
+        "link": "projects/memories-of-home/index.html",
+        "external": true,
+        "image": "projects/memories-of-home/memories-of-home.png",
+        "creatorLinks": [
+            {
+                "label": "Instagram",
+                "url": "https://www.instagram.com/maybe____angel/"
+            },
+            {
+                "label": "Arena",
+                "url": "https://www.are.na/julia-moses-sjblkowkqfi"
+            }
+        ],
+        "description": "memories of home is an interactive archive conjured during a period of physical displacement. A travel diary for the lost. Drawing from a digital paper trail (images, recordings, screenshots, and links) the project maps fragments of memory to geographic coordinates. The map attempts to uncover orientation but reveals how images and media meant to anchor a sense of home fail to fully resolve."
+    },
+    {
         "creator": "Maria Agra",
         "title": "Digital Landscapes",
         "session": "Summer 2025",
