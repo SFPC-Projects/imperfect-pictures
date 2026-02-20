@@ -226,5 +226,24 @@
             }
         ],
         "description": "This project takes the form of a booklet that opens in a 16:9 format, echoing the proportions of the screen. It focuses on landscapes we often encounter not in person, but as desktop wallpapers: vast, awe-inspiring scenes rendered into digital backdrops. Starting as digital files, these landscapes are processed and distorted, then brought back into the physical world and reworked by hand with coloured pencils and embroidery.\n\nThe work reflects on the shifting status of these images of nature as they oscillate between digital and physical forms, questioning how the screen both frames and distances our experience of the sublime."
+    },
+    {
+        "creator": "Anoushka Carroll",
+        "title": "a digital garden",
+        "session": "Summer 2025",
+        "link": "https://anoushka.neocities.org/digitalgarden/",
+        "external": true,
+        "image": "projects/digital-garden/digital-garden.png",
+        "creatorLinks": [
+            {
+                "label": "Instagram",
+                "url": "https://instagram.com/4n0u5hk4/"
+            },
+            {
+                "label": "Website",
+                "url": "https://anoushka.rocks"
+            }
+        ],
+        "description": "I’ve been overwhelmed by the amount of files I’ve been making during this course. As a kid/teen of course I would be saving my favourite fan arts, dollz, pics, etc, but as an adult everything goes on Google Drive. I feel like I can’t organise/keep track of everything. Visual overload.\n\nI’ve combined that idea with an ongoing annoyance with the concept of “digital gardens”. Such a term sounds playful and intriguing, but after some research/googling, a digital garden is nothing more than a blog rebranded! Boo!\n\nTo make an actual digital garden has fueled my interest in getting back into web coding and creating interactive websites that work like games but are still just websites. This can be done with P5 and interactive stuff like that but I’m interested in the outcomes having more of an “old web” or “y2k web” or “web 1” look/feel.\n\nSo I’ve vibe coded a webpage where each time you click refresh a new composition shows up - made from my personal files/screen shots and garden gifs and jpegs. The viewer is you sitting in your chair at your computer gazing through your window (maybe in a kitchen or parlour) to regard my landscaping.\n\nI want to invoke that chaos of the amount of information we get through web 2 now - endless streams of content. There’s up to 300 files I think. More can be added - the limit is my neocities’ subscription allowance."
     }
 ]
