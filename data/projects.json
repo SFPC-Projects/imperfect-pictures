@@ -211,5 +211,20 @@
             }
         ],
         "description": "RHYSQUAD is a digital restoration team focused on files, contemporary art, and discovering niche, esoteric, beautiful artists (rare!). We encountered manujin’s folder after he submitted several restoration requests believing he met our criteria. Through the recovery of his deleted archives, we learned they were produced as part of Molly Soda’s course at SFPC. The files are now available for download. Please visit our shop and take our curatorial survey — you might be next!"
+    },
+    {
+        "creator": "Maria Agra",
+        "title": "Digital Landscapes",
+        "session": "Summer 2025",
+        "link": "https://maria-agra.art/portfolio/landscape-zine/",
+        "external": true,
+        "image": "projects/digital-landscapes/digital-landscapes.png",
+        "creatorLinks": [
+            {
+                "label": "Instagram",
+                "url": "https://www.instagram.com/agra_maria_art/"
+            }
+        ],
+        "description": "This project takes the form of a booklet that opens in a 16:9 format, echoing the proportions of the screen. It focuses on landscapes we often encounter not in person, but as desktop wallpapers: vast, awe-inspiring scenes rendered into digital backdrops. Starting as digital files, these landscapes are processed and distorted, then brought back into the physical world and reworked by hand with coloured pencils and embroidery.\n\nThe work reflects on the shifting status of these images of nature as they oscillate between digital and physical forms, questioning how the screen both frames and distances our experience of the sublime."
     }
 ]
