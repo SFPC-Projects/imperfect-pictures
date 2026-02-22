@@ -90,15 +90,14 @@
     }
 
     function isItemExternal(item) {
-        if (!item || !item.external) return false;
-
+        if (!item) return false;
+        
         // Explicit `external` in projects.json is authoritative.
         // Only infer from link type when the key is absent.
-        if (item.external === true) return true;
-        if (item.external === false) return false;
-
+        if (typeof item.external === 'boolean') return item.external;
         return !!(item.link && isExternalLink(item.link));
     }
+
 
     function isItemDownload(item) {
         return !!(item && item.download);
