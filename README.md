@@ -54,7 +54,7 @@ Edit `data/projects.json` and add a new object to the array. Example:
     - an **external site** (e.g. `https://example.com`)
     - a **downloadable file** (e.g. `projects/name/project.zip`)
 - `image` (optional string): Project thumbnail. If omitted, a placeholder image is used.
-- `external` (optional boolean): Set to `true` if the link should always open externally (in a new tab), even if it appears to be an internal link. Defaults to `false`.
+- `external` (optional boolean): Explicit override for link behavior. If present, `true` always opens in a new tab and `false` always opens internally (iframe/navigation), regardless of URL shape. If the key is omitted, behavior is inferred from `link` type (absolute URL = external; relative path = internal).
 - `download` (optional boolean): Set to `true` to trigger download of the file at `link` when clicked. If a string, it sets the saved filename. If `false` or omitted, clicking navigates normally.
 - `creatorLinks` (optional array): List of objects like `{ "label": "Portfolio", "url": "https://..." }` for multiple labeled links (e.g. website, Instagram, etc).
 - `description` (optional string): Description shown in the context menu or on hover in list/desktop views.
@@ -64,11 +64,6 @@ Edit `data/projects.json` and add a new object to the array. Example:
 ## Local Development
 
 ```bash
-# From the repo root
-# Option A: open index.html directly
-open index.html
-
-# Option B: run a tiny HTTP server
 python3 -m http.server 8080
 # then visit http://localhost:8080/
 ```
