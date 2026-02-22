@@ -317,5 +317,20 @@
             }
         ],
         "description": "Build-a-familytree is a project that encourages building a location of comfort visually and healing-wise through recognizing the small and large acts between one's friends, community, chosen family, old lovers, old friends, and how media allows one to build a portrait of comfort. It is a digital form of shadow work. It explores and embraces the spectrum of healing."
+    },
+    {
+        "creator": "Stef Lai",
+        "title": "The Price of Participation",
+        "session": "Summer 2025",
+        "link": "projects/price-of-participation/index.html",
+        "external": false,
+        "image": "projects/price-of-participation/price-of-participation.png",
+        "creatorLinks": [
+            {
+                "label": "Instagram",
+                "url": "https://www.instagram.com/stef_y_lai/"
+            }
+        ],
+        "description": "A collection of covid test photos. For a year or so after 2020 the Hong Kong government required a negative covid rapid test for entry into restaurants and other indoor spaces. Sending photos of negative tests to Whatsapp groups before gatherings became a common practice to ‘prove’ that they were safe to be around. For some the price of participation may just have been the inconvenience of taking and photographing the rapid COVID tests. Others such as those with health conditions and disabilities felt and continue to feel unable to ‘afford’ the risks posed by the virus. “Are we free yet?” is asked at the bottom of the page as each negative test can be seen as a bid to be free from the strictures of public health policies. Particularly in China where strict and arbitrary quarantines were placed on many people."
     }
 ]
