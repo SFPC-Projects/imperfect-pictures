@@ -338,6 +338,7 @@
         "title": "real home video",
         "session": "Summer 2025",
         "link": "https://cecewettemann.hotglue.me/",
-        "external": true
+        "external": true,
+        "image": "projects/real-home-video/real-home-video.png"
     }
 ]
