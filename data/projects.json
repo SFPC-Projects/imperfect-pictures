@@ -217,7 +217,7 @@
         "title": "memories of home",
         "session": "Summer 2025",
         "link": "projects/memories-of-home/index.html",
-        "external": true,
+        "external": false,
         "image": "projects/memories-of-home/memories-of-home.png",
         "creatorLinks": [
             {
